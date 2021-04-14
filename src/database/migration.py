@@ -4,7 +4,7 @@ from yoyo import read_migrations
 from yoyo import get_backend
 
 
-# TODO
+# TODO: method should be implemented
 def migrate():
     backend = get_backend('mysql://myuser@localhost/mydatabase')
     migrations = read_migrations('path/to/migrations')
