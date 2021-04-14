@@ -1,3 +1,13 @@
+### Folders
+out/
+target/
+tmp/
+__pycache__
+
+### Python
+venv/
+config.py
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -14,3 +24,18 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 /.idea/
+
+### Extensions
+*.ids
+*.xml
+*.iws
+*.crt
+*.key
+*.csr
+*.pem
+*.p12
+*.iml
+.idea
+.DS_Store
+*-overriding.properties
+*.pyc

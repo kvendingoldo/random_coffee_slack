@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from slack_bolt import App
 from loguru import logger
 

@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+# C0111: Missing docstring
+# R0904: Too many public methods
+# W0141: Used builtin function %r
+disable=C0111,R0904,R0913,W0141,locally-disabled
