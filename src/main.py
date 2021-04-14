@@ -16,16 +16,6 @@ app = App(
 )
 
 
-@app.command("/wow")
-def message(ack, say, command):
-    ack()
-    logger.info(
-        f"Received /wow command from {command['user_name']} in {command['channel_name']} - {command['team_domain']}"
-    )
-
-    say("What's up?")
-
-
 @app.action("action_start_join")
 def action_start_join(body, ack, say):
     # Acknowledge the action
