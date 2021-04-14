@@ -35,7 +35,25 @@ def action_start_join(body, ack, say):
 
     say(
         text=f"Расскажи немного о себе",
-        blocks=[],
+        blocks=[
+            {
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "Done"
+                        },
+                        "style": "primary",
+                        "action_id": "123",
+                        "value": "click_me_123"
+                    }
+                ]
+            }
+
+        ],
         attachments=[
             {
                 "fallback": "Upgrade your Slack client to use messages like these.",
@@ -145,7 +163,7 @@ if __name__ == "__main__":
     bot = threading.Thread(target=app.start, args=())
     bot.start()
 
-    pairs = threading.Thread(target=pair.create, args=(60,))
+    pairs = threading.Thread(target=pair.create, args=(app.client, 60,))
     pairs.start()
 
     pairs.join()
