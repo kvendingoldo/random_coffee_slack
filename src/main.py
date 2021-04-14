@@ -26,6 +26,45 @@ def message(ack, say, command):
     say("What's up?")
 
 
+@app.action("action_start_join")
+def action_start_join(body, ack, say):
+    # Acknowledge the action
+    ack(
+        # redirect(url_for('message_onboard'))
+    )
+
+    say(
+        text=f"Расскажи немного о себе",
+        blocks=[],
+        attachments=[
+            {
+                "fallback": "Upgrade your Slack client to use messages like these.",
+                "color": "3AA3E3",
+                "attachment_type": "default",
+                "callback_id": "select_remote_1234",
+                "actions": [
+                    {
+                        "name": "Location",
+                        "text": "You location",
+                        "type": "select",
+
+                        "options": [
+                            {
+                                "text": "Saratov",
+                                "value": "saratov"
+                            },
+                            {
+                                "text": "St. Petersburg",
+                                "value": "spb"
+                            },
+                        ],
+                    }
+                ]
+            }
+        ]
+    )
+
+
 @app.message("start")
 def message_start(message, say):
     say(
@@ -57,7 +96,7 @@ def message_start(message, say):
                             "text": "Join"
                         },
                         "style": "primary",
-                        "action_id": "Join",
+                        "action_id": "action_start_join",
                         "value": "click_me_123"
                     },
                     {
@@ -70,7 +109,6 @@ def message_start(message, say):
                         "action_id": "Help",
                         "value": "click_me_123"
                     },
-
                     {
                         "type": "button",
                         "text": {
@@ -107,7 +145,7 @@ if __name__ == "__main__":
     bot = threading.Thread(target=app.start, args=())
     bot.start()
 
-    pairs = threading.Thread(target=pair.create, args=(5,))
+    pairs = threading.Thread(target=pair.create, args=(60,))
     pairs.start()
 
     pairs.join()
