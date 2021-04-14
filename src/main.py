@@ -4,6 +4,7 @@ from slack_bolt import App
 from loguru import logger
 from mysql.connector import connect, Error
 import threading
+from algo import pair
 
 sigSecret = "db26cd0745b8c2555ee77a42c16ee0c5"
 otoken = "xoxb-1962766308593-1962780502497-JpOCNTLxOQWn6kbEJY91jb5b"
@@ -105,4 +106,9 @@ if __name__ == "__main__":
 
     bot = threading.Thread(target=app.start, args=())
     bot.start()
+
+    pairs = threading.Thread(target=pair.create, args=(5,))
+    pairs.start()
+
+    pairs.join()
     bot.join()
