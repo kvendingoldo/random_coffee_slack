@@ -2,6 +2,7 @@
 
 from slack_bolt import App
 from loguru import logger
+from mysql.connector import connect, Error
 
 sigSecret = ""
 otoken = ""
@@ -22,6 +23,22 @@ def message(ack, say, command):
     say(command["text"])
 
 
+def get_db():
+    try:
+        with connect(
+                host="localhost",
+                user="",
+                password="",
+        ) as connection:
+            return connection
+    except Error as e:
+        print(e)
+
+
 # Start your app
 if __name__ == "__main__":
+    connection = get_db()
+
+    # add(connection, ...)
+
     app.start(port=80)
