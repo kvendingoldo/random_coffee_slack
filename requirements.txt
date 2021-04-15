@@ -1,6 +1,4 @@
 slack_bolt
 loguru
-yoyo
 mysql-connector-python
 pyyaml
-async_cron
