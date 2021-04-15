@@ -157,6 +157,9 @@ def add_when_join():
     uuser = user.User(username="test", uid="uid")
     users.add(connection, uuser)
 
+def get_user():
+    user = users.get_users(connection, "uid")
+
 if __name__ == "__main__":
     connection = get_db()
 
