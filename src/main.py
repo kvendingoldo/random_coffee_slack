@@ -4,7 +4,7 @@ from slack_bolt import App
 from loguru import logger
 from mysql.connector import connect, Error
 import threading
-from algo import pair
+from daemons import pairs, week
 from database.dao import meets, users
 from entities import user
 from utils import config
@@ -172,8 +172,12 @@ if __name__ == "__main__":
     bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
     bot.start()
 
-    # pairs = threading.Thread(target=pair.create, args=(app.client, 60,))
-    # pairs.start()
+    pairs = threading.Thread(target=pairs.create, args=(app.client, 60,))
+    pairs.start()
 
-    # pairs.join()
+    week = threading.Thread(target=week.care, args=(app.client, connection, 60,))
+    week.start()
+
+    pairs.join()
+    week.join()
     bot.join()

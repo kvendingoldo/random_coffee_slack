@@ -8,7 +8,7 @@ def create(client, period=60):
     while True:
         # make pairs
         # notify user
-        print("pairs algo")
+        print("pairs daemons")
 
         client.chat_postMessage(channel="D01TRBDB8EA",
                                 text="Привет!\n"
