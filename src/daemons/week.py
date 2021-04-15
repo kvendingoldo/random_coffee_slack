@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from database.dao import users
+from datetime import date
 
 
 def meet_reminder(sclient):
@@ -10,6 +11,14 @@ def meet_reminder(sclient):
                              text="Привет!\n"
                                   "✉️ Уже середина недели,\n"
                                   "Напиши своему партнеру Random Coffee, если вдруг забыл(а)."
+                             )
+
+
+def ask_about_this_week(sclient):
+    sclient.chat_postMessage(channel="D01TRBDB8EA",
+                             text="Завершилась неделя встреч Random Coffee.\n"
+                                  "Небольшой опрос. \n"
+                                  "Состоялась встреча c UserX?"
                              )
 
 
@@ -25,12 +34,12 @@ def ask_about_next_week(sclient):
 def care(sclient, db_connection):
     users = []
 
-    for user in users.get_users(db_connection)
+    for user in users.get_users(db_connection):
+        cur_day = date.today().weekday()
 
-        # The mid of week
-        if True:
+        if cur_day == 2:
             meet_reminder(sclient)
 
-        # Friday
-        if True:
+        if cur_day == 4:
             ask_about_next_week(sclient)
+            ask_about_this_week(sclient)

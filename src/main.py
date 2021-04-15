@@ -164,6 +164,38 @@ def flow_2_start(body, ack, say):
     )
 
 
+@app.action("flow_next_week_yes")
+def flow_next_week_yes(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_next_week_yes"
+    )
+
+
+@app.action("flow_next_week_no")
+def flow_next_week_no(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_next_week_yes"
+    )
+
+
+@app.action("flow_meet_was")
+def flow_meet_was(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_meet_was"
+    )
+
+
+@app.action("flow_meet_was_not")
+def flow_meet_was_not(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_meet_was_not"
+    )
+
+
 if __name__ == "__main__":
     connection = common.get_db(config["database"]["host"], config["database"]["port"],
                                config["database"]["username"], config["database"]["password"],
