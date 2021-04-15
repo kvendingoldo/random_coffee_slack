@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from slack_bolt import App
 from loguru import logger
 from mysql.connector import connect, Error
@@ -9,6 +10,7 @@ from database.dao import meets, users
 from entities import user
 from utils import config
 from database import common
+from concurrent.futures import ThreadPoolExecutor
 
 config = config.load("/Users/asharov/projects/personal/random_coffee_slack/resources/config.yml")
 app = App(
@@ -98,25 +100,6 @@ def flow_1_start(body, ack, say):
         ack()
         say(
             text=f"Расскажи немного о себе",
-            blocks=[
-                {
-                    "type": "actions",
-                    "elements": [
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "Done"
-                            },
-                            "style": "primary",
-                            "action_id": "flow_2_start",
-                            "value": "click_me_123"
-                        }
-                    ]
-                }
-
-            ],
             attachments=[
                 {
                     "fallback": "Upgrade your Slack client to use messages like these.",
@@ -142,6 +125,25 @@ def flow_1_start(body, ack, say):
                         }
                     ]
                 }
+            ],
+            blocks=[
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "emoji": True,
+                                "text": "Done"
+                            },
+                            "style": "primary",
+                            "action_id": "flow_2_start",
+                            "value": "click_me_123"
+                        }
+                    ]
+                }
+
             ]
         )
     else:
@@ -168,16 +170,22 @@ def flow_2_start(body, ack, say):
 def flow_next_week_yes(body, ack, say):
     ack()
     say(
-        text=f"TODO: flow_next_week_yes"
+        text=f"Отлично!👍! Напишу тебе в понедельник."
     )
+
+    # user.ready = True
+    # users.set_ready(connection, user)
 
 
 @app.action("flow_next_week_no")
 def flow_next_week_no(body, ack, say):
     ack()
     say(
-        text=f"TODO: flow_next_week_yes"
+        text=f"Перерыв нужен всегда, понимаю. Вернусь к тебе на следующей неделе"
     )
+
+    # user.ready = False
+    # users.set_ready(connection, user)
 
 
 @app.action("flow_meet_was")
@@ -187,6 +195,8 @@ def flow_meet_was(body, ack, say):
         text=f"TODO: flow_meet_was"
     )
 
+    # TODO: do some calculation stuff
+
 
 @app.action("flow_meet_was_not")
 def flow_meet_was_not(body, ack, say):
@@ -195,21 +205,23 @@ def flow_meet_was_not(body, ack, say):
         text=f"TODO: flow_meet_was_not"
     )
 
+    # TODO: do some calculation stuff
+
 
 if __name__ == "__main__":
     connection = common.get_db(config["database"]["host"], config["database"]["port"],
                                config["database"]["username"], config["database"]["password"],
                                config["database"]["db"])
 
+    pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
+    pairs.start()
+
+    week = threading.Thread(target=week.care, args=(app.client, config, 5,))
+    week.start()
+
     bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
     bot.start()
 
-    pairs = threading.Thread(target=pairs.create, args=(app.client, 60,))
-    pairs.start()
-
-    week = threading.Thread(target=week.care, args=(app.client, connection, 60,))
-    week.start()
-
-    pairs.join()
+    # pairs.join()
     week.join()
     bot.join()

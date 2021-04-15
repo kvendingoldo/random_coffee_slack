@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-def test():
-    pass
-
 class User(object):
     def __init__(self, username, uid, ready=False, aware=False):
         self.username = username

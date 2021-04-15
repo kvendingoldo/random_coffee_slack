@@ -44,3 +44,17 @@ def get_users(db, uid):
         result = cursor.fetchone()
         print(result)
         return user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
+
+
+def list(db):
+    users = []
+
+    sql_statement = f"SELECT * FROM users"
+    with db.cursor() as cursor:
+        cursor.execute(sql_statement)
+        for row in cursor.fetchall():
+            users.append(
+                user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
+            )
+
+    return users

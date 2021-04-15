@@ -10,7 +10,7 @@ def create(client, period=60):
         # notify user
         print("pairs daemons")
 
-        client.chat_postMessage(channel="D01TRBDB8EA",
+        client.chat_postMessage(channel="U01THB38EDV",
                                 text="Привет!\n"
                                      "Твоя пара в random coffee на эту неделю: @nickname \n"
                                      "Не откладывай, договорись о встрече сразу 🙂 \n"
