@@ -5,9 +5,11 @@ from loguru import logger
 from mysql.connector import connect, Error
 import threading
 from algo import pair
+from database.dao import meets, users
+from entities import user
 
-sigSecret = "db26cd0745b8c2555ee77a42c16ee0c5"
-otoken = "xoxb-1962766308593-1962780502497-JpOCNTLxOQWn6kbEJY91jb5b"
+sigSecret = ""
+otoken = ""
 
 # Initializes your app with your bot token and signing secret
 app = App(
@@ -22,7 +24,7 @@ def action_start_join(body, ack, say):
     ack(
         # redirect(url_for('message_onboard'))
     )
-
+    print(body)
     say(
         text=f"Расскажи немного о себе",
         blocks=[
@@ -75,6 +77,7 @@ def action_start_join(body, ack, say):
 
 @app.message("start")
 def message_start(message, say):
+    print(message)
     say(
         blocks=[
             {
@@ -137,20 +140,27 @@ def message_start(message, say):
 
 def get_db():
     try:
-        with connect(
-                host="localhost",
-                user="",
-                password="",
-        ) as connection:
-            return connection
+        connection = connect(
+            host="localhost",
+            user="root",
+            password="fuckfuckFUCK",
+            port=3306,
+            database="coffee",
+        )
+        print("connected")
+        return connection
     except Error as e:
         print(e)
 
 
+def add_when_join():
+    uuser = user.User(username="test", uid="uid")
+    users.add(connection, uuser)
+
 if __name__ == "__main__":
     connection = get_db()
 
-    bot = threading.Thread(target=app.start, args=())
+    bot = threading.Thread(target=app.start(port=80), args=())
     bot.start()
 
     pairs = threading.Thread(target=pair.create, args=(app.client, 60,))
