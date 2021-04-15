@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from src.entities import user
+from entities import user
 
 
 def add(db, user):
-
     sql_statement = f"INSERT IGNORE INTO users (username, uid, ready, aware) VALUES " \
                     f"(\"{user.username}\", " \
                     f"\"{user.uid}\", " \
@@ -13,6 +12,11 @@ def add(db, user):
     with db.cursor() as cursor:
         cursor.execute(sql_statement)
         db.commit()
+
+
+def is_new(connection, uid):
+    # TODO: TO BE IMPLEMENTED
+    return True
 
 
 def is_ready(connection, user):

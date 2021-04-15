@@ -1,12 +1,11 @@
-### Folders
+# Folders
 out/
 target/
 tmp/
 __pycache__
 
-### Python
+# Python
 venv/
-config.py
 
 # Binaries for programs and plugins
 *.exe
@@ -25,7 +24,7 @@ config.py
 # vendor/
 /.idea/
 
-### Extensions
+# Extensions
 *.ids
 *.xml
 *.iws
@@ -39,3 +38,6 @@ config.py
 .DS_Store
 *-overriding.properties
 *.pyc
+
+# Misc
+resources/config.yml

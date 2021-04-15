@@ -7,92 +7,45 @@ import threading
 from algo import pair
 from database.dao import meets, users
 from entities import user
+from utils import config
+from database import common
 
-sigSecret = ""
-otoken = ""
-
-# Initializes your app with your bot token and signing secret
+config = config.load("/Users/asharov/projects/personal/random_coffee_slack/resources/config.yml")
 app = App(
-    token=otoken,
-    signing_secret=sigSecret,
+    token=config["slack"]["otoken"],
+    signing_secret=config["slack"]["sigSecret"],
 )
 
 
-@app.action("action_start_join")
-def action_start_join(body, ack, say):
-    # Acknowledge the action
-    ack(
-        # redirect(url_for('message_onboard'))
-    )
-    print(body)
+#
+# Bot flow
+#
+@app.action("flow_help")
+def flow_help(body, ack, say):
+    ack()
     say(
-        text=f"Расскажи немного о себе",
-        blocks=[
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Done"
-                        },
-                        "style": "primary",
-                        "action_id": "123",
-                        "value": "click_me_123"
-                    }
-                ]
-            }
-
-        ],
-        attachments=[
-            {
-                "fallback": "Upgrade your Slack client to use messages like these.",
-                "color": "3AA3E3",
-                "attachment_type": "default",
-                "callback_id": "select_remote_1234",
-                "actions": [
-                    {
-                        "name": "Location",
-                        "text": "You location",
-                        "type": "select",
-
-                        "options": [
-                            {
-                                "text": "Saratov",
-                                "value": "saratov"
-                            },
-                            {
-                                "text": "St. Petersburg",
-                                "value": "spb"
-                            },
-                        ],
-                    }
-                ]
-            }
-        ]
+        text=f"TODO: Add some help info"
     )
 
 
 @app.message("start")
-def message_start(message, say):
-    print(message)
+def flow_0_start(message, say):
     say(
         blocks=[
             {
                 "type": "section",
                 "text": {
+                    # TODO (asharov): rewrite
                     "type": "mrkdwn",
-                    "text": "Привет человек!👋\n" \
+                    "text": "Привет человек (текст будет переписан!)👋 \n" \
                             "Недавно я узнал о Random coffee challenge и понял - он нужен.\n" \
-                            "Каждую неделю я буду предлагать тебе для встречи интересного человека, случайно выбранного среди других участников. " \
+                            "Каждую неделю я буду предлагать тебе для встречи интересного человека, случайно выбранного среди других участников." \
                             "Вы с ним увидите никнеймы друг друга и сможете сразу выбрать подходящий формат для встречи (в офисе, skype, zoom и т.д.).\n" \
                             "Интересно? Тогда присоединяйся!"
                 },
                 "accessory": {
                     "type": "image",
-                    "image_url": "https://banner2.cleanpng.com/20180426/dww/kisspng-donuts-cafe-coffee-menu-donut-worry-pink-donut-5ae1808952de31.0211226315247279453394.jpg",
+                    "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
                     "alt_text": "cute donut"
                 }
             },
@@ -107,8 +60,7 @@ def message_start(message, say):
                             "text": "Join"
                         },
                         "style": "primary",
-                        "action_id": "action_start_join",
-                        "value": "click_me_123"
+                        "action_id": "flow_1_start"
                     },
                     {
                         "type": "button",
@@ -117,8 +69,7 @@ def message_start(message, say):
                             "emoji": True,
                             "text": "Help"
                         },
-                        "action_id": "Help",
-                        "value": "click_me_123"
+                        "action_id": "flow_help"
                     },
                     {
                         "type": "button",
@@ -128,46 +79,101 @@ def message_start(message, say):
                             "text": "Cancel"
                         },
                         "style": "danger",
-                        "action_id": "cancel",
-                        "value": "click_me_123"
+                        "action_id": "flow_0_cancel"
                     }
                 ]
             }
         ],
-        text=f"Hello <@{message['user']}>!"
+        text=""
     )
 
 
-def get_db():
-    try:
-        connection = connect(
-            host="localhost",
-            user="root",
-            password="fuckfuckFUCK",
-            port=3306,
-            database="coffee",
+@app.action("flow_1_start")
+def flow_1_start(body, ack, say):
+    uuser = user.User(username=body["user"]["username"], uid=body["user"]["id"])
+
+    if users.is_new(connection, body["user"]["id"]):
+        users.add(connection, uuser)
+
+        ack()
+        say(
+            text=f"Расскажи немного о себе",
+            blocks=[
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "emoji": True,
+                                "text": "Done"
+                            },
+                            "style": "primary",
+                            "action_id": "flow_2_start",
+                            "value": "click_me_123"
+                        }
+                    ]
+                }
+
+            ],
+            attachments=[
+                {
+                    "fallback": "Upgrade your Slack client to use messages like these.",
+                    "color": "3AA3E3",
+                    "attachment_type": "default",
+                    "callback_id": "select_remote_1234",
+                    "actions": [
+                        {
+                            "name": "Location",
+                            "text": "You location",
+                            "type": "select",
+
+                            "options": [
+                                {
+                                    "text": "Saratov",
+                                    "value": "saratov"
+                                },
+                                {
+                                    "text": "St. Petersburg",
+                                    "value": "spb"
+                                },
+                            ],
+                        }
+                    ]
+                }
+            ]
         )
-        print("connected")
-        return connection
-    except Error as e:
-        print(e)
+    else:
+        flow_2_start(body, ack, say)
 
 
-def add_when_join():
-    uuser = user.User(username="test", uid="uid")
-    users.add(connection, uuser)
+@app.action("flow_0_cancel")
+def flow_1_cancel(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_0_cancel"
+    )
 
-def get_user():
-    user = users.get_users(connection, "uid")
+
+@app.action("flow_2_start")
+def flow_2_start(body, ack, say):
+    ack()
+    say(
+        text=f"TODO: flow_help"
+    )
+
 
 if __name__ == "__main__":
-    connection = get_db()
+    connection = common.get_db(config["database"]["host"], config["database"]["port"],
+                               config["database"]["username"], config["database"]["password"],
+                               config["database"]["db"])
 
-    bot = threading.Thread(target=app.start(port=80), args=())
+    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
     bot.start()
 
-    pairs = threading.Thread(target=pair.create, args=(app.client, 60,))
-    pairs.start()
+    # pairs = threading.Thread(target=pair.create, args=(app.client, 60,))
+    # pairs.start()
 
-    pairs.join()
+    # pairs.join()
     bot.join()
