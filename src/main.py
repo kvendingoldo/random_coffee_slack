@@ -225,16 +225,16 @@ if __name__ == "__main__":
     usersDAO = users.UsersDAO(connector)
     meetsDAO = meets.MeetsDAO(connector)
     # usersDAO.get_user("uid")
-
-    pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
-    pairs.start()
-
-    week = threading.Thread(target=week.care, args=(app.client, connection_pool, config, 5,))
-    week.start()
-
-    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
-    bot.start()
-
-    pairs.join()
-    week.join()
-    bot.join()
+    logger.info(list(usersDAO.pairs()))
+    # pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
+    # pairs.start()
+    #
+    # week = threading.Thread(target=week.care, args=(app.client, connection_pool, config, 5,))
+    # week.start()
+    #
+    # bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
+    # bot.start()
+    #
+    # pairs.join()
+    # week.join()
+    # bot.join()

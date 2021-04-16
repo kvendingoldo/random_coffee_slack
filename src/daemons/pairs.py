@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import time
+from random import randrange, shuffle
+
 from database.interface import connector
 
 
-def create(sclient, connection_pool, period=60):
-    connector = connector.Connector(connection_pool)
+def create(sclient, usersDAO, period=60):
+    ready = usersDAO.ready_all()
+    if len(ready) % 2 == 0:
+        ready.pop(randrange(0, len(ready)))
+        shuffle(ready)
+        pairs = zip(ready[::2], ready[1::2])
 
     # TODO: kvendingoldo after implementation of DAO layer
     while True:

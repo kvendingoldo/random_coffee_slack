@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+import random
+
 from entities import user
+from random import randrange, shuffle
+
 
 class UsersDAO(object):
     def __init__(self, connector):
@@ -31,16 +35,26 @@ class UsersDAO(object):
         sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
 
-        return user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
+        return user.User(username=result[0][1], uid=result[0][2], ready=result[0][3], aware=result[0][4])
 
     def list_all(self):
         users = []
 
-        sql_statement = f"SELECT * FROM users"
+        sql_statement = "SELECT * FROM users"
         result = self.connector.get(sql_statement)
+        print(result)
         for row in result:
             users.append(
                 user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
             )
 
         return users
+
+    def ready_all(self):
+        sql_statement = f"SELECT uid FROM users where ready = 1"
+        ready = []
+        result = self.connector.get(sql_statement)
+        for id in result:
+            ready.append(id[0])
+
+        return ready

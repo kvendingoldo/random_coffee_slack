@@ -26,7 +26,7 @@ class Connector(object):
         with self.connection.cursor(buffered=True) as cursor:
             cursor.execute(sql_statement)
             self.connection.commit()
-            return cursor.fetchall()[0]
+            return cursor.fetchall()
 
     def post(self, sql_statement):
         with self.connection.cursor(buffered=True) as cursor:
