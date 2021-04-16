@@ -220,6 +220,9 @@ if __name__ == "__main__":
 
     connector = connector.Connector(connection_pool)
 
+    # cusers = users.CUsers(connector)
+    # cusers.get_user("uid")
+
     pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
     pairs.start()
 

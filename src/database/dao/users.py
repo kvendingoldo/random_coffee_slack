@@ -2,47 +2,46 @@
 from src import entities
 
 
-def add(connector, user):
-    sql_statement = f"INSERT IGNORE INTO users (username, uid, ready, aware) VALUES " \
-                    f"(\'{user.username}\', " \
-                    f"\'{user.uid}\', " \
-                    f"\'{int(user.ready)}\', " \
-                    f"\'{int(user.aware)}\')"
+class CUsers(object):
+    def __init__(self, connector):
+        self.connector = connector
 
-    return connector.post(sql_statement)
+    def add(self, user):
+        sql_statement = f"INSERT IGNORE INTO users (username, uid, ready, aware) VALUES " \
+                        f"(\'{user.username}\', " \
+                        f"\'{user.uid}\', " \
+                        f"\'{int(user.ready)}\', " \
+                        f"\'{int(user.aware)}\')"
 
+        return self.connector.post(sql_statement)
 
-def is_new(connector, uid):
-    sql_statement = ""
-    return connector.get(sql_statement)
+    def is_new(self, uid):
+        sql_statement = ""
+        return self.connector.get(sql_statement)
 
+    def is_ready(self, uid):
+        sql_statement = f"SELECT ready FROM users WHERE username = \'{uid}\'"
 
-def is_ready(connector, uid):
-    sql_statement = f"SELECT ready FROM users WHERE username = \'{uid}\'"
+        return self.connector.get(sql_statement)
 
-    return connector.get(sql_statement)
+    def set_ready(self, uid):
+        sql_statement = f"UPDATE users SET ready = \'{int(uid.ready)}\' WHERE uid = \'{uid.uid}\'"
+        return self.connector.post(sql_statement)
 
+    def get_user(self, uid):
+        sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
+        result = self.connector.get(sql_statement)
 
-def set_ready(connector, uid):
-    sql_statement = f"UPDATE users SET ready = \'{int(uid.ready)}\' WHERE uid = \'{uid.uid}\'"
-    return connector.post(sql_statement)
+        return entities.user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
 
+    def list_all(self):
+        users = []
 
-def get_user(connector, uid):
-    sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
-    result = connector.get(sql_statement)
+        sql_statement = f"SELECT * FROM users"
+        result = self.connector.get(sql_statement)
+        for row in result:
+            users.append(
+                entities.user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
+            )
 
-    return entities.user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
-
-
-def list_all(connector):
-    users = []
-
-    sql_statement = f"SELECT * FROM users"
-    result = connector.get(sql_statement)
-    for row in result:
-        users.append(
-            entities.user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
-        )
-
-    return users
+        return users
