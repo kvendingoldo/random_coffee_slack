@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+from os import listdir
+from os.path import isfile, join
 
 from slack_bolt import App
 from loguru import logger
@@ -93,8 +94,8 @@ def flow_0_start(message, say):
 def flow_1_start(body, ack, say):
     uuser = user.User(username=body["user"]["username"], uid=body["user"]["id"])
 
-    if users.is_new(connection, body["user"]["id"]):
-        users.add(connection, uuser)
+    if usersDAO.is_new(body["user"]["id"]):
+        usersDAO.add(uuser)
 
         ack()
         say(
@@ -208,6 +209,7 @@ def flow_meet_was_not(body, ack, say):
 
 
 if __name__ == "__main__":
+
     connection_pool = pooling.MySQLConnectionPool(pool_name="default",
                                                   pool_size=5,
                                                   pool_reset_session=True,
@@ -220,8 +222,9 @@ if __name__ == "__main__":
 
     connector = connector.Connector(connection_pool)
 
-    # cusers = users.CUsers(connector)
-    # cusers.get_user("uid")
+    usersDAO = users.UsersDAO(connector)
+    meetsDAO = meets.MeetsDAO(connector)
+    # usersDAO.get_user("uid")
 
     pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
     pairs.start()

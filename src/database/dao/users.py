@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from src import entities
+from entities import user
 
-
-class CUsers(object):
+class UsersDAO(object):
     def __init__(self, connector):
         self.connector = connector
 
@@ -32,7 +31,7 @@ class CUsers(object):
         sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
 
-        return entities.user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
+        return user.User(username=result[1], uid=result[2], ready=result[3], aware=result[4])
 
     def list_all(self):
         users = []
@@ -41,7 +40,7 @@ class CUsers(object):
         result = self.connector.get(sql_statement)
         for row in result:
             users.append(
-                entities.user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
+                user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
             )
 
         return users

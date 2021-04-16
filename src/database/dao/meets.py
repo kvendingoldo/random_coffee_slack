@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class CMeets(object):
+class MeetsDAO(object):
     def __init__(self, connector):
         self.connector = connector
 
