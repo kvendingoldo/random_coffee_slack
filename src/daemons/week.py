@@ -3,7 +3,7 @@
 import time
 
 from database.dao import users
-from database import common
+from database.interface import connector
 from datetime import date
 
 
@@ -110,13 +110,11 @@ def ask_about_next_week(sclient, user):
                              )
 
 
-def care(slack_client, config, period):
-    connection = common.get_db(config["database"]["host"], config["database"]["port"],
-                               config["database"]["username"], config["database"]["password"],
-                               config["database"]["db"])
+def care(slack_client, connection_pool, period):
+    connector = connector.Connector(connection_pool)
 
     while True:
-        for user in users.list(connection):
+        for user in users.list(connector):
             cur_day = date.today().weekday()
 
             if cur_day == 2:

@@ -3,15 +3,13 @@
 
 from slack_bolt import App
 from loguru import logger
-from mysql.connector import connect, Error
 import threading
 from daemons import pairs, week
 from database.dao import meets, users
 from database.interface import connector
 from entities import user
 from utils import config
-from database import common
-from concurrent.futures import ThreadPoolExecutor
+from mysql.connector import pooling
 
 config = config.load("../config.yml")
 app = App(
@@ -210,15 +208,22 @@ def flow_meet_was_not(body, ack, say):
 
 
 if __name__ == "__main__":
-    connection = common.get_db(config["database"]["host"], config["database"]["port"],
-                               config["database"]["username"], config["database"]["password"],
-                               config["database"]["db"])
-    connector = connector.Connector(connection)
+    connection_pool = pooling.MySQLConnectionPool(pool_name="default",
+                                                  pool_size=5,
+                                                  pool_reset_session=True,
+                                                  host=config["database"]["host"],
+                                                  port=config["database"]["port"],
+                                                  database=config["database"]["db"],
+                                                  user=config["database"]["username"],
+                                                  password=config["database"]["password"]
+                                                  )
 
-    pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
+    connector = connector.Connector(connection_pool)
+
+    pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
     pairs.start()
 
-    week = threading.Thread(target=week.care, args=(app.client, config, 5,))
+    week = threading.Thread(target=week.care, args=(app.client, connection_pool, config, 5,))
     week.start()
 
     bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
