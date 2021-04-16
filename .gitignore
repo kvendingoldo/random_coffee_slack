@@ -39,5 +39,7 @@ venv/
 *-overriding.properties
 *.pyc
 
+config.yml
+
 # Misc
 resources/config.yml

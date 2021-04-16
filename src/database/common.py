@@ -14,11 +14,11 @@ def get_db(host, port, user, password, db):
                                              password=password)
         if connection.is_connected():
             info = connection.get_server_info()
-            logger.info("Connected to MySQL Server version ", info)
+            logger.info(f"Connected to MySQL Server version {info}")
             cursor = connection.cursor()
             cursor.execute("select database();")
             record = cursor.fetchone()
-            logger.info("You're connected to database: ", record)
+            logger.info(f"You're connected to database: {record}")
         return connection
     except Error as e:
-        logger.error("Error while connecting to MySQL", e)
+        logger.error(f"Error while connecting to MySQL {e}")

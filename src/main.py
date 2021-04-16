@@ -7,12 +7,13 @@ from mysql.connector import connect, Error
 import threading
 from daemons import pairs, week
 from database.dao import meets, users
+from database.interface import connector
 from entities import user
 from utils import config
 from database import common
 from concurrent.futures import ThreadPoolExecutor
 
-config = config.load("/Users/asharov/projects/personal/random_coffee_slack/resources/config.yml")
+config = config.load("../config.yml")
 app = App(
     token=config["slack"]["otoken"],
     signing_secret=config["slack"]["sigSecret"],
@@ -212,16 +213,18 @@ if __name__ == "__main__":
     connection = common.get_db(config["database"]["host"], config["database"]["port"],
                                config["database"]["username"], config["database"]["password"],
                                config["database"]["db"])
+    connector = connector.Connector(connection)
+    print(users.get_user(connector, "uid").username)
 
-    pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
-    pairs.start()
-
-    week = threading.Thread(target=week.care, args=(app.client, config, 5,))
-    week.start()
-
-    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
-    bot.start()
+    # pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
+    # pairs.start()
+    #
+    # week = threading.Thread(target=week.care, args=(app.client, config, 5,))
+    # week.start()
+    #
+    # bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
+    # bot.start()
 
     # pairs.join()
-    week.join()
-    bot.join()
+    # week.join()
+    # bot.join()
