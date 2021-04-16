@@ -214,17 +214,16 @@ if __name__ == "__main__":
                                config["database"]["username"], config["database"]["password"],
                                config["database"]["db"])
     connector = connector.Connector(connection)
-    print(users.get_user(connector, "uid").username)
 
-    # pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
-    # pairs.start()
-    #
-    # week = threading.Thread(target=week.care, args=(app.client, config, 5,))
-    # week.start()
-    #
-    # bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
-    # bot.start()
+    pairs = threading.Thread(target=pairs.create, args=(app.client, 5,))
+    pairs.start()
 
-    # pairs.join()
-    # week.join()
-    # bot.join()
+    week = threading.Thread(target=week.care, args=(app.client, config, 5,))
+    week.start()
+
+    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
+    bot.start()
+
+    pairs.join()
+    week.join()
+    bot.join()
