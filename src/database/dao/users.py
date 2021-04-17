@@ -42,7 +42,6 @@ class UsersDAO(object):
 
         sql_statement = "SELECT * FROM users"
         result = self.connector.get(sql_statement)
-        print(result)
         for row in result:
             users.append(
                 user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])

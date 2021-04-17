@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
-class MeetsDAO(object):
+import datetime
+
+
+class MeetsDao(object):
     def __init__(self, connector):
         self.connector = connector
 
-
     def add(self, user1, user2):
+        season = datetime.datetime.now().strftime("%Y%V")
+
         sql_statement = f"INSERT IGNORE INTO meets (uid1, uid2) VALUES " \
                         f"(\'{user1.uid}\', " \
-                        f"\'{user2.uid}\' "
+                        f"\'{user2.uid}\'" \
+                        f"\'{season}\')"
 
         return self.connector.post(sql_statement)
 
