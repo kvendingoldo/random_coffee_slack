@@ -89,12 +89,19 @@ def flow_0_start(message, say):
         text=""
     )
 
+@app.action("location")
+def location(body, ack, say):
+    logger.info("location :::", body)
+    uuser = user.User(username=body["user"]["name"],
+                      uid=body["user"]["id"],
+                      loc=body["actions"][0]["selected_options"][0]["value"])
+    usersDAO.set_loc(uuser)
 
 @app.action("flow_1_start")
 def flow_1_start(body, ack, say):
     uuser = user.User(username=body["user"]["username"], uid=body["user"]["id"])
-
-    if usersDAO.is_new(body["user"]["id"]):
+    uuuser = usersDAO.get_user(body["user"]["id"])
+    if not uuuser or uuuser.loc == "none":
         usersDAO.add(uuser)
 
         ack()
@@ -105,7 +112,7 @@ def flow_1_start(body, ack, say):
                     "fallback": "Upgrade your Slack client to use messages like these.",
                     "color": "3AA3E3",
                     "attachment_type": "default",
-                    "callback_id": "select_remote_1234",
+                    "callback_id": "location",
                     "actions": [
                         {
                             "name": "Location",
@@ -153,6 +160,7 @@ def flow_1_start(body, ack, say):
 @app.action("flow_0_cancel")
 def flow_1_cancel(body, ack, say):
     ack()
+    logger.info("flow_0_cancel :::", body)
     say(
         text=f"TODO: flow_0_cancel"
     )
@@ -160,10 +168,15 @@ def flow_1_cancel(body, ack, say):
 
 @app.action("flow_2_start")
 def flow_2_start(body, ack, say):
-    ack()
-    say(
-        text=f"TODO: flow_help"
-    )
+    logger.info("flow_2_start :::", body)
+    uuser = usersDAO.get_user(uid=body["user"]["id"])
+    if uuser.loc == "none":
+        flow_1_start(body, ack, say)
+    else:
+        ack()
+        say(
+            text=f"TODO: flow_help"
+        )
 
 
 @app.action("flow_next_week_yes")
@@ -223,17 +236,17 @@ if __name__ == "__main__":
     connector = connector.Connector(connection_pool)
 
     usersDAO = users.UsersDAO(connector)
-    meetsDAO = meets.MeetsDAO(connector)
+    meetsDAO = meets.MeetsDao(connector)
     # usersDAO.get_user("uid")
-    logger.info(list(usersDAO.pairs()))
+    # logger.info(list(usersDAO.pairs()))
     # pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
     # pairs.start()
     #
     # week = threading.Thread(target=week.care, args=(app.client, connection_pool, config, 5,))
     # week.start()
     #
-    # bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
-    # bot.start()
+    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
+    bot.start()
     #
     # pairs.join()
     # week.join()

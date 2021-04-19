@@ -10,9 +10,10 @@ class UsersDAO(object):
         self.connector = connector
 
     def add(self, user):
-        sql_statement = f"INSERT IGNORE INTO users (username, uid, ready, aware) VALUES " \
+        sql_statement = f"INSERT IGNORE INTO users (username, uid, loc, ready, aware) VALUES " \
                         f"(\'{user.username}\', " \
                         f"\'{user.uid}\', " \
+                        f"\'{user.loc}\', " \
                         f"\'{int(user.ready)}\', " \
                         f"\'{int(user.aware)}\')"
 
@@ -31,11 +32,24 @@ class UsersDAO(object):
         sql_statement = f"UPDATE users SET ready = \'{int(uid.ready)}\' WHERE uid = \'{uid.uid}\'"
         return self.connector.post(sql_statement)
 
+    def set_loc(self, uid):
+        sql_statement = f"UPDATE users SET loc = \'{uid.loc}\' WHERE uid = \'{uid.uid}\'"
+        return self.connector.post(sql_statement)
+
     def get_user(self, uid):
         sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
-
-        return user.User(username=result[0][1], uid=result[0][2], ready=result[0][3], aware=result[0][4])
+        print(result)
+        if len(result) > 0:
+            return user.User(
+                username=result[0][1],
+                uid=result[0][2],
+                loc=result[0][3],
+                ready=result[0][4],
+                aware=result[0][5]
+            )
+        else:
+            return False
 
     def list_all(self):
         users = []
@@ -44,7 +58,7 @@ class UsersDAO(object):
         result = self.connector.get(sql_statement)
         for row in result:
             users.append(
-                user.User(username=row[1], uid=row[2], ready=row[3], aware=row[4])
+                user.User(username=row[1], uid=row[2], loc=row[3], ready=row[4], aware=row[5])
             )
 
         return users

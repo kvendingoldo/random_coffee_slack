@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users
     id       INT          NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     uid      VARCHAR(100) NOT NULL,
+    loc      VARCHAR(100) NOT NULL,
     ready    BOOLEAN      NOT NULL,
     aware    BOOLEAN      NOT NULL,
     PRIMARY KEY (`id`),
@@ -32,4 +33,3 @@ CREATE TABLE IF NOT EXISTS rating
     value DOUBLE       NOT NULL,
     PRIMARY KEY (`id`)
 );
-
