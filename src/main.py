@@ -89,13 +89,16 @@ def flow_0_start(message, say):
         text=""
     )
 
+
 @app.action("location")
 def location(body, ack, say):
     logger.info("location :::", body)
-    uuser = user.User(username=body["user"]["name"],
-                      uid=body["user"]["id"],
-                      loc=body["actions"][0]["selected_options"][0]["value"])
-    usersDAO.set_loc(uuser)
+    ack()
+    if usersDAO.get_user(body["user"]["id"]).loc != "none":
+        usersDAO.set_loc(user.User(username=body["user"]["name"],
+                                   uid=body["user"]["id"],
+                                   loc=body["actions"][0]["selected_options"][0]["value"]))
+
 
 @app.action("flow_1_start")
 def flow_1_start(body, ack, say):
