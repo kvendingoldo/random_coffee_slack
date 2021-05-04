@@ -167,16 +167,6 @@ def flow_participate_1(body, ack, say):
         flow_participate_2(body, ack, say)
 
 
-@app.action("flow_stop")
-def flow_stop(body, ack, say):
-    logger.info("flow::participate::cancel :::", body)
-
-    ack()
-    say(
-        text=f" I’m looking forward to seeing you when you come back"
-    )
-
-
 @app.action("flow_participate_2")
 def flow_participate_2(body, ack, say):
     logger.info("flow::participate::2 :::", body)
@@ -204,6 +194,14 @@ def flow_participate_2(body, ack, say):
         text=""
     )
 
+@app.action("flow_stop")
+def flow_stop(body, ack, say):
+    logger.info("flow::participate::cancel :::", body)
+
+    ack()
+    say(
+        text=f" I’m looking forward to seeing you when you come back"
+    )
 
 @app.action("flow_next_week_yes")
 def flow_next_week_yes(body, ack, say):

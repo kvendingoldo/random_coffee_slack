@@ -47,10 +47,9 @@ def create(sclient, usersDAO, period=60):
         print("pairs daemons")
 
         sclient.chat_postMessage(channel="U01THB38EDV",
-                                 text="Привет!\n"
-                                      "Твоя пара в random coffee на эту неделю: @nickname \n"
-                                      "Не откладывай, договорись о встрече сразу 🙂 \n"
-                                      "Будут вопросы, пиши в чат `help`.\n"
-                                      "👨‍💻 Рекомендуем на этой неделе провести встречу по видеосвязи.\n"
-                                      "Берегите себя и близких! И поддерживайте общение с окружающими онлайн")
+                                 text="Hey!👋\n\n" \
+                                      "This week your Random Coffee partner is @nickname!\n\n" \
+                                      "Lucky you :)\n\n" \
+                                      "Slack them now to set up a meeting."
+                                 )
         time.sleep(period)
