@@ -31,19 +31,18 @@ def flow_help(body, ack, say):
 
 
 @app.message("start")
-def flow_0_start(message, say):
+def flow_participate_0(message, say):
+    logger.info("flow::participate::0")
     say(
         blocks=[
             {
                 "type": "section",
                 "text": {
-                    # TODO (asharov): rewrite
                     "type": "mrkdwn",
-                    "text": "Привет человек (текст будет переписан!)👋 \n" \
-                            "Недавно я узнал о Random coffee challenge и понял - он нужен.\n" \
-                            "Каждую неделю я буду предлагать тебе для встречи интересного человека, случайно выбранного среди других участников." \
-                            "Вы с ним увидите никнеймы друг друга и сможете сразу выбрать подходящий формат для встречи (в офисе, skype, zoom и т.д.).\n" \
-                            "Интересно? Тогда присоединяйся!"
+                    "text": "Hi there!👋\n\n" \
+                            "I'm a Random Coffee bot here to help you create real connections with Grid Dynamis people worldwide. Weekly I'll randomly pick one exciting person for you to catch up with. You both will receive each other's names; slack them, agree on a date and choose a platform to meet: zoom, skype, meet, etc.\n\n" \
+                            "So are you up for?\n\n" \
+                            "Enter Join to move forward."
                 },
                 "accessory": {
                     "type": "image",
@@ -62,7 +61,7 @@ def flow_0_start(message, say):
                             "text": "Join"
                         },
                         "style": "primary",
-                        "action_id": "flow_1_start"
+                        "action_id": "flow_participate_1"
                     },
                     {
                         "type": "button",
@@ -81,7 +80,7 @@ def flow_0_start(message, say):
                             "text": "Cancel"
                         },
                         "style": "danger",
-                        "action_id": "flow_0_cancel"
+                        "action_id": "flow_stop"
                     }
                 ]
             }
@@ -90,6 +89,7 @@ def flow_0_start(message, say):
     )
 
 
+# QUESTION: where are we using it?
 @app.action("location")
 def location(body, ack, say):
     logger.info("location :::", body)
@@ -100,16 +100,24 @@ def location(body, ack, say):
                                    loc=body["actions"][0]["selected_options"][0]["value"]))
 
 
-@app.action("flow_1_start")
-def flow_1_start(body, ack, say):
-    uuser = user.User(username=body["user"]["username"], uid=body["user"]["id"])
-    uuuser = usersDAO.get_user(body["user"]["id"])
-    if not uuuser or uuuser.loc == "none":
-        usersDAO.add(uuser)
+@app.action("flow_participate_1")
+def flow_participate_1(body, ack, say):
+    logger.info("flow::participate::1 :::", body)
 
+    msg_user = usersDAO.get_user(body["user"]["id"])
+
+    print(msg_user)
+    print(msg_user.loc)
+
+    if not msg_user or msg_user.loc == "none":
+        usersDAO.add(user.User(username=body["user"]["username"], uid=body["user"]["id"]))
+
+        # TODO: get links from user
         ack()
         say(
-            text=f"Расскажи немного о себе",
+            text="Tell me a little bit about yourself!\n\n" \
+                 "What are you into?\n\n" \
+                 "Share links on your Instagram or Facebook if any.",
             attachments=[
                 {
                     "fallback": "Upgrade your Slack client to use messages like these.",
@@ -121,7 +129,6 @@ def flow_1_start(body, ack, say):
                             "name": "Location",
                             "text": "You location",
                             "type": "select",
-
                             "options": [
                                 {
                                     "text": "Saratov",
@@ -148,7 +155,7 @@ def flow_1_start(body, ack, say):
                                 "text": "Done"
                             },
                             "style": "primary",
-                            "action_id": "flow_2_start",
+                            "action_id": "flow_participate_2",
                             "value": "click_me_123"
                         }
                     ]
@@ -157,47 +164,75 @@ def flow_1_start(body, ack, say):
             ]
         )
     else:
-        flow_2_start(body, ack, say)
+        flow_participate_2(body, ack, say)
 
 
-@app.action("flow_0_cancel")
-def flow_1_cancel(body, ack, say):
+@app.action("flow_stop")
+def flow_stop(body, ack, say):
+    logger.info("flow::participate::cancel :::", body)
+
     ack()
-    logger.info("flow_0_cancel :::", body)
     say(
-        text=f"TODO: flow_0_cancel"
+        text=f" I’m looking forward to seeing you when you come back"
     )
 
 
-@app.action("flow_2_start")
-def flow_2_start(body, ack, say):
-    logger.info("flow_2_start :::", body)
-    uuser = usersDAO.get_user(uid=body["user"]["id"])
-    if uuser.loc == "none":
-        flow_1_start(body, ack, say)
-    else:
-        ack()
-        say(
-            text=f"TODO: flow_help"
-        )
+@app.action("flow_participate_2")
+def flow_participate_2(body, ack, say):
+    logger.info("flow::participate::2 :::", body)
+
+    ack()
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Wow! Now you’re a Random coffee participant!\n\n" \
+                            "What’s next?\n\n" \
+                            "1. Every Monday you’ll receive a name of your next coffee partner\n" \
+                            "2. Slack them, agree on a date and choose a platform to meet: zoom, skype, meet or even office in your location?\n" \
+                            "3. Be interested and punctual. No one wants their coffee pause to be ruined."
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
+                    "alt_text": "cute donut"
+                }
+            }
+        ],
+        text=""
+    )
 
 
 @app.action("flow_next_week_yes")
 def flow_next_week_yes(body, ack, say):
     ack()
     say(
-        text=f"Отлично!👍! Напишу тебе в понедельник."
+        text=f"Great! Next Monday I’ll choose one more amazing coffee partner for you!"
     )
 
+    # TODO
     # user.ready = True
     # users.set_ready(connection, user)
 
 
-@app.action("flow_next_week_no")
-def flow_next_week_no(body, ack, say):
+@app.action("flow_next_week_pause_1w")
+def flow_next_week_pause_1w(body, ack, say):
     ack()
     say(
-        text=f"Перерыв нужен всегда, понимаю. Вернусь к тебе на следующей неделе"
+        text=f"I see. Let's do this again next week!"
+    )
+
+    # user.ready = False
+    # users.set_ready(connection, user)
+
+
+@app.action("flow_next_week_pause_1m")
+def flow_next_week_pause_1m(body, ack, say):
+    ack()
+    say(
+        text=f"I see. I will get back to you in a month!"
     )
 
     # user.ready = False
@@ -225,7 +260,6 @@ def flow_meet_was_not(body, ack, say):
 
 
 if __name__ == "__main__":
-
     connection_pool = pooling.MySQLConnectionPool(pool_name="default",
                                                   pool_size=5,
                                                   pool_reset_session=True,
