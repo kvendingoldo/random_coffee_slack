@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-from os import listdir
-from os.path import isfile, join
 
 from slack_bolt import App
-from slack_sdk import WebClient
 
 from loguru import logger
 import threading
@@ -21,9 +18,6 @@ app = App(
 )
 
 
-#
-# Bot flow
-#
 @app.action("flow_help")
 def flow_help(body, ack, say):
     ack()
@@ -35,6 +29,7 @@ def flow_help(body, ack, say):
 @app.message("start")
 def flow_participate_0(message, say):
     logger.info("flow::participate::0")
+
     say(
         blocks=[
             {
@@ -93,9 +88,9 @@ def flow_participate_0(message, say):
 
 @app.action("location")
 def location(ack, body, action, logger, client, say):
-    location = body["actions"][0]["selected_options"][0]["value"]
+    logger.info("flow::location")
 
-    logger.info("location :::", location)
+    location = body["actions"][0]["selected_options"][0]["value"]
 
     ack()
 
@@ -109,7 +104,7 @@ def location(ack, body, action, logger, client, say):
 
 @app.action("flow_participate_1")
 def flow_participate_1(ack, body, action, logger, client, say):
-    logger.info("flow::participate::1 :::", body)
+    logger.info("flow::participate::1 ::: ", body)
 
     ack()
     msg_user = usersDAO.get_user(body["user"]["id"])
@@ -117,17 +112,13 @@ def flow_participate_1(ack, body, action, logger, client, say):
     if not msg_user or msg_user.loc == "none":
         usersDAO.add(user.User(username=body["user"]["username"], uid=body["user"]["id"]))
 
-        # TODO: get links from user
-        ack()
-
         blocks = [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
                     "text": "Tell me a little bit about yourself!\n\n" \
-                            "What are you into?\n\n" \
-                            "Share links on your Instagram or Facebook if any.",
+                            "What are you location?"
                 }
             }
         ]
@@ -168,7 +159,7 @@ def flow_participate_1(ack, body, action, logger, client, say):
 
 @app.action("flow_participate_2")
 def flow_participate_2(ack, body, action, logger, client, say):
-    logger.info("flow::participate::2 :::", body)
+    logger.info("flow::participate::2 ::: ", body)
 
     ack()
     blocks = [
@@ -190,11 +181,10 @@ def flow_participate_2(ack, body, action, logger, client, say):
         }
     ]
 
-    if body["original_message"]["ts"]:
+    if "original_message" in body.keys():
         ts = body["original_message"]["ts"]
     else:
         ts = body["message"]["ts"]
-
 
     client.chat_update(channel=body['channel']['id'],
                        ts=ts,
@@ -204,7 +194,7 @@ def flow_participate_2(ack, body, action, logger, client, say):
 
 @app.action("flow_stop")
 def flow_stop(body, ack, say):
-    logger.info("flow::participate::cancel :::", body)
+    logger.info("flow::participate::cancel ::: ", body)
 
     ack()
     say(
@@ -264,6 +254,73 @@ def flow_meet_was_not(body, ack, say):
     )
 
     # TODO: do some calculation stuff
+
+
+@app.message("update_profile")
+def update_profile(ack, body, action, logger, client, say):
+    logger.info("flow::update_profile :::", body)
+
+    ack()
+
+    blocks = [
+        {
+            "dispatch_action": True,
+            "type": "input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "plain_text_input-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Instagram",
+                "emoji": True
+            }
+        },
+        {
+            "dispatch_action": True,
+            "type": "input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "plain_text_input-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Telegram",
+                "emoji": True
+            }
+        },
+        {
+            "dispatch_action": True,
+            "type": "input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "plain_text_input-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "VK",
+                "emoji": True
+            }
+        },
+        {
+            "dispatch_action": True,
+            "type": "input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "plain_text_input-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Facebook",
+                "emoji": True
+            }
+        }
+    ]
+
+    # client.chat_update(channel=body['channel']['id'],
+    #                    ts=body["message"]["ts"],
+    #                    attachments=[],
+    #                    blocks=blocks)
 
 
 if __name__ == "__main__":

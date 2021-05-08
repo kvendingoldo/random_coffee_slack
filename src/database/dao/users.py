@@ -19,10 +19,6 @@ class UsersDAO(object):
 
         return self.connector.post(sql_statement)
 
-    def is_new(self, uid):
-        sql_statement = ""
-        return self.connector.get(sql_statement)
-
     def is_ready(self, uid):
         sql_statement = f"SELECT ready FROM users WHERE username = \'{uid}\'"
 
