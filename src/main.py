@@ -3,6 +3,8 @@ from os import listdir
 from os.path import isfile, join
 
 from slack_bolt import App
+from slack_sdk import WebClient
+
 from loguru import logger
 import threading
 from daemons import pairs, week
@@ -90,7 +92,7 @@ def flow_participate_0(message, say):
 
 
 @app.action("location")
-def location(body, ack, say):
+def location(ack, body, action, logger, client, say):
     location = body["actions"][0]["selected_options"][0]["value"]
 
     logger.info("location :::", location)
@@ -102,93 +104,102 @@ def location(body, ack, say):
                                    uid=body["user"]["id"],
                                    loc=location))
 
-    flow_participate_2(body, ack, say)
+    flow_participate_2(ack, body, action, logger, client, say)
 
 
 @app.action("flow_participate_1")
-def flow_participate_1(body, ack, say):
+def flow_participate_1(ack, body, action, logger, client, say):
     logger.info("flow::participate::1 :::", body)
 
+    ack()
     msg_user = usersDAO.get_user(body["user"]["id"])
-
-    print(msg_user)
-    print(msg_user.loc)
 
     if not msg_user or msg_user.loc == "none":
         usersDAO.add(user.User(username=body["user"]["username"], uid=body["user"]["id"]))
 
         # TODO: get links from user
         ack()
-        say(
-            text="",
-            attachments=[
-                {
-                    "fallback": "Upgrade your Slack client to use messages like these.",
-                    "color": "3AA3E3",
-                    "attachment_type": "default",
-                    "callback_id": "location",
-                    "actions": [
-                        {
-                            "name": "Location",
-                            "text": "You location",
-                            "type": "select",
-                            "options": [
-                                {
-                                    "text": "Saratov",
-                                    "value": "saratov"
-                                },
-                                {
-                                    "text": "St. Petersburg",
-                                    "value": "spb"
-                                },
-                            ],
-                        }
-                    ]
-                }
-            ],
-            blocks=[
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Tell me a little bit about yourself!\n\n" \
-                                "What are you into?\n\n" \
-                                "Share links on your Instagram or Facebook if any.",
-                    },
-                }
 
-            ]
-        )
-    else:
-        flow_participate_2(body, ack, say)
-
-
-@app.action("flow_participate_2")
-def flow_participate_2(body, ack, say):
-    logger.info("flow::participate::2 :::", body)
-
-    ack()
-    say(
-        blocks=[
+        blocks = [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Wow! Now you’re a Random coffee participant!\n\n" \
-                            "What’s next?\n\n" \
-                            "1. Every Monday you’ll receive a name of your next coffee partner\n" \
-                            "2. Slack them, agree on a date and choose a platform to meet: zoom, skype, meet or even office in your location?\n" \
-                            "3. Be interested and punctual. No one wants their coffee pause to be ruined."
-                },
-                "accessory": {
-                    "type": "image",
-                    "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
-                    "alt_text": "cute donut"
+                    "text": "Tell me a little bit about yourself!\n\n" \
+                            "What are you into?\n\n" \
+                            "Share links on your Instagram or Facebook if any.",
                 }
             }
-        ],
-        text=""
-    )
+        ]
+
+        attachments = [
+            {
+                "fallback": "Upgrade your Slack client to use messages like these.",
+                "color": "3AA3E3",
+                "attachment_type": "default",
+                "callback_id": "location",
+                "actions": [
+                    {
+                        "name": "Location",
+                        "text": "You location",
+                        "type": "select",
+                        "options": [
+                            {
+                                "text": "Saratov",
+                                "value": "saratov"
+                            },
+                            {
+                                "text": "St. Petersburg",
+                                "value": "spb"
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+
+        client.chat_update(channel=body['channel']['id'],
+                           ts=body['message']['ts'],
+                           attachments=attachments,
+                           blocks=blocks)
+    else:
+        flow_participate_2(ack, body, action, logger, client, say)
+
+
+@app.action("flow_participate_2")
+def flow_participate_2(ack, body, action, logger, client, say):
+    logger.info("flow::participate::2 :::", body)
+
+    ack()
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Wow! Now you’re a Random coffee participant!\n\n" \
+                        "What’s next?\n\n" \
+                        "1. Every Monday you’ll receive a name of your next coffee partner\n" \
+                        "2. Slack them, agree on a date and choose a platform to meet: zoom, skype, meet or even office in your location?\n" \
+                        "3. Be interested and punctual. No one wants their coffee pause to be ruined."
+            },
+            "accessory": {
+                "type": "image",
+                "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
+                "alt_text": "cute donut"
+            }
+        }
+    ]
+
+    if body["original_message"]["ts"]:
+        ts = body["original_message"]["ts"]
+    else:
+        ts = body["message"]["ts"]
+
+
+    client.chat_update(channel=body['channel']['id'],
+                       ts=ts,
+                       attachments=[],
+                       blocks=blocks)
 
 
 @app.action("flow_stop")
