@@ -32,8 +32,10 @@ class UsersDAO(object):
         sql_statement = f"UPDATE users SET ready = \'{int(uid.ready)}\' WHERE uid = \'{uid.uid}\'"
         return self.connector.post(sql_statement)
 
-    def set_loc(self, uid):
-        sql_statement = f"UPDATE users SET loc = \'{uid.loc}\' WHERE uid = \'{uid.uid}\'"
+    def set_loc(self, user):
+        print("USER")
+        print(user)
+        sql_statement = f"UPDATE users SET loc = \'{user.loc}\' WHERE uid = \'{user.uid}\'"
         return self.connector.post(sql_statement)
 
     def get_user(self, uid):

@@ -89,15 +89,20 @@ def flow_participate_0(message, say):
     )
 
 
-# QUESTION: where are we using it?
 @app.action("location")
 def location(body, ack, say):
-    logger.info("location :::", body)
+    location = body["actions"][0]["selected_options"][0]["value"]
+
+    logger.info("location :::", location)
+
     ack()
-    if usersDAO.get_user(body["user"]["id"]).loc != "none":
+
+    if usersDAO.get_user(body["user"]["id"]).loc == "none":
         usersDAO.set_loc(user.User(username=body["user"]["name"],
                                    uid=body["user"]["id"],
-                                   loc=body["actions"][0]["selected_options"][0]["value"]))
+                                   loc=location))
+
+    flow_participate_2(body, ack, say)
 
 
 @app.action("flow_participate_1")
@@ -115,9 +120,7 @@ def flow_participate_1(body, ack, say):
         # TODO: get links from user
         ack()
         say(
-            text="Tell me a little bit about yourself!\n\n" \
-                 "What are you into?\n\n" \
-                 "Share links on your Instagram or Facebook if any.",
+            text="",
             attachments=[
                 {
                     "fallback": "Upgrade your Slack client to use messages like these.",
@@ -145,20 +148,13 @@ def flow_participate_1(body, ack, say):
             ],
             blocks=[
                 {
-                    "type": "actions",
-                    "elements": [
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "Done"
-                            },
-                            "style": "primary",
-                            "action_id": "flow_participate_2",
-                            "value": "click_me_123"
-                        }
-                    ]
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Tell me a little bit about yourself!\n\n" \
+                                "What are you into?\n\n" \
+                                "Share links on your Instagram or Facebook if any.",
+                    },
                 }
 
             ]
@@ -194,6 +190,7 @@ def flow_participate_2(body, ack, say):
         text=""
     )
 
+
 @app.action("flow_stop")
 def flow_stop(body, ack, say):
     logger.info("flow::participate::cancel :::", body)
@@ -202,6 +199,7 @@ def flow_stop(body, ack, say):
     say(
         text=f" I’m looking forward to seeing you when you come back"
     )
+
 
 @app.action("flow_next_week_yes")
 def flow_next_week_yes(body, ack, say):
