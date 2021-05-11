@@ -237,23 +237,51 @@ def flow_next_week_pause_1m(body, ack, say):
 
 
 @app.action("flow_meet_was")
-def flow_meet_was(body, ack, say):
+def flow_meet_was(ack, body, action, logger, client, say):
     ack()
-    say(
-        text=f"TODO: flow_meet_was"
-    )
 
     # TODO: do some calculation stuff
+
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Thank you for response!"
+            }
+        }
+    ]
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=body["message"]["ts"],
+        attachments=[],
+        blocks=blocks
+    )
 
 
 @app.action("flow_meet_was_not")
-def flow_meet_was_not(body, ack, say):
+def flow_meet_was_not(ack, body, action, logger, client, say):
     ack()
-    say(
-        text=f"TODO: flow_meet_was_not"
-    )
 
     # TODO: do some calculation stuff
+
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Thank you for response!"
+            }
+        }
+    ]
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=body["message"]["ts"],
+        attachments=[],
+        blocks=blocks
+    )
 
 
 @app.message("update_profile")
@@ -343,12 +371,12 @@ if __name__ == "__main__":
     # pairs = threading.Thread(target=pairs.create, args=(app.client, connection_pool, 5,))
     # pairs.start()
     #
-    # week = threading.Thread(target=week.care, args=(app.client, connection_pool, config, 5,))
-    # week.start()
-    #
+    week = threading.Thread(target=week.care, args=(app.client, connection_pool, config,))
+    week.start()
+
     bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
     bot.start()
-    #
+
     # pairs.join()
     # week.join()
     # bot.join()

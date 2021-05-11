@@ -41,15 +41,15 @@ def create(sclient, usersDAO, period=60):
         pairs = zip(ready[::2], ready[1::2])
 
     # TODO: kvendingoldo after implementation of DAO layer
-    while True:
-        # make pairs
-        # notify user
-        print("pairs daemons")
-
-        sclient.chat_postMessage(channel="U01THB38EDV",
-                                 text="Hey!👋\n\n" \
-                                      "This week your Random Coffee partner is @nickname!\n\n" \
-                                      "Lucky you :)\n\n" \
-                                      "Slack them now to set up a meeting."
-                                 )
-        time.sleep(period)
+    # while True:
+    #     # make pairs
+    #     # notify user
+    #     print("pairs daemons")
+    #
+    #     sclient.chat_postMessage(channel="U01THB38EDV",
+    #                              text="Hey!👋\n\n" \
+    #                                   "This week your Random Coffee partner is @nickname!\n\n" \
+    #                                   "Lucky you :)\n\n" \
+    #                                   "Slack them now to set up a meeting."
+    #                              )
+    #     time.sleep(period)

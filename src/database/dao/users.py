@@ -29,15 +29,12 @@ class UsersDAO(object):
         return self.connector.post(sql_statement)
 
     def set_loc(self, user):
-        print("USER")
-        print(user)
         sql_statement = f"UPDATE users SET loc = \'{user.loc}\' WHERE uid = \'{user.uid}\'"
         return self.connector.post(sql_statement)
 
     def get_user(self, uid):
         sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
-        print(result)
         if len(result) > 0:
             return user.User(
                 username=result[0][1],
@@ -49,7 +46,7 @@ class UsersDAO(object):
         else:
             return False
 
-    def list_all(self):
+    def list(self):
         users = []
 
         sql_statement = "SELECT * FROM users"
