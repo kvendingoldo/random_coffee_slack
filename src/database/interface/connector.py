@@ -3,7 +3,7 @@
 from loguru import logger
 
 
-class Connector(object):
+class Connector:
     def __init__(self, connection_pool):
 
         self.connection = connection_pool.get_connection()
@@ -15,12 +15,12 @@ class Connector(object):
             cursor = self.connection.cursor()
             cursor.execute("select database();")
             record = cursor.fetchone()
-            logger.info(f"You're connected to database: {record}")
+            logger.info(f"Connected to database: {record}")
 
     def __del__(self):
         if self.connection.is_connected():
             self.connection.close()
-            logger.info(f"MySQL connection is closed")
+            logger.info("MySQL connection is closed")
 
     def get(self, sql_statement):
         with self.connection.cursor(buffered=True) as cursor:

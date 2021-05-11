@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def get_current():
@@ -9,5 +9,6 @@ def get_current():
 
 
 def get_next():
-    season = datetime.now().strftime("%Y%V")
+    today = datetime.now()
+    season = (today + timedelta(days=(7 - today.weekday()))).strftime("%Y%V")
     return season

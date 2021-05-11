@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import random
 
 from entities import user
-from random import randrange, shuffle
 
 
-class UsersDAO(object):
+class UserDAO:
     def __init__(self, connector):
         self.connector = connector
 
@@ -24,8 +22,12 @@ class UsersDAO(object):
 
         return self.connector.get(sql_statement)
 
+    def set_unready(self, uid):
+        sql_statement = f"UPDATE users SET ready = '0' WHERE uid = \'{uid}\'"
+        return self.connector.post(sql_statement)
+
     def set_ready(self, uid):
-        sql_statement = f"UPDATE users SET ready = \'{int(uid.ready)}\' WHERE uid = \'{uid.uid}\'"
+        sql_statement = f"UPDATE users SET ready = '1' WHERE uid = \'{uid}\'"
         return self.connector.post(sql_statement)
 
     def set_loc(self, user):
@@ -57,12 +59,3 @@ class UsersDAO(object):
             )
 
         return users
-
-    def ready_all(self):
-        sql_statement = f"SELECT uid FROM users where ready = 1"
-        ready = []
-        result = self.connector.get(sql_statement)
-        for id in result:
-            ready.append(id[0])
-
-        return ready
