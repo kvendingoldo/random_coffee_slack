@@ -8,7 +8,6 @@ class RatingDao:
     def add(self, new_uid):
         users = self.connector.get(f"SELECT uid from users WHERE uid != '{new_uid}'")
         for user in users:
-            print(user)
             uid = user[0]
 
             self.connector.post(

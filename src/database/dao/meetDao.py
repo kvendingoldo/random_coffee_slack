@@ -8,38 +8,33 @@ class MeetDao:
     def __init__(self, connector):
         self.connector = connector
 
-    def create(self, sclient, usersDAO, period=60):
-        # users = []
-        #
-        # season = datetime.datetime.now().strftime("%Y%V")
-        #
-        # for user in users:
-        #     sql_statement = f"SELECT AVAIL.user" \
-        #                     f"FROM (SELECT uid2 AS user FROM rating where uid1 = ? ORDER BY value DESC) AVAIL" \
-        #                     f"LEFT JOIN (" \
-        #                     f"SELECT DISTINCT user" \
-        #                     f"FROM (" \
-        #                     f"SELECT uid2 AS user, season" \
-        #                     f"FROM meets" \
-        #                     f"WHERE uid1 = ?" \
-        #                     f"UNION" \
-        #                     f"SELECT uid1 AS user, season" \
-        #                     f"FROM meets" \
-        #                     f"WHERE uid2 = ?" \
-        #                     f") RES" \
-        #                     f"WHERE season = ?" \
-        #                     f") BUSY ON AVAIL.user = BUSY.user" \
-        #                     f"WHERE BUSY.user IS null;"
-        #     user2 = ""
-        #     # get result
-        #
-        #     meetDao.add(user1, user2, season)
+    def create(self):
+        users = []
 
-        ready = usersDAO.ready_all()
-        if len(ready) % 2 == 0:
-            ready.pop(randrange(0, len(ready)))
-            shuffle(ready)
-            pairs = zip(ready[::2], ready[1::2])
+        season = season.get_current()
+
+        for user in users:
+            #     sql_statement = f"SELECT AVAIL.user" \
+            #                     f"FROM (SELECT uid2 AS user FROM rating where uid1 = ? ORDER BY value DESC) AVAIL" \
+            #
+            #                     f"LEFT JOIN (" \
+            #                     f"SELECT DISTINCT user" \
+            #                     f"FROM (" \
+            #                     f"SELECT uid2 AS user, season" \
+            #                     f"FROM meets" \
+            #                     f"WHERE uid1 = ?" \
+            #                     f"UNION" \
+            #
+            #                     f"SELECT uid1 AS user, season" \
+            #                     f"FROM meets" \
+            #                     f"WHERE uid2 = ?" \
+            #                     f") RES" \
+            #                     f"WHERE season = ?" \
+            #                     f") BUSY ON AVAIL.user = BUSY.user" \
+            #                     f"WHERE BUSY.user IS null;"
+            #     user2 = ""
+
+            self.add(uid1, uid2)
 
         # TODO: kvendingoldo after implementation of DAO layer
         # while True:
@@ -55,8 +50,9 @@ class MeetDao:
         #                              )
         #     time.sleep(period)
 
-    def add(self, uid1, uid2):
-        season_id = season.get_current()
+    def add(self, uid1, uid2, season_id="current"):
+        if season_id == "current":
+            season_id = season.get_current()
 
         sql_statement = "INSERT IGNORE INTO meets (season, uid1, uid2) VALUES " \
                         f"(\'{uid1}\', " \

@@ -231,6 +231,11 @@ def flow_next_week_yes(body, ack, say):
 @app.action("flow_next_week_pause_1w")
 def flow_next_week_pause_1w(body, ack, say):
     ack()
+
+    usr = userDAO.get_user(body["user"]["id"])
+    usr.pause_in_weeks = 1
+    userDAO.set_pause(usr)
+
     say(
         text=f"I see. Let's do this again next week!"
     )
@@ -239,12 +244,14 @@ def flow_next_week_pause_1w(body, ack, say):
 @app.action("flow_next_week_pause_1m")
 def flow_next_week_pause_1m(body, ack, say):
     ack()
+
+    usr = userDAO.get_user(body["user"]["id"])
+    usr.pause_in_weeks = 4
+    userDAO.set_pause(usr)
+
     say(
         text=f"I see. I will get back to you in a month!"
     )
-
-    # user.ready = False
-    # users.set_ready(connection, user)
 
 
 @app.action("flow_meet_was")
@@ -296,6 +303,54 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
                 "type": "mrkdwn",
                 "text": "Thank you for response!"
             }
+        }
+    ]
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=body["message"]["ts"],
+        attachments=[],
+        blocks=blocks
+    )
+
+
+@app.action("flow_meet_had")
+def flow_meet_was_not(ack, body, action, logger, client, say):
+    ack()
+
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": ":eyes: How it was?"
+            },
+
+        },
+        {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "emoji": True,
+                        "text": "Awesome!"
+                    },
+                    "style": "primary",
+                    "action_id": "flow_meet_was"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "emoji": True,
+                        "text": "Could be better"
+                    },
+                    "style": "primary",
+                    "action_id": "flow_meet_was_not"
+                }
+            ]
         }
     ]
 

@@ -6,12 +6,12 @@ DROP TABLE IF EXISTS meets;
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id       INT          NOT NULL AUTO_INCREMENT,
-    username VARCHAR(100) NOT NULL,
-    uid      VARCHAR(100) NOT NULL,
-    loc      VARCHAR(100) NOT NULL,
-    ready    BOOLEAN      NOT NULL,
-    aware    BOOLEAN      NOT NULL,
+    id             INT          NOT NULL AUTO_INCREMENT,
+    username       VARCHAR(100) NOT NULL,
+    uid            VARCHAR(100) NOT NULL,
+    loc            VARCHAR(100) NOT NULL,
+    ready          BOOLEAN      NOT NULL DEFAULT true,
+    pause_in_weeks INT          NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
     UNIQUE KEY (uid)
 );
