@@ -14,6 +14,10 @@ class RatingDao:
                 f"INSERT INTO rating (uid1, uid2, value) VALUES (\'{new_uid}\', \'{uid}\', 1.0)"
             )
 
+            self.connector.post(
+                f"INSERT INTO rating (uid1, uid2, value) VALUES (\'{uid}\', \'{new_uid}\', 1.0)"
+            )
+
     def change(self, uid1, uid2, delta):
         sql_statement = f"SELECT value FROM rating WHERE uid1 = \'{uid1}\' AND uid2 =\'{uid2}\'"
 

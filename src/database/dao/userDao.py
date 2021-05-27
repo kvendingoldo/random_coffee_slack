@@ -75,6 +75,17 @@ class UserDAO:
 
         return users
 
+    def list_avail_ids(self):
+        user_ids = []
+
+        sql_statement = "SELECT * FROM users WHERE pause_in_weeks = 0"
+        result = self.connector.get(sql_statement)
+        for row in result:
+            user_ids.append(row[2])
+
+        return user_ids
+
+
     def decrement_users_pause(self, decrement):
         users = self.list()
 
