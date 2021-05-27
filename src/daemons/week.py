@@ -176,7 +176,7 @@ def care(client, userDAO, meetDAO, config):
         # weekday = date.today().weekday() + 1
         weekday = 1
         users = userDAO.list()
-        user_avail_ids = userDAO.list_avail_ids()
+        user_avail_ids = userDAO.list_ids(only_available=True)
 
         if weekday == 1:
             #pass

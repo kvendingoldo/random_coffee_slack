@@ -98,14 +98,11 @@ def location(ack, body, action, logr, client, say):
     logger.info("flow::location")
     ack()
 
-    if userDAO.get_user(body["user"]["id"]).loc == "none":
-        userDAO.set_loc(
-            user.User(
-                username=body["user"]["name"],
-                uid=body["user"]["id"],
-                loc=body["actions"][0]["selected_options"][0]["value"]
-            )
-        )
+    usr = userDAO.get(body["user"]["id"])
+
+    if usr.loc == "none":
+        usr.loc = body["actions"][0]["selected_options"][0]["value"]
+        userDAO.update(usr)
 
     flow_participate_2(ack, body, action, logr, client, say)
 
@@ -115,7 +112,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
     logger.info("flow::participate::1 ::: ", body)
     ack()
 
-    msg_user = userDAO.get_user(body["user"]["id"])
+    msg_user = userDAO.get(body["user"]["id"])
 
     if not msg_user or msg_user.loc == "none":
         new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"])
@@ -212,9 +209,10 @@ def flow_stop(body, ack, say):
     say(
         text="I’m looking forward to seeing you when you come back"
     )
-    userDAO.set_unready(
-        uid=body["user"]["id"]
-    )
+
+    usr = userDAO.get(body["user"]["id"])
+    usr.pause_in_weeks = "inf"
+    userDAO.update(usr)
 
 
 @app.action("flow_next_week_yes")
@@ -223,18 +221,19 @@ def flow_next_week_yes(body, ack, say):
     say(
         text="Great! Next Monday I’ll choose one more amazing coffee partner for you!"
     )
-    userDAO.set_ready(
-        uid=body["user"]["id"]
-    )
+
+    usr = userDAO.get(body["user"]["id"])
+    usr.pause_in_weeks = "0"
+    userDAO.update(usr)
 
 
 @app.action("flow_next_week_pause_1w")
 def flow_next_week_pause_1w(body, ack, say):
     ack()
 
-    usr = userDAO.get_user(body["user"]["id"])
-    usr.pause_in_weeks = 1
-    userDAO.set_pause(usr)
+    usr = userDAO.get(body["user"]["id"])
+    usr.pause_in_weeks = "1"
+    userDAO.update(usr)
 
     say(
         text=f"I see. Let's do this again next week!"
@@ -245,9 +244,9 @@ def flow_next_week_pause_1w(body, ack, say):
 def flow_next_week_pause_1m(body, ack, say):
     ack()
 
-    usr = userDAO.get_user(body["user"]["id"])
-    usr.pause_in_weeks = 4
-    userDAO.set_pause(usr)
+    usr = userDAO.get(body["user"]["id"])
+    usr.pause_in_weeks = "4"
+    userDAO.update(usr)
 
     say(
         text=f"I see. I will get back to you in a month!"

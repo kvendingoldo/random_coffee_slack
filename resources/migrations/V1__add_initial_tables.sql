@@ -10,8 +10,7 @@ CREATE TABLE IF NOT EXISTS users
     username       VARCHAR(100) NOT NULL,
     uid            VARCHAR(100) NOT NULL,
     loc            VARCHAR(100) NOT NULL,
-    ready          BOOLEAN      NOT NULL DEFAULT true,
-    pause_in_weeks INT          NOT NULL DEFAULT 0,
+    pause_in_weeks VARCHAR(3)   NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`),
     UNIQUE KEY (uid)
 );
