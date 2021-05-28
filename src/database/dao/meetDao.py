@@ -27,7 +27,7 @@ class MeetDao:
                             f"  SELECT uid" \
                             f"  FROM users" \
                             f"  INNER JOIN" \
-                            f"  (SELECT uid2 FROM rating where uid1 = 'USR0' ORDER BY value DESC) RAT" \
+                            f"  (SELECT uid2 FROM rating where uid1 = '{uid}' ORDER BY value DESC) RAT" \
                             f"  ON RAT.uid2 = uid" \
                             f"  WHERE pause_in_weeks = '0'" \
                             f") AVAIL" \
