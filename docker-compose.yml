@@ -8,3 +8,18 @@ services:
       MYSQL_DATABASE: coffee
     ports:
       - "3306:3306"
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - ~/bot/config.yml:/home/rcb/bot/config.yml
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ~/bot/certs:/certs
+      - resources/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "443:443"
