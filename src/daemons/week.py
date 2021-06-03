@@ -179,7 +179,7 @@ def care(client, userDAO, meetDAO, config):
         user_avail_ids = userDAO.list_ids(only_available=True)
 
         if weekday == 1:
-            meetDAO.create_based_on_rating(user_avail_ids)
+            meetDAO.create_based_on_rating(user_avail_ids, config)
 
         for user in users:
             if user.uid == "U01THB38EDV":

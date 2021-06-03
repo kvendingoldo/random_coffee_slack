@@ -10,7 +10,7 @@ class MeetDao:
     def __init__(self, connector):
         self.connector = connector
 
-    def create_random(self, uids):
+    def create_random(self, uids, config):
         season_id = season.get_current()
         for_rand_distr = []
 
@@ -23,7 +23,7 @@ class MeetDao:
 
 
 
-    def create_based_on_rating(self, uids):
+    def create_based_on_rating(self, uids, config):
         print("start pairs algo")
 
         season_id = season.get_current()
@@ -74,8 +74,7 @@ class MeetDao:
 
         if for_rand_distr:
             if (len(for_rand_distr) % 2) == 1:
-                # kvendingoldo user
-                for_rand_distr.append("U01THB38EDV")
+                for_rand_distr.append(config["bot"]["additionalUsers"][0])
 
             for uid in for_rand_distr:
                 uid_pair = random.choice(for_rand_distr)
