@@ -10,7 +10,20 @@ class MeetDao:
     def __init__(self, connector):
         self.connector = connector
 
-    def create(self, uids):
+    def create_random(self, uids):
+        season_id = season.get_current()
+        for_rand_distr = []
+
+        for uid in uids:
+            if self.check_exist(uid):
+                continue
+
+        # TODO
+        sql_statement = ""
+
+
+
+    def create_based_on_rating(self, uids):
         print("start pairs algo")
 
         season_id = season.get_current()
@@ -86,16 +99,6 @@ class MeetDao:
                 print("====")
 
         print("end")
-
-            # while True:
-        #
-        #     sclient.chat_postMessage(channel="U01THB38EDV",
-        #                              text="Hey!👋\n\n" \
-        #                                   "This week your Random Coffee partner is @nickname!\n\n" \
-        #                                   "Lucky you :)\n\n" \
-        #                                   "Slack them now to set up a meeting."
-        #                              )
-        #     time.sleep(period)
 
     def add(self, uid1, uid2, season_id="current"):
         if season_id == "current":
