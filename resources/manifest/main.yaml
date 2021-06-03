@@ -2,16 +2,13 @@ _metadata:
   major_version: 1
   minor_version: 1
 display_information:
-  name: RandomCoffee Bot
+  name: Random Coffee Bot
+  description: If you have any questions - contact @asharov or @ytsvetkova
+  background_color: "#0d0d0d"
 features:
   bot_user:
-    display_name: RandomCoffee Bot
-    always_online: false
-  shortcuts:
-    - name: open_modal
-      type: global
-      callback_id: open_modal
-      description: open_modal
+    display_name: Random Coffee Bot
+    always_online: true
 oauth_config:
   scopes:
     user:
@@ -31,4 +28,3 @@ settings:
   org_deploy_enabled: false
   socket_mode_enabled: false
   is_hosted: false
-
