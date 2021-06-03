@@ -11,17 +11,17 @@ def load(yaml_path, env_path):
 
     load_dotenv(env_path)
 
-    slack_otoken = os.environ.get("SLACK_OTOKEN")
-    slack_sigsecret = os.environ.get("SLACK_SIGSECRET")
+    slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
+    slack_app_token = os.environ.get("SLACK_APP_TOKEN")
+
     db_password = os.environ.get("DATABASE_PASSWORD")
 
     config["slack"] = {
-        "otoken": slack_otoken,
-        "sigSecret": slack_sigsecret
+        "botToken": slack_bot_token,
+        "appToken": slack_app_token
+
     }
 
     config["database"]["password"] = db_password
-
-    print(config)
 
     return config

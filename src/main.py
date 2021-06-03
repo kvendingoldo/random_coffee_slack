@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import threading
+
 from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+
 from loguru import logger
 from mysql.connector import pooling
 
@@ -14,8 +17,7 @@ from database.interface import connector
 
 config = config.load("../resources/config.yml", "../.env")
 app = App(
-    token=config["slack"]["otoken"],
-    signing_secret=config["slack"]["sigSecret"],
+    token=config["slack"]["botToken"]
 )
 
 
@@ -452,7 +454,7 @@ if __name__ == "__main__":
     )
     week.start()
 
-    bot = threading.Thread(target=app.start(port=config["bot"]["port"]), args=())
+    bot = threading.Thread(target=SocketModeHandler(app, config["slack"]["appToken"]).start(), args=())
     bot.start()
 
     # week.join()

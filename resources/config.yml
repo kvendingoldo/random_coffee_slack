@@ -1,5 +1,4 @@
 bot:
-  port: 3000
   additionalUsers:
     - U01THB38EDV # kvendingoldo
 
