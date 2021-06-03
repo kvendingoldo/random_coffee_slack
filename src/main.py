@@ -12,7 +12,7 @@ from daemons import week
 from database.dao import meetDao, userDao, ratingDao
 from database.interface import connector
 
-config = config.load("../config.yml")
+config = config.load("../resources/config.yml", "../.env")
 app = App(
     token=config["slack"]["otoken"],
     signing_secret=config["slack"]["sigSecret"],

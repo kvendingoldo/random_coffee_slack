@@ -1,4 +1,4 @@
-slack_bolt
-loguru
-mysql-connector-python
-pyyaml
+slack_bolt==1.6.0
+loguru==0.5.3
+mysql-connector-python==8.0.25
+pyyaml==5.4.1
