@@ -174,12 +174,12 @@ def ask_about_next_week(sclient, user):
 def care(client, userDAO, meetDAO, config):
     while True:
         # weekday = date.today().weekday() + 1
-        weekday = 5
+        weekday = 1
         users = userDAO.list()
         user_avail_ids = userDAO.list_ids(only_available=True)
 
         if weekday == 1:
-            meetDAO.create_based_on_rating(user_avail_ids, config)
+            meetDAO.create(user_avail_ids, config)
 
         for user in users:
             if user.uid == "U01THB38EDV":

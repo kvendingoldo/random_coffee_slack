@@ -8,6 +8,12 @@ def get_current():
     return season
 
 
+def get_previous():
+    today = datetime.now()
+    season = (today - timedelta(days=(7 - today.weekday()))).strftime("%Y%V")
+    return season
+
+
 def get_next():
     today = datetime.now()
     season = (today + timedelta(days=(7 - today.weekday()))).strftime("%Y%V")
