@@ -18,6 +18,12 @@ class RatingDao:
                 f"INSERT INTO rating (uid1, uid2, value) VALUES (\'{uid}\', \'{new_uid}\', 1.0)"
             )
 
+    def delete(self, uid):
+        sql_statement = f"DELETE FROM rating WHERE " \
+                        f"uid1=\'{uid}\' OR uid2=\'{uid}\'"
+
+        return self.connector.post(sql_statement)
+
     def change(self, uid1, uid2, delta):
         sql_statement = f"SELECT value FROM rating WHERE uid1 = \'{uid1}\' AND uid2 =\'{uid2}\'"
 

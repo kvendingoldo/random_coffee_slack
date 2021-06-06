@@ -17,6 +17,12 @@ class UserDAO:
 
         return self.connector.post(sql_statement)
 
+    def delete_by_id(self, uid):
+        sql_statement = f"DELETE FROM users WHERE " \
+                        f"uid=\'{uid}\'"
+
+        return self.connector.post(sql_statement)
+
     def update(self, user):
         sql_statement = f"UPDATE users SET " \
                         f"username=\'{user.username}\'," \

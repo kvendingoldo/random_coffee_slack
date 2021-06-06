@@ -21,8 +21,6 @@ class MeetDao:
         # TODO
         sql_statement = ""
 
-
-
     def create_based_on_rating(self, uids, config):
         print("start pairs algo")
 
@@ -110,6 +108,20 @@ class MeetDao:
                         f"\'0\')"
 
         return self.connector.post(sql_statement)
+
+    def delete(self, uid):
+        sql_statement = f"DELETE FROM meets WHERE " \
+                        f"uid1=\'{uid}\'"
+
+        self.connector.post(sql_statement)
+
+        sql_statement = f"UPDATE meets SET " \
+                        f"uid2='deleted'" \
+                        f"WHERE uid2=\'{uid}\'"
+
+        self.connector.post(sql_statement)
+
+        return True
 
     def get_partner_uid(self, season_id, uid):
         sql_statement = f"SELECT uid2 as uid FROM meets WHERE season = \'{season_id}\' AND uid1 = \'{uid}\' " \

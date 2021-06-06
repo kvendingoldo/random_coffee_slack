@@ -9,6 +9,16 @@ features:
   bot_user:
     display_name: Random Coffee Bot
     always_online: true
+  slash_commands:
+    - command: /start
+      description: Start to be a participant!
+      should_escape: false
+    - command: /help
+      description: Give me a help about RCB
+      should_escape: false
+    - command: /quit
+      description: Stop to be a participant
+      should_escape: false
 oauth_config:
   scopes:
     user:
@@ -17,6 +27,7 @@ oauth_config:
       - im:history
       - im:read
       - incoming-webhook
+      - commands
 settings:
   event_subscriptions:
     request_url: http://90e24b5c20c7.ngrok.io/slack/events

@@ -13,6 +13,7 @@ from utils import config, season
 
 from daemons import week
 from database.dao import meetDao, userDao, ratingDao
+from database import exceptions
 from database.interface import connector
 
 config = config.load("../resources/config.yml", "../.env")
@@ -21,19 +22,33 @@ app = App(
 )
 
 
-@app.action("flow_help")
+@app.command("/help")
 def flow_help(body, ack, say):
     logger.info("flow::help")
     ack()
 
-    # TODO: Add text
     say(
-        text=f"TODO: Add some help info"
+        text=f"TODO"
     )
 
 
-@app.message("start")
-def flow_participate_0(message, say):
+@app.command("/quit")
+def flow_quit(body, ack, say):
+    logger.info("flow::quit")
+
+    uid = body['user_id']
+    userDAO.delete_by_id(uid)
+    ratingDAO.delete(uid)
+    meetDAO.delete(uid)
+
+    say(
+        text=f"Sorry to see this decision. Hope to see you soon again. " \
+             f"Just write /start again in this case. Information about you was deleted."
+    )
+
+
+@app.command("/start")
+def flow_participate_0(body, ack, say):
     logger.info("flow::participate::0")
 
     say(
@@ -114,9 +129,9 @@ def flow_participate_1(ack, body, action, logr, client, say):
     logger.info("flow::participate::1 ::: ", body)
     ack()
 
-    msg_user = userDAO.get(body["user"]["id"])
-
-    if not msg_user or msg_user.loc == "none":
+    try:
+        msg_user = userDAO.get(body["user"]["id"])
+    except exceptions.NoResultFound as ex:
         new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"])
         userDAO.add(new_user)
         ratingDAO.add(new_user.uid)
