@@ -3,18 +3,12 @@
 from datetime import datetime, timedelta
 
 
-def get_current():
-    season = datetime.now().strftime("%Y%V")
-    return season
+def get(kind="current"):
+    season = datetime.now()
 
+    if kind == "next":
+        season = season + timedelta(days=(7 - season.weekday()))
+    elif kind == "previous":
+        season = season - timedelta(days=(7 - season.weekday()))
 
-def get_previous():
-    today = datetime.now()
-    season = (today - timedelta(days=(7 - today.weekday()))).strftime("%Y%V")
-    return season
-
-
-def get_next():
-    today = datetime.now()
-    season = (today + timedelta(days=(7 - today.weekday()))).strftime("%Y%V")
-    return season
+    return season.strftime("%Y%V")

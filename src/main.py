@@ -38,9 +38,10 @@ def flow_quit(body, ack, say):
 
     uid = body['user_id']
     userDAO.delete_by_id(uid)
-    ratingDAO.delete(uid)
-    meetDAO.delete(uid)
+    ratingDAO.delete_by_id(uid)
+    meetDAO.delete_by_id(uid)
 
+    ack()
     say(
         text=f"Sorry to see this decision. Hope to see you soon again. " \
              f"Just write /start again in this case. Information about you was deleted."
@@ -48,9 +49,10 @@ def flow_quit(body, ack, say):
 
 
 @app.command("/start")
-def flow_participate_0(body, ack, say):
+def flow_participate_0(ack, say, command):
     logger.info("flow::participate::0")
 
+    ack()
     say(
         blocks=[
             {
@@ -115,7 +117,7 @@ def location(ack, body, action, logr, client, say):
     logger.info("flow::location")
     ack()
 
-    usr = userDAO.get(body["user"]["id"])
+    usr = userDAO.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
         usr.loc = body["actions"][0]["selected_options"][0]["value"]
@@ -130,11 +132,12 @@ def flow_participate_1(ack, body, action, logr, client, say):
     ack()
 
     try:
-        msg_user = userDAO.get(body["user"]["id"])
+        msg_user = userDAO.get_by_id(body["user"]["id"])
     except exceptions.NoResultFound as ex:
-        new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"])
+        new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"], pause_in_weeks="0")
+
         userDAO.add(new_user)
-        ratingDAO.add(new_user.uid)
+        ratingDAO.add_by_id(new_user.uid)
 
         blocks = [
             {
@@ -227,7 +230,7 @@ def flow_stop(body, ack, say):
         text="I’m looking forward to seeing you when you come back"
     )
 
-    usr = userDAO.get(body["user"]["id"])
+    usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "inf"
     userDAO.update(usr)
 
@@ -239,7 +242,7 @@ def flow_next_week_yes(body, ack, say):
         text="Great! Next Monday I’ll choose one more amazing coffee partner for you!"
     )
 
-    usr = userDAO.get(body["user"]["id"])
+    usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
     userDAO.update(usr)
 
@@ -248,7 +251,7 @@ def flow_next_week_yes(body, ack, say):
 def flow_next_week_pause_1w(body, ack, say):
     ack()
 
-    usr = userDAO.get(body["user"]["id"])
+    usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "1"
     userDAO.update(usr)
 
@@ -261,7 +264,7 @@ def flow_next_week_pause_1w(body, ack, say):
 def flow_next_week_pause_1m(body, ack, say):
     ack()
 
-    usr = userDAO.get(body["user"]["id"])
+    usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "4"
     userDAO.update(usr)
 
@@ -276,11 +279,11 @@ def flow_meet_was(ack, body, action, logger, client, say):
 
     uid = body["user"]["id"]
 
-    partner_uid = meetDAO.get_partner_uid(
-        season.get_current(), uid
+    partner_uid = meetDAO.get_uid2_by_id(
+        season.get(), uid
     )
 
-    ratingDAO.change(uid, partner_uid, 0.1)
+    ratingDAO.change_by_ids(uid, partner_uid, 0.1)
 
     blocks = [
         {
@@ -306,11 +309,11 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
 
     uid = body["user"]["id"]
 
-    partner_uid = meetDAO.get_partner_uid(
-        season.get_current(), uid
+    partner_uid = meetDAO.get_uid2_by_id(
+        season.get(), uid
     )
 
-    ratingDAO.change(uid, partner_uid, -0.1)
+    ratingDAO.change_by_ids(uid, partner_uid, -0.1)
 
     blocks = [
         {
@@ -378,6 +381,7 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
     )
 
 
+# TODO
 @app.message("update_profile")
 def update_profile(ack, body, action, logger, client, say):
     logger.info("flow::update_profile :::", body)

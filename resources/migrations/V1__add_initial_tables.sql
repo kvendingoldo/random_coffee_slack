@@ -3,6 +3,7 @@ CREATE DATABASE if not exists coffee;
 use coffee;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS meets;
+DROP TABLE IF EXISTS rating;
 
 CREATE TABLE IF NOT EXISTS users
 (

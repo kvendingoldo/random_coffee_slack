@@ -33,7 +33,7 @@ class UserDAO:
 
         return self.connector.post(sql_statement)
 
-    def get(self, uid):
+    def get_by_id(self, uid):
         sql_statement = f"SELECT * FROM users WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
         if len(result) > 0:
@@ -44,7 +44,7 @@ class UserDAO:
                 pause_in_weeks=result[0][4]
             )
         else:
-            raise exceptions.NoResultFound("")
+            raise exceptions.NoResultFound
 
     def list(self, only_available=False):
         sql_statement = "SELECT * FROM users"
@@ -59,7 +59,7 @@ class UserDAO:
                 users.append(user.User(username=row[1], uid=row[2], loc=row[3], pause_in_weeks=row[4]))
             return users
         else:
-            raise exceptions.NoResultFound("")
+            raise exceptions.NoResultFound
 
     def list_ids(self, only_available=False):
         sql_statement = "SELECT * FROM users"
@@ -74,7 +74,7 @@ class UserDAO:
 
             return ids
         else:
-            raise exceptions.NoResultFound("")
+            raise exceptions.NoResultFound
 
     def decrement_users_pause(self, decrement):
         users = self.list()

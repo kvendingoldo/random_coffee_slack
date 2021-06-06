@@ -21,7 +21,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 # Add user to docker group
 #
 sudo groupadd docker
-sudo usermod -aG docker $USER
+sudo usermod -aG docker ${USER}
 newgrp docker
 docker run --rm hello-world
 
@@ -34,4 +34,4 @@ sudo chmod +x /usr/local/bin/docker-compose
 #
 # Create bot folders
 #
-mkdir -p ~/bot/certs
+mkdir -p ~/bot

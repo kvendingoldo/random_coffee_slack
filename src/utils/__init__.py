@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ["config.py", "season"]
+__all__ = ["config", "season"]

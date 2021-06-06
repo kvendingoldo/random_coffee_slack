@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import yaml
 import os
+import yaml
+
 from dotenv import load_dotenv
 
 

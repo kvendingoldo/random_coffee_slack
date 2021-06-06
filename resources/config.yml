@@ -10,4 +10,4 @@ database:
 
 daemons:
   week:
-    poolPeriod: 10 #seconds, 86400
+    poolPeriod: 100 #seconds, 86400

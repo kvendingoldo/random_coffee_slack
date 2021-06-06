@@ -15,24 +15,9 @@ services:
         max-size: 50m
   app:
     build: .
-    ports:
-      - "3000:3000"
     restart: always
     volumes:
       - ~/bot/config.yml:/home/rcb/bot/config.yml
-    logging:
-      driver: "json-file"
-      options:
-        max-file: 5
-        max-size: 50m
-  nginx:
-    image: nginx:latest
-    restart: always
-    volumes:
-      - ~/bot/certs:/certs
-      - resources/nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - "443:443"
     logging:
       driver: "json-file"
       options:

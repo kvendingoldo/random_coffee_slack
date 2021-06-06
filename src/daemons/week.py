@@ -2,25 +2,33 @@
 
 import time
 
+from loguru import logger
+
 from database import exceptions
 from utils import season
 
 
 def meet_info(client, meetDao, user):
-    uid = meetDao.get_partner_uid(
-        season.get_current(), user.uid
-    )
+    try:
+        uid = meetDao.get_uid2_by_id(
+            season.get(), user.uid
+        )
 
-    client.chat_postMessage(
-        channel=user.uid,
-        text="Hey!👋 \n\n"
-             f"This week your Random Coffee partner is <@{uid}>! Lucky you :) \n\n"
-             "Slack them now to set up a meeting."
-    )
+        client.chat_postMessage(
+            channel=user.uid,
+            text="Hey!👋 \n\n"
+                 f"This week your Random Coffee partner is <@{uid}>! Lucky you :) \n\n"
+                 "Slack them now to set up a meeting."
+        )
+    except:
+        logger.error("Info message didn't send")
+
+    else:
+        logger.info("Info message sent")
 
 
 def meet_reminder(client, meetDao, user):
-    completed = meetDao.get_status(season.get_current(), user.uid)
+    completed = meetDao.get_status(season.get(), user.uid)
 
     if not completed:
         client.chat_postMessage(
@@ -58,9 +66,7 @@ def meet_reminder(client, meetDao, user):
 
 def meet_feedback(client, meetsDao, user):
     try:
-        uid = meetsDao.get_partner_uid(
-            season.get_current(), user.uid
-        )
+        uid = meetsDao.get_uid2_by_id(season.get(), user.uid)
 
         client.chat_postMessage(
             channel=user.uid,
@@ -184,7 +190,6 @@ def care(client, userDAO, meetDAO, config):
         for user in users:
             if user.uid == "U01THB38EDV":
                 if weekday == 1:
-
                     meet_info(client, meetDAO, user)
                 elif weekday == 3:
                     meet_reminder(client, meetDAO, user)

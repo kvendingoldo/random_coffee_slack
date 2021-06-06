@@ -4,14 +4,14 @@ _metadata:
 display_information:
   name: Random Coffee Bot
   description: If you have any questions - contact @asharov or @ytsvetkova
-  background_color: "#0d0d0d"
+  background_color: "#2e0f2e"
 features:
   bot_user:
     display_name: Random Coffee Bot
     always_online: true
   slash_commands:
     - command: /start
-      description: Start to be a participant!
+      description: Start to be a participant
       should_escape: false
     - command: /help
       description: Give me a help about RCB
@@ -30,12 +30,10 @@ oauth_config:
       - commands
 settings:
   event_subscriptions:
-    request_url: http://90e24b5c20c7.ngrok.io/slack/events
     bot_events:
       - message.im
   interactivity:
     is_enabled: true
-    request_url: http://90e24b5c20c7.ngrok.io/slack/events
   org_deploy_enabled: false
   socket_mode_enabled: true
   is_hosted: false
