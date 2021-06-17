@@ -15,8 +15,6 @@ features:
       should_escape: false
 oauth_config:
   scopes:
-    user:
-      - admin
     bot:
       - commands
       - im:history
