@@ -22,8 +22,25 @@ app = App(
 )
 
 
-@app.command("/help")
+@app.command("/rcb")
+def flow_rcb_command(body, ack, say):
+    msg = body["text"]
+    if msg:
+        if msg == "start":
+            flow_participate_0(body, ack, say)
+        elif msg == "help":
+            flow_help(body, ack, say)
+        elif msg == "quit":
+            flow_quit(body, ack, say)
+        else:
+            ack()
+            say(
+                text=f"Command not found. Available commands are: start, quit, help."
+            )
+
+
 def flow_help(body, ack, say):
+    logger.info(body["text"])
     logger.info("flow::help")
     ack()
 
@@ -32,7 +49,6 @@ def flow_help(body, ack, say):
     )
 
 
-@app.command("/quit")
 def flow_quit(body, ack, say):
     logger.info("flow::quit")
 
@@ -48,8 +64,7 @@ def flow_quit(body, ack, say):
     )
 
 
-@app.command("/start")
-def flow_participate_0(ack, say, command):
+def flow_participate_0(body, ack, say):
     logger.info("flow::participate::0")
 
     ack()

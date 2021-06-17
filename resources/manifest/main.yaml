@@ -10,24 +10,17 @@ features:
     display_name: Random Coffee Bot
     always_online: true
   slash_commands:
-    - command: /start
-      description: Start to be a participant
-      should_escape: false
-    - command: /help
-      description: Give me a help about RCB
-      should_escape: false
-    - command: /quit
-      description: Stop to be a participant
+    - command: /rcb
+      description: Use random coffee bot
       should_escape: false
 oauth_config:
   scopes:
     user:
       - admin
     bot:
-      - im:history
-      - im:read
-      - incoming-webhook
       - commands
+      - im:history
+      - incoming-webhook
 settings:
   event_subscriptions:
     bot_events:
@@ -36,4 +29,3 @@ settings:
     is_enabled: true
   org_deploy_enabled: false
   socket_mode_enabled: true
-  is_hosted: false
