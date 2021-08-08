@@ -1,4 +1,5 @@
 FROM python:3
+#3-alpine
 
 #
 # Create a base UID/GID and SUID/SGID which will be used by container
