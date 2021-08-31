@@ -4,6 +4,7 @@ import time
 
 from loguru import logger
 
+from datetime import date
 from database import exceptions
 from utils import season
 
@@ -179,8 +180,7 @@ def ask_about_next_week(sclient, user):
 
 def care(client, userDAO, meetDAO, config):
     while True:
-        # weekday = date.today().weekday() + 1
-        weekday = 1
+        weekday = date.today().weekday() + 1
         users = userDAO.list()
         user_avail_ids = userDAO.list_ids(only_available=True)
 

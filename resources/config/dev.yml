@@ -1,0 +1,13 @@
+bot:
+  additionalUsers:
+    - U01THB38EDV # kvendingoldo
+
+database:
+  host: 127.0.0.1
+  port: 3306
+  db: coffee
+  username: root
+
+daemons:
+  week:
+    poolPeriod: 86400

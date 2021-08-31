@@ -16,7 +16,7 @@ from database.dao import meetDao, userDao, ratingDao
 from database import exceptions
 from database.interface import connector
 
-config = config.load("../resources/config.yml", "../.env")
+config = config.load("../resources/config.yml")
 app = App(
     token=config["slack"]["botToken"]
 )
@@ -127,16 +127,31 @@ def flow_participate_0(body, ack, say):
     )
 
 
+@app.event("message")
+def handle_message_events(event):
+    logger.info("test")
+    logger.info(event)
+
+
 @app.action("location")
 def location(ack, body, action, logr, client, say):
     logger.info("flow::location")
     ack()
 
+    logger.info("abc1")
+    logger.info(body)
+    logger.info("abc11")
+    logger.info(body["actions"])
+    logger.info("abc12")
+    logger.info(body["actions"][0]["selected_option"]["text"]["text"])
+
     usr = userDAO.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
-        usr.loc = body["actions"][0]["selected_options"][0]["value"]
+        usr.loc = body["actions"][0]["selected_option"]["text"]["text"]
         userDAO.update(usr)
+
+    logger.info("abc2")
 
     flow_participate_2(ack, body, action, logr, client, say)
 
@@ -161,44 +176,77 @@ def flow_participate_1(ack, body, action, logr, client, say):
                     "type": "mrkdwn",
                     "text": "Tell me a little bit about yourself! \n\n" \
                             "What are you location?"
+                },
+                "accessory": {
+                    "type": "static_select",
+                    "placeholder": {
+                        "type": "plain_text",
+                        "text": "Select an item",
+                        "emoji": True
+                    },
+                    "options": [
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Saratov",
+                                "emoji": True
+                            },
+                            "value": "saratov_value"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Saint Petersburg",
+                                "emoji": True
+                            },
+                            "value": "spb_value"
+                        }
+                    ],
+                    "action_id": "location"
                 }
             }
         ]
 
-        attachments = [
-            {
-                "fallback": "Upgrade your Slack client to use messages like these.",
-                "color": "3AA3E3",
-                "attachment_type": "default",
-                "callback_id": "location",
-                "actions": [
-                    {
-                        "name": "Location",
-                        "text": "You location",
-                        "type": "select",
-                        "options": [
-                            {
-                                "text": "Saratov",
-                                "value": "saratov"
-                            },
-                            {
-                                "text": "St. Petersburg",
-                                "value": "spb"
-                            },
-                        ]
-                    }
-                ]
-            }
-        ]
+        # attachments = [
+        #     {
+        #         "fallback": "Upgrade your Slack client to use messages like these.",
+        #         "color": "3AA3E3",
+        #         "attachment_type": "default",
+        #         "callback_id": "location",
+        #         "actions": [
+        #             {
+        #                 "name": "Location",
+        #                 "text": "You location",
+        #                 "type": "select",
+        #                 "options": [
+        #                     {
+        #                         "text": "Saratov",
+        #                         "value": "saratov"
+        #                     },
+        #                     {
+        #                         "text": "St. Petersburg",
+        #                         "value": "spb"
+        #                     },
+        #                 ]
+        #             }
+        #         ]
+        #     }
+        # ]
+
+        logger.info("abc0")
 
         client.chat_update(
             channel=body['channel']['id'],
+            # attachments = attachments,
             ts=body['message']['ts'],
-            attachments=attachments,
             blocks=blocks
         )
+
+        logger.info("abc01")
     else:
         flow_participate_2(ack, body, action, logr, client, say)
+
+    logger.info("abc02")
 
 
 @app.action("flow_participate_2")

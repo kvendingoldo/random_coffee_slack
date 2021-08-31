@@ -1,13 +1,1 @@
-bot:
-  additionalUsers:
-    - U01THB38EDV # kvendingoldo
-
-database:
-  host: 127.0.0.1
-  port: 3306
-  db: coffee
-  username: root
-
-daemons:
-  week:
-    poolPeriod: 100 #seconds, 86400
+/Users/asharov/projects/personal/random_coffee_slack/resources/config/dev.yml

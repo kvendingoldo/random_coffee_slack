@@ -1,0 +1,13 @@
+bot:
+  additionalUsers:
+    - U4BSUSM5Z # Alex Sharov
+
+database:
+  host: db
+  port: 3306
+  db: coffee
+  username: root
+
+daemons:
+  week:
+    poolPeriod: 86400
