@@ -7,6 +7,7 @@ from loguru import logger
 from datetime import date
 from database import exceptions
 from utils import season
+from constants import messages
 
 
 def meet_info(client, meetDao, user):
@@ -17,9 +18,7 @@ def meet_info(client, meetDao, user):
 
         client.chat_postMessage(
             channel=user.uid,
-            text="Hey!👋 \n\n"
-                 f"This week your Random Coffee partner is <@{uid}>! Lucky you :) \n\n"
-                 "Slack them now to set up a meeting."
+            text=messages.MEET_INFO.format(uid)
         )
     except:
         logger.error("Info message didn't send")
@@ -29,7 +28,7 @@ def meet_info(client, meetDao, user):
 
 
 def meet_reminder(client, meetDao, user):
-    completed = meetDao.get_status(season.get(), user.uid)
+    completed = meetDao.get_status_by_id(season.get(), user.uid)
 
     if not completed:
         client.chat_postMessage(
@@ -40,9 +39,7 @@ def meet_reminder(client, meetDao, user):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "✉️ How are things?\n\n" \
-                                "Meed-week is the best day to set up a meeting with your coffee partner!\n\n" \
-                                "Slack them now to set up a meeting."
+                        "text": messages.MEET_REMINDER
                     },
 
                 },
@@ -77,8 +74,8 @@ def meet_feedback(client, meetsDao, user):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "The week is over! \n\n" \
-                                f"Did you get a chance to catch up with <@{uid}> for a coffee break?"
+                        "text": messages.MEET_FEEDBACK.format(uid)
+
                     },
 
                 },
@@ -123,8 +120,7 @@ def ask_about_next_week(sclient, user):
                 "text": {
 
                     "type": "mrkdwn",
-                    "text": "New week – new opportunities!\n\n" \
-                            "Are you taking part in Random Coffee meetings next week?"
+                    "text": messages.MEET_NEXT
 
                 },
 
@@ -185,18 +181,17 @@ def care(client, userDAO, meetDAO, config):
         user_avail_ids = userDAO.list_ids(only_available=True)
 
         if weekday == 1:
-            meetDAO.create(user_avail_ids, config)
-
+            if len(user_avail_ids) > 1:
+                meetDAO.create(user_avail_ids, config)
         for user in users:
-            if user.uid == "U01THB38EDV":
-                if weekday == 1:
-                    meet_info(client, meetDAO, user)
-                elif weekday == 3:
-                    meet_reminder(client, meetDAO, user)
-                elif weekday == 5:
-                    meet_feedback(client, meetDAO, user)
-                elif weekday == 7:
-                    ask_about_next_week(client, user)
-                    userDAO.decrement_users_pause(1)
+            if weekday == 1:
+                meet_info(client, meetDAO, user)
+            elif weekday == 3:
+                meet_reminder(client, meetDAO, user)
+            elif weekday == 5:
+                meet_feedback(client, meetDAO, user)
+            elif weekday == 7:
+                ask_about_next_week(client, user)
+                userDAO.decrement_users_pause(1)
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])

@@ -3,7 +3,7 @@ bot:
     - U4BSUSM5Z # Alex Sharov
 
 database:
-  host: db
+  host: mysql
   port: 3306
   db: coffee
   username: root

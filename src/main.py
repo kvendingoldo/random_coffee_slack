@@ -15,6 +15,7 @@ from daemons import week
 from database.dao import meetDao, userDao, ratingDao
 from database import exceptions
 from database.interface import connector
+from constants import messages
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -23,7 +24,7 @@ app = App(
 
 
 @app.command("/rcb")
-def flow_rcb_command(body, ack, say):
+def rcb_command(body, ack, say):
     msg = body["text"]
     if msg:
         if msg == "start":
@@ -34,18 +35,31 @@ def flow_rcb_command(body, ack, say):
             flow_quit(body, ack, say)
         else:
             ack()
-            say(
-                text=f"Command not found. Available commands are: start, quit, help."
-            )
+            say(text=messages.NOT_FOUND)
 
 
 def flow_help(body, ack, say):
-    logger.info(body["text"])
-    logger.info("flow::help")
+    logger.info("flow::help (command)")
     ack()
+    say(text=messages.FLOW_HELP)
 
-    say(
-        text=f"TODO"
+
+@app.action("help")
+def action_help(ack, body, client, say):
+    logger.info("flow::help (action)")
+    ack()
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=body['message']['ts'],
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_HELP
+                }
+            }
+        ]
     )
 
 
@@ -58,10 +72,7 @@ def flow_quit(body, ack, say):
     meetDAO.delete_by_id(uid)
 
     ack()
-    say(
-        text=f"Sorry to see this decision. Hope to see you soon again. " \
-             f"Just write /start again in this case. Information about you was deleted."
-    )
+    say(text=messages.FLOW_QUIT)
 
 
 def flow_participate_0(body, ack, say):
@@ -74,13 +85,7 @@ def flow_participate_0(body, ack, say):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Hi there!👋\n\n"
-                            "I'm a Random Coffee bot here to help you create real connections with Grid Dynamis people worldwide. "
-                            "Weekly I'll randomly pick one exciting person for you to catch up with. "
-                            "You both will receive each other's names; "
-                            "slack them, agree on a date and choose a platform to meet: zoom, skype, meet, etc. \n\n"
-                            "So are you up for? \n\n"
-                            "Enter Join to move forward."
+                    "text": messages.FLOW_PARTICIPATE_0
                 },
                 "accessory": {
                     "type": "image",
@@ -108,7 +113,7 @@ def flow_participate_0(body, ack, say):
                             "emoji": True,
                             "text": "Help"
                         },
-                        "action_id": "flow_help"
+                        "action_id": "help"
                     },
                     {
                         "type": "button",
@@ -118,7 +123,7 @@ def flow_participate_0(body, ack, say):
                             "text": "Cancel"
                         },
                         "style": "danger",
-                        "action_id": "flow_stop"
+                        "action_id": "stop"
                     }
                 ]
             }
@@ -127,31 +132,16 @@ def flow_participate_0(body, ack, say):
     )
 
 
-@app.event("message")
-def handle_message_events(event):
-    logger.info("test")
-    logger.info(event)
-
-
 @app.action("location")
 def location(ack, body, action, logr, client, say):
     logger.info("flow::location")
     ack()
 
-    logger.info("abc1")
-    logger.info(body)
-    logger.info("abc11")
-    logger.info(body["actions"])
-    logger.info("abc12")
-    logger.info(body["actions"][0]["selected_option"]["text"]["text"])
-
     usr = userDAO.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
-        usr.loc = body["actions"][0]["selected_option"]["text"]["text"]
+        usr.loc = body["actions"][0]["selected_option"]["value"]
         userDAO.update(usr)
-
-    logger.info("abc2")
 
     flow_participate_2(ack, body, action, logr, client, say)
 
@@ -174,8 +164,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Tell me a little bit about yourself! \n\n" \
-                            "What are you location?"
+                    "text": messages.FLOW_PARTICIPATE_1
                 },
                 "accessory": {
                     "type": "static_select",
@@ -191,7 +180,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
                                 "text": "Saratov",
                                 "emoji": True
                             },
-                            "value": "saratov_value"
+                            "value": "saratov"
                         },
                         {
                             "text": {
@@ -199,7 +188,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
                                 "text": "Saint Petersburg",
                                 "emoji": True
                             },
-                            "value": "spb_value"
+                            "value": "spb"
                         }
                     ],
                     "action_id": "location"
@@ -207,46 +196,13 @@ def flow_participate_1(ack, body, action, logr, client, say):
             }
         ]
 
-        # attachments = [
-        #     {
-        #         "fallback": "Upgrade your Slack client to use messages like these.",
-        #         "color": "3AA3E3",
-        #         "attachment_type": "default",
-        #         "callback_id": "location",
-        #         "actions": [
-        #             {
-        #                 "name": "Location",
-        #                 "text": "You location",
-        #                 "type": "select",
-        #                 "options": [
-        #                     {
-        #                         "text": "Saratov",
-        #                         "value": "saratov"
-        #                     },
-        #                     {
-        #                         "text": "St. Petersburg",
-        #                         "value": "spb"
-        #                     },
-        #                 ]
-        #             }
-        #         ]
-        #     }
-        # ]
-
-        logger.info("abc0")
-
         client.chat_update(
             channel=body['channel']['id'],
-            # attachments = attachments,
             ts=body['message']['ts'],
             blocks=blocks
         )
-
-        logger.info("abc01")
     else:
         flow_participate_2(ack, body, action, logr, client, say)
-
-    logger.info("abc02")
 
 
 @app.action("flow_participate_2")
@@ -259,11 +215,7 @@ def flow_participate_2(ack, body, action, logr, client, say):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Wow! Now you’re a Random coffee participant! \n\n" \
-                        "What’s next? \n\n" \
-                        "1. Every Monday you’ll receive a name of your next coffee partner \n" \
-                        "2. Slack them, agree on a date and choose a platform to meet: zoom, skype, meet or even office in your location? \n" \
-                        "3. Be interested and punctual. No one wants their coffee pause to be ruined."
+                "text": messages.FLOW_PARTICIPATE_2
             },
             "accessory": {
                 "type": "image",
@@ -281,17 +233,14 @@ def flow_participate_2(ack, body, action, logr, client, say):
     client.chat_update(
         channel=body['channel']['id'],
         ts=ts,
-        attachments=[],
         blocks=blocks
     )
 
 
-@app.action("flow_stop")
-def flow_stop(body, ack, say):
+@app.action("stop")
+def action_stop(body, ack, say):
     ack()
-    say(
-        text="I’m looking forward to seeing you when you come back"
-    )
+    say(text=messages.ACTION_STOP)
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "inf"
@@ -301,9 +250,7 @@ def flow_stop(body, ack, say):
 @app.action("flow_next_week_yes")
 def flow_next_week_yes(body, ack, say):
     ack()
-    say(
-        text="Great! Next Monday I’ll choose one more amazing coffee partner for you!"
-    )
+    say(text=messages.FLOW_WEEK_YES)
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
@@ -318,9 +265,7 @@ def flow_next_week_pause_1w(body, ack, say):
     usr.pause_in_weeks = "1"
     userDAO.update(usr)
 
-    say(
-        text=f"I see. Let's do this again next week!"
-    )
+    say(text=messages.FLOW_WEEK_PAUSE_1W)
 
 
 @app.action("flow_next_week_pause_1m")
@@ -331,9 +276,7 @@ def flow_next_week_pause_1m(body, ack, say):
     usr.pause_in_weeks = "4"
     userDAO.update(usr)
 
-    say(
-        text=f"I see. I will get back to you in a month!"
-    )
+    say(text=messages.FLOW_WEEK_PAUSE_1M)
 
 
 @app.action("flow_meet_was")
@@ -353,7 +296,7 @@ def flow_meet_was(ack, body, action, logger, client, say):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Thank you for response!"
+                "text": messages.FLOW_MEET_WAS
             }
         }
     ]
@@ -361,7 +304,6 @@ def flow_meet_was(ack, body, action, logger, client, say):
     client.chat_update(
         channel=body['channel']['id'],
         ts=body["message"]["ts"],
-        attachments=[],
         blocks=blocks
     )
 
@@ -383,7 +325,8 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "Thank you for response!"
+                "text": messages.FLOW_MEET_WASNT
+
             }
         }
     ]
@@ -391,13 +334,12 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
     client.chat_update(
         channel=body['channel']['id'],
         ts=body["message"]["ts"],
-        attachments=[],
         blocks=blocks
     )
 
 
 @app.action("flow_meet_had")
-def flow_meet_was_not(ack, body, action, logger, client, say):
+def flow_meet_had(ack, body, action, logger, client, say):
     ack()
 
     blocks = [
@@ -405,7 +347,7 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": ":eyes: How it was?"
+                "text": messages.FLOW_MEET_HAD
             },
 
         },
@@ -439,77 +381,8 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
     client.chat_update(
         channel=body['channel']['id'],
         ts=body["message"]["ts"],
-        attachments=[],
         blocks=blocks
     )
-
-
-# TODO
-@app.message("update_profile")
-def update_profile(ack, body, action, logger, client, say):
-    logger.info("flow::update_profile :::", body)
-
-    ack()
-
-    blocks = [
-        {
-            "dispatch_action": True,
-            "type": "input",
-            "element": {
-                "type": "plain_text_input",
-                "action_id": "plain_text_input-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Instagram",
-                "emoji": True
-            }
-        },
-        {
-            "dispatch_action": True,
-            "type": "input",
-            "element": {
-                "type": "plain_text_input",
-                "action_id": "plain_text_input-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Telegram",
-                "emoji": True
-            }
-        },
-        {
-            "dispatch_action": True,
-            "type": "input",
-            "element": {
-                "type": "plain_text_input",
-                "action_id": "plain_text_input-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "VK",
-                "emoji": True
-            }
-        },
-        {
-            "dispatch_action": True,
-            "type": "input",
-            "element": {
-                "type": "plain_text_input",
-                "action_id": "plain_text_input-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Facebook",
-                "emoji": True
-            }
-        }
-    ]
-
-    # client.chat_update(channel=body['channel']['id'],
-    #                    ts=body["message"]["ts"],
-    #                    attachments=[],
-    #                    blocks=blocks)
 
 
 if __name__ == "__main__":

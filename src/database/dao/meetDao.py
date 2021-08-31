@@ -60,8 +60,9 @@ class MeetDao:
                 uids.remove(uid)
 
             else:
-                for_rand_distr.append(uid)
-                uids.remove(uid)
+                if len(uids) > 0:
+                    for_rand_distr.append(uid)
+                    uids.remove(uid)
 
         if for_rand_distr:
             if (len(for_rand_distr) % 2) == 1:

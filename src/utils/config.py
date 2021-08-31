@@ -3,6 +3,7 @@
 import os
 import yaml
 
+
 def load(yaml_path):
     with open(yaml_path, "r") as f:
         config = yaml.safe_load(f)

@@ -1,10 +1,10 @@
-FROM python:3
+FROM python:3-alpine
 
 #
 # Create a base UID/GID and SUID/SGID which will be used by container
 #
-RUN groupadd --system --gid 1000 rcb \
- && useradd --system --gid rcb --uid 1000 --shell /bin/bash --create-home rcb \
+RUN addgroup -S --gid 1000 rcb \
+ && adduser -S -G rcb -u 1000 -s /bin/bash rcb \
  && mkdir -p /run/user/1000 \
  && chown -R rcb /run/user/1000 /home/rcb \
  && echo rcb:100000:65536 | tee /etc/subuid | tee /etc/subgid

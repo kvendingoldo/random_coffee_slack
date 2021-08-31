@@ -1,6 +1,6 @@
 version: '3.1'
 services:
-  db:
+  mysql:
     container_name: mysql
     image: mysql:8.0
     restart: always
@@ -10,14 +10,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ~/bot/sql:/docker-entrypoint-initdb.d/:rw
+      - ${BOT_HOME}/sql:/docker-entrypoint-initdb.d/:rw
+      - ${BOT_HOME}/mysql_data:/var/lib/mysql
   app:
     container_name: bot
     image: rcb:${BOT_VERSION}
     restart: always
+    env_file:
+      - ${BOT_HOME}/resources/.env
     volumes:
-      - ~/bot/resources/config.yml:/home/rcb/bot/resources/config.yml
-      - ~/bot/resources/.env:/home/rcb/bot/.env
-
-# TODO: rework it
-#config = config.load("../resources/config.yml", "../.env")
+      - ${BOT_HOME}/resources/config.yml:/home/rcb/bot/resources/config.yml

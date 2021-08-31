@@ -15,10 +15,13 @@ features:
       should_escape: false
 oauth_config:
   scopes:
+    user:
+      - im:read
     bot:
       - commands
       - im:history
       - incoming-webhook
+      - chat:write
 settings:
   event_subscriptions:
     bot_events:
@@ -27,3 +30,4 @@ settings:
     is_enabled: true
   org_deploy_enabled: false
   socket_mode_enabled: true
+  token_rotation_enabled: false
