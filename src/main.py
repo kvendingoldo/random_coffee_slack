@@ -30,7 +30,8 @@ def rcb_command(body, ack, say):
         if msg == "start":
             flow_participate_0(body, ack, say)
         elif msg == "help":
-            flow_help(body, ack, say)
+            ack()
+            say(text=messages.FLOW_HELP)
         elif msg == "quit":
             flow_quit(body, ack, say)
         else:
@@ -38,15 +39,9 @@ def rcb_command(body, ack, say):
             say(text=messages.NOT_FOUND)
 
 
-def flow_help(body, ack, say):
-    logger.info("flow::help (command)")
-    ack()
-    say(text=messages.FLOW_HELP)
-
-
 @app.action("help")
 def action_help(ack, body, client, say):
-    logger.info("flow::help (action)")
+    logger.info("flow::help")
     ack()
     client.chat_update(
         channel=body['channel']['id'],
@@ -61,6 +56,11 @@ def action_help(ack, body, client, say):
             }
         ]
     )
+
+
+@app.event("message")
+def handle_message_events(body, logger):
+    logger.info("Handled message event, body: ", body)
 
 
 def flow_quit(body, ack, say):
