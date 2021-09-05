@@ -16,6 +16,7 @@ from database.dao import meetDao, userDao, ratingDao
 from database import exceptions
 from database.interface import connector
 from constants import messages
+from utils import msg
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -42,10 +43,11 @@ def rcb_command(body, ack, say):
 @app.action("help")
 def action_help(ack, body, client, say):
     logger.info("flow::help")
+
     ack()
     client.chat_update(
         channel=body['channel']['id'],
-        ts=body['message']['ts'],
+        ts=msg.get_ts(body),
         blocks=[
             {
                 "type": "section",
@@ -198,7 +200,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
 
         client.chat_update(
             channel=body['channel']['id'],
-            ts=body['message']['ts'],
+            ts=msg.get_ts(body),
             blocks=blocks
         )
     else:
@@ -225,58 +227,107 @@ def flow_participate_2(ack, body, action, logr, client, say):
         }
     ]
 
-    if "original_message" in body.keys():
-        ts = body["original_message"]["ts"]
-    else:
-        ts = body["message"]["ts"]
-
     client.chat_update(
         channel=body['channel']['id'],
-        ts=ts,
+        ts=msg.get_ts(body),
         blocks=blocks
     )
 
 
 @app.action("stop")
-def action_stop(body, ack, say):
+def action_stop(ack, body, action, logr, client, say):
     ack()
-    say(text=messages.ACTION_STOP)
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "inf"
     userDAO.update(usr)
 
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.ACTION_STOP
+
+                }
+            }
+        ]
+    )
+
 
 @app.action("flow_next_week_yes")
-def flow_next_week_yes(body, ack, say):
+def flow_next_week_yes(ack, body, action, logr, client, say):
     ack()
-    say(text=messages.FLOW_WEEK_YES)
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
     userDAO.update(usr)
 
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_WEEK_YES
+
+                }
+            }
+        ]
+    )
+
 
 @app.action("flow_next_week_pause_1w")
-def flow_next_week_pause_1w(body, ack, say):
+def flow_next_week_pause_1w(ack, body, action, logr, client, say):
     ack()
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "1"
     userDAO.update(usr)
 
-    say(text=messages.FLOW_WEEK_PAUSE_1W)
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_WEEK_PAUSE_1W
+
+                }
+            }
+        ]
+    )
 
 
 @app.action("flow_next_week_pause_1m")
-def flow_next_week_pause_1m(body, ack, say):
+def flow_next_week_pause_1m(ack, body, action, logr, client, say):
     ack()
 
     usr = userDAO.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "4"
     userDAO.update(usr)
 
-    say(text=messages.FLOW_WEEK_PAUSE_1M)
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_WEEK_PAUSE_1M
+
+                }
+            }
+        ]
+    )
 
 
 @app.action("flow_meet_was")
@@ -291,20 +342,18 @@ def flow_meet_was(ack, body, action, logger, client, say):
 
     ratingDAO.change_by_ids(uid, partner_uid, 0.1)
 
-    blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": messages.FLOW_MEET_WAS
-            }
-        }
-    ]
-
     client.chat_update(
         channel=body['channel']['id'],
-        ts=body["message"]["ts"],
-        blocks=blocks
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_MEET_WAS
+                }
+            }
+        ]
     )
 
 
@@ -320,21 +369,19 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
 
     ratingDAO.change_by_ids(uid, partner_uid, -0.1)
 
-    blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": messages.FLOW_MEET_WASNT
-
-            }
-        }
-    ]
-
     client.chat_update(
         channel=body['channel']['id'],
-        ts=body["message"]["ts"],
-        blocks=blocks
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_MEET_WASNT
+
+                }
+            }
+        ]
     )
 
 
@@ -380,7 +427,7 @@ def flow_meet_had(ack, body, action, logger, client, say):
 
     client.chat_update(
         channel=body['channel']['id'],
-        ts=body["message"]["ts"],
+        ts=msg.get_ts(body),
         blocks=blocks
     )
 

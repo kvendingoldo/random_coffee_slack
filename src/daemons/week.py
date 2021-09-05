@@ -118,7 +118,6 @@ def ask_about_next_week(sclient, user):
             {
                 "type": "section",
                 "text": {
-
                     "type": "mrkdwn",
                     "text": messages.MEET_NEXT
 
@@ -166,7 +165,7 @@ def ask_about_next_week(sclient, user):
                             "text": "Stop bot permanently"
                         },
                         "style": "danger",
-                        "action_id": "flow_stop"
+                        "action_id": "stop"
                     }
                 ]
             }
