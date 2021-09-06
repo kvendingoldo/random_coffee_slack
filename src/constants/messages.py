@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 NOT_FOUND = "Command not found. Use '/rcb help' command for getting help information"
 
 FLOW_HELP = "Available commands:\n" \

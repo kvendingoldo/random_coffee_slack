@@ -5,7 +5,6 @@ import time
 from loguru import logger
 
 from datetime import date
-from database import exceptions
 from utils import season
 from constants import messages
 
@@ -26,10 +25,10 @@ def meet_info(client, meetDao, notificationDao, user):
                 channel=user.uid,
                 text=messages.MEET_INFO.format(uid)
             )
+
+            logger.info(f"Info message sent for {user.uid}")
     except:
-        logger.error("Info message didn't send")
-    else:
-        logger.info("Info message sent")
+        logger.error(f"Info message didn't send for {user.uid}")
 
 
 def meet_reminder(client, meetDao, notificationDao, user):
@@ -72,56 +71,51 @@ def meet_reminder(client, meetDao, notificationDao, user):
 
 
 def meet_feedback(client, meetsDao, notificationDao, user):
-    try:
-        if notificationDao.is_notified(user.uid, "feedback"):
-            logger.info(f"{user.uid} has already notified about feedback")
-        else:
-            notificationDao.change_column(user.uid, "feedback", "1")
+    if notificationDao.is_notified(user.uid, "feedback"):
+        logger.info(f"{user.uid} has already notified about feedback")
+    else:
+        notificationDao.change_column(user.uid, "feedback", "1")
 
-            uid = meetsDao.get_uid2_by_id(season.get(), user.uid)
+        uid = meetsDao.get_uid2_by_id(season.get(), user.uid)
 
-            client.chat_postMessage(
-                channel=user.uid,
-                text="",
-                blocks=[
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": messages.MEET_FEEDBACK.format(uid)
-
-                        },
-
+        client.chat_postMessage(
+            channel=user.uid,
+            text="",
+            blocks=[
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": messages.MEET_FEEDBACK.format(uid)
                     },
-                    {
-                        "type": "actions",
-                        "elements": [
-                            {
-                                "type": "button",
-                                "text": {
-                                    "type": "plain_text",
-                                    "emoji": True,
-                                    "text": "Yes"
-                                },
-                                "style": "primary",
-                                "action_id": "flow_meet_was"
+                },
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "emoji": True,
+                                "text": "Yes"
                             },
-                            {
-                                "type": "button",
-                                "text": {
-                                    "type": "plain_text",
-                                    "emoji": True,
-                                    "text": "No"
-                                },
-                                "style": "danger",
-                                "action_id": "flow_meet_was_not"
-                            }
-                        ]
-                    }
-                ]
-            )
-    except exceptions.NoResultFound:
-        pass
+                            "style": "primary",
+                            "action_id": "flow_meet_was"
+                        },
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "emoji": True,
+                                "text": "No"
+                            },
+                            "style": "danger",
+                            "action_id": "flow_meet_was_not"
+                        }
+                    ]
+                }
+            ]
+        )
 
 
 def ask_about_next_week(sclient, notificationDao, user):

@@ -15,7 +15,7 @@ from daemons import week
 from database.dao import meetDao, userDao, ratingDao, notificationDao
 from database import exceptions
 from database.interface import connector
-from constants import messages
+from constants import messages, elements
 from utils import msg
 
 config = config.load("../resources/config.yml")
@@ -175,72 +175,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
                         "text": "Select an item",
                         "emoji": True
                     },
-                    "options": [
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "US",
-                                "emoji": True
-                            },
-                            "value": "us"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Saratov",
-                                "emoji": True
-                            },
-                            "value": "saratov"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Saint Petersburg",
-                                "emoji": True
-                            },
-                            "value": "spb"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Kharkiv",
-                                "emoji": True
-                            },
-                            "value": "kharkiv"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Lviv",
-                                "emoji": True
-                            },
-                            "value": "lviv"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Kyiv",
-                                "emoji": True
-                            },
-                            "value": "kyiv"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Krakow",
-                                "emoji": True
-                            },
-                            "value": "krakow"
-                        },
-                        {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Belgrade",
-                                "emoji": True
-                            },
-                            "value": "belgrade"
-                        }
-                    ],
+                    "options": elements.LOCATIONS,
                     "action_id": "location"
                 }
             }

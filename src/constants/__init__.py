@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['messages']
+__all__ = ['locations', 'messages']
