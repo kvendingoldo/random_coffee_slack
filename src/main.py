@@ -12,7 +12,7 @@ from entities import user
 from utils import config, season
 
 from daemons import week
-from database.dao import meetDao, userDao, ratingDao
+from database.dao import meetDao, userDao, ratingDao, notificationDao
 from database import exceptions
 from database.interface import connector
 from constants import messages
@@ -497,10 +497,11 @@ if __name__ == "__main__":
     userDAO = userDao.UserDAO(connector)
     meetDAO = meetDao.MeetDao(connector)
     ratingDAO = ratingDao.RatingDao(connector)
+    notificationDAO = notificationDao.NotificationDao(connector)
 
     week = threading.Thread(
         target=week.care,
-        args=(app.client, userDAO, meetDAO, config,)
+        args=(app.client, userDAO, meetDAO, notificationDAO, config,)
     )
     week.start()
 

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['meetDao', 'ratingDao', 'userDao']
+__all__ = ['meetDao', 'notificationDao', 'ratingDao', 'userDao']

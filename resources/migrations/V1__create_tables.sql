@@ -1,5 +1,6 @@
 use coffee;
 
+-- TODO(asharov): Delete id later
 CREATE TABLE IF NOT EXISTS users
 (
     id             INT          NOT NULL AUTO_INCREMENT,
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS meets
     PRIMARY KEY (`id`)
 );
 
+-- TODO(asharov): Delete id later
 CREATE TABLE IF NOT EXISTS rating
 (
     id    INT          NOT NULL AUTO_INCREMENT,
@@ -28,4 +30,11 @@ CREATE TABLE IF NOT EXISTS rating
     uid2  VARCHAR(100) NOT NULL,
     value DOUBLE       NOT NULL,
     PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS notifications
+(
+    uid            VARCHAR(100) NOT NULL,
+    status BOOLEAN NOT NULL,
+    PRIMARY KEY (`uid`)
 );

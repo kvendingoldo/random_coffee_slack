@@ -10,19 +10,23 @@ from utils import season
 from constants import messages
 
 
-def meet_info(client, meetDao, user):
+def meet_info(client, meetDao, notificationDao, user):
     try:
+        # TODO(asharov): send notification about all meets
         uid = meetDao.get_uid2_by_id(
             season.get(), user.uid
         )
 
-        client.chat_postMessage(
-            channel=user.uid,
-            text=messages.MEET_INFO.format(uid)
-        )
+        if notificationDao.is_notified(user.uid):
+            logger.info(f"{user.uid} has already notified about meet")
+        else:
+            notificationDao.change_status(user.uid, "1")
+            client.chat_postMessage(
+                channel=user.uid,
+                text=messages.MEET_INFO.format(uid)
+            )
     except:
         logger.error("Info message didn't send")
-
     else:
         logger.info("Info message sent")
 
@@ -173,7 +177,7 @@ def ask_about_next_week(sclient, user):
     )
 
 
-def care(client, userDAO, meetDAO, config):
+def care(client, userDAO, meetDAO, notificationDao, config):
     while True:
         weekday = date.today().weekday() + 1
         users = userDAO.list()
@@ -184,7 +188,7 @@ def care(client, userDAO, meetDAO, config):
                 meetDAO.create(user_avail_ids, config)
         for user in users:
             if weekday == 1:
-                meet_info(client, meetDAO, user)
+                meet_info(client, meetDAO, notificationDao, user)
             elif weekday == 3:
                 meet_reminder(client, meetDAO, user)
             elif weekday == 5:
@@ -192,5 +196,6 @@ def care(client, userDAO, meetDAO, config):
             elif weekday == 7:
                 ask_about_next_week(client, user)
                 userDAO.decrement_users_pause(1)
+                notificationDao.nullify_all()
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])
