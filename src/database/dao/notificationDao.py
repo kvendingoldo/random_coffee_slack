@@ -9,7 +9,7 @@ class NotificationDao:
 
     def is_notified(self, uid, column):
         if column not in COLUMNS:
-            raise ValueError(f"Wrong value for notification column type: {type}")
+            raise ValueError(f"Wrong value for notification column name: {column}")
 
         sql_statement = f"SELECT {column} FROM notifications WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
@@ -20,6 +20,9 @@ class NotificationDao:
             return False
 
     def change_column(self, uid, column, notified="1"):
+        if column not in COLUMNS:
+            raise ValueError(f"Wrong value for notification column name: {column}")
+
         sql_statement = f"SELECT {column} FROM notifications WHERE uid = \'{uid}\'"
         result = self.connector.get(sql_statement)
 
