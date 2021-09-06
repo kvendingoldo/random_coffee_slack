@@ -35,6 +35,7 @@ class MeetDao:
 
             if self.check_exist_by_id(uid, season_cur_id):
                 uids.remove(uid)
+                continue
 
             sql_statement = f"SELECT AVAIL.uid " \
                             f"FROM (SELECT uid FROM users WHERE pause_in_weeks = '0' AND uid != '{uid}') as AVAIL " \
