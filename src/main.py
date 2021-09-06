@@ -179,6 +179,14 @@ def flow_participate_1(ack, body, action, logr, client, say):
                         {
                             "text": {
                                 "type": "plain_text",
+                                "text": "US",
+                                "emoji": True
+                            },
+                            "value": "us"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
                                 "text": "Saratov",
                                 "emoji": True
                             },
@@ -191,6 +199,46 @@ def flow_participate_1(ack, body, action, logr, client, say):
                                 "emoji": True
                             },
                             "value": "spb"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Kharkiv",
+                                "emoji": True
+                            },
+                            "value": "kharkiv"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Lviv",
+                                "emoji": True
+                            },
+                            "value": "lviv"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Kyiv",
+                                "emoji": True
+                            },
+                            "value": "kyiv"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Krakow",
+                                "emoji": True
+                            },
+                            "value": "krakow"
+                        },
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Belgrade",
+                                "emoji": True
+                            },
+                            "value": "belgrade"
                         }
                     ],
                     "action_id": "location"

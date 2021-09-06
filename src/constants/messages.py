@@ -19,7 +19,7 @@ FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "Enter Join to move forward."
 
 FLOW_PARTICIPATE_1 = "Tell me a little bit about yourself! \n\n" \
-                     "What are you location?"
+                     "What is your location?"
 
 FLOW_PARTICIPATE_2 = "Wow! Now you’re a Random coffee participant! \n\n" \
                      "What’s next? \n\n" \
