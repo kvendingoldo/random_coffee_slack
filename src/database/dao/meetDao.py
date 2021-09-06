@@ -29,7 +29,9 @@ class MeetDao:
             uid = uids[0]
 
             if len(uids) == 1:
-                for_rand_distr.append(uid)
+                if not self.check_exist_by_id(uid, season_cur_id):
+                    for_rand_distr.append(uid)
+                break
 
             if self.check_exist_by_id(uid, season_cur_id):
                 uids.remove(uid)
@@ -70,10 +72,12 @@ class MeetDao:
 
             while len(for_rand_distr) > 0:
                 uid1 = for_rand_distr[0]
-                uid2 = random.choice(for_rand_distr)
+                # Pick up random uid except for uid1
+                uid2 = random.choice(
+                    [uid for uid in for_rand_distr if uid != uid1]
+                )
 
                 self.add_by_ids(uid1, uid2, season_cur_id)
-
                 for_rand_distr.remove(uid1)
                 for_rand_distr.remove(uid2)
 
