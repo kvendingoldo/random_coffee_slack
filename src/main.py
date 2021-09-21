@@ -35,9 +35,17 @@ def rcb_command(body, ack, say):
             say(text=messages.FLOW_HELP)
         elif msg == "quit":
             flow_quit(body, ack, say)
+        elif msg == "stop":
+            try:
+                _ = userDAO.get_by_id(body["user_id"])
+            except exceptions.NoResultFound:
+                ack()
+                say(text=messages.USER_NOT_FOUND)
+            else:
+                flow_stop(ack, body)
         else:
             ack()
-            say(text=messages.NOT_FOUND)
+            say(text=messages.COMMAND_NOT_FOUND)
 
 
 @app.action("help")
@@ -55,6 +63,60 @@ def action_help(ack, body, client, say):
                     "type": "mrkdwn",
                     "text": messages.FLOW_HELP
                 }
+            }
+        ]
+    )
+
+
+def flow_stop(ack, body):
+    ack()
+    app.client.chat_postMessage(
+        channel=body["user_id"],
+        text="",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_STOP
+
+                },
+
+            },
+            {
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "One-week pause"
+                        },
+                        "style": "danger",
+                        "action_id": "flow_next_week_pause_1w"
+                    },
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "One-month pause"
+                        },
+                        "style": "danger",
+                        "action_id": "flow_next_week_pause_1m"
+                    },
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "Stop bot permanently"
+                        },
+                        "style": "danger",
+                        "action_id": "stop"
+                    }
+                ]
             }
         ]
     )
@@ -217,30 +279,6 @@ def flow_participate_2(ack, body, action, logr, client, say):
     )
 
 
-@app.action("stop")
-def action_stop(ack, body, action, logr, client, say):
-    ack()
-
-    usr = userDAO.get_by_id(body["user"]["id"])
-    usr.pause_in_weeks = "inf"
-    userDAO.update(usr)
-
-    client.chat_update(
-        channel=body['channel']['id'],
-        ts=msg.get_ts(body),
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.ACTION_STOP
-
-                }
-            }
-        ]
-    )
-
-
 @app.action("flow_next_week_yes")
 def flow_next_week_yes(ack, body, action, logr, client, say):
     ack()
@@ -265,12 +303,11 @@ def flow_next_week_yes(ack, body, action, logr, client, say):
     )
 
 
-@app.action("flow_next_week_pause_1w")
-def flow_next_week_pause_1w(ack, body, action, logr, client, say):
+def stop_wrapper(ack, body, client, period, message):
     ack()
 
     usr = userDAO.get_by_id(body["user"]["id"])
-    usr.pause_in_weeks = "1"
+    usr.pause_in_weeks = period
     userDAO.update(usr)
 
     client.chat_update(
@@ -281,36 +318,26 @@ def flow_next_week_pause_1w(ack, body, action, logr, client, say):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": messages.FLOW_WEEK_PAUSE_1W
-
+                    "text": message
                 }
             }
         ]
     )
+
+
+@app.action("flow_next_week_pause_1w")
+def flow_next_week_pause_1w(ack, body, client, say):
+    stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1W)
 
 
 @app.action("flow_next_week_pause_1m")
-def flow_next_week_pause_1m(ack, body, action, logr, client, say):
-    ack()
+def flow_next_week_pause_1m(ack, body, client, say):
+    stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1M)
 
-    usr = userDAO.get_by_id(body["user"]["id"])
-    usr.pause_in_weeks = "4"
-    userDAO.update(usr)
 
-    client.chat_update(
-        channel=body['channel']['id'],
-        ts=msg.get_ts(body),
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_WEEK_PAUSE_1M
-
-                }
-            }
-        ]
-    )
+@app.action("stop")
+def action_stop(ack, body, client, say):
+    stop_wrapper(ack, body, client, "inf", messages.ACTION_STOP)
 
 
 @app.action("flow_meet_was")
@@ -416,6 +443,8 @@ def flow_meet_had(ack, body, action, logger, client, say):
 
 
 if __name__ == "__main__":
+    logger.info("Bot launching ...")
+
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="default",
         pool_size=5,

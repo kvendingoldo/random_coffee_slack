@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-NOT_FOUND = "Command not found. Use '/rcb help' command for getting help information"
+USER_NOT_FOUND = "Your ID is not found in RCB system. Looks like that you didn't register via /rcb start command OR executed /rcb quit command"
+COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command for getting help information"
 
 FLOW_HELP = "Available commands:\n" \
             "/rcb start - participate in Random Coffee meets\n" \
@@ -9,6 +10,8 @@ FLOW_HELP = "Available commands:\n" \
 
 FLOW_QUIT = "Sorry to see this decision. Hope to see you soon again. " \
             "Just write /rcb start again in this case. Information about you was deleted."
+
+FLOW_STOP = "Please, choose a period to stop participating"
 
 ACTION_STOP = "I’m looking forward to seeing you when you come back"
 
