@@ -1,5 +1,4 @@
-slack_bolt==1.6.0
+slack_bolt==1.9.1
 loguru==0.5.3
 mysql-connector-python==8.0.25
 pyyaml==5.4.1
-python-dotenv==0.17.1

@@ -215,6 +215,8 @@ def flow_participate_1(ack, body, action, logr, client, say):
 
     try:
         msg_user = userDAO.get_by_id(body["user"]["id"])
+        msg_user.pause_in_weeks = "0"
+        userDAO.update(msg_user)
     except exceptions.NoResultFound as ex:
         new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"], pause_in_weeks="0")
 
