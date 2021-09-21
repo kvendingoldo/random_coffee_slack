@@ -5,6 +5,7 @@ COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command for getting help
 
 FLOW_HELP = "Available commands:\n" \
             "/rcb start - participate in Random Coffee meets\n" \
+            "/rcb stop  - stop to participate in Random Coffee meets\n" \
             "/rcb quit  - quit from Random Coffee meets\n" \
             "/rcb help  - help\n"
 

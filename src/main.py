@@ -79,9 +79,7 @@ def flow_stop(ack, body):
                 "text": {
                     "type": "mrkdwn",
                     "text": messages.FLOW_STOP
-
                 },
-
             },
             {
                 "type": "actions",
