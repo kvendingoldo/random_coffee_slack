@@ -8,6 +8,8 @@ from datetime import date
 from utils import season
 from constants import messages
 
+from models.meet import Meet
+
 
 def meet_info(client, meetDao, notificationDao, user):
     try:
@@ -32,6 +34,11 @@ def meet_info(client, meetDao, notificationDao, user):
 
 
 def meet_reminder(client, meetDao, notificationDao, user):
+    completed = meet_repo.get_by_spec(
+        uid1=user.uid,
+        season=season.get()
+    ).status
+
     completed = meetDao.get_status_by_id(season.get(), user.uid)
 
     if not completed:
@@ -207,6 +214,9 @@ def care(client, userDAO, meetDAO, notificationDao, config):
             elif weekday == 7:
                 notificationDao.change_all(user.uid, "0")
                 ask_about_next_week(client, notificationDao, user)
-                userDAO.decrement_users_pause(1)
+
+                for u in user_repo.list():
+                    u.pause_in_weeks = str(int(u.pause_in_weeks) - 1)
+                    user_repo.update(u)
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])

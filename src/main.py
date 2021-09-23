@@ -19,7 +19,7 @@ from constants import messages, elements
 from utils import msg
 
 # new
-from dependency_injector import providers
+
 from database import database
 from database.repo import user as u_repo
 from models import user

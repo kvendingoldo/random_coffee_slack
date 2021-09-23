@@ -12,6 +12,7 @@ class MeetDao:
     def __init__(self, connector):
         self.connector = connector
 
+    # todo
     def create(self, uids, config, type='random'):
         logger.info("Starting algorithm for create pairs")
 

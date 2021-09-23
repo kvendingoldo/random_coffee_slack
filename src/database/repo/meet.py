@@ -5,61 +5,38 @@ from typing import Callable, Iterator
 
 from sqlalchemy.orm import Session
 
-from models.user import User
-from database.exceptions import UserNotFoundError
+from models.meet import Meet
+from database.exceptions import MeetNotFoundError
 
 
-class UserRepository:
+class MeetRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
-    def add(self, user: User) -> User:
+    def add(self, meet: Meet) -> Meet:
         with self.session_factory() as session:
-            session.add(user)
+            session.add(meet)
             session.commit()
-            session.refresh(user)
-            return user
+            session.refresh(meet)
+            return meet
 
     def delete_by_id(self, id: str) -> None:
         with self.session_factory() as session:
-            entity: User = session.query(User).filter(User.id == id).first()
+            entity: Meet = session.query(Meet).filter_by(uid1=id).first()
             if not entity:
-                raise UserNotFoundError(id)
+                raise MeetNotFoundError(id)
             session.delete(entity)
-            session.commit()
 
-    def update(self, user: User) -> None:
-        with self.session_factory() as session:
-            entity: User = session.query(User).filter_by(id=user.id).first()
-            if not entity:
-                raise UserNotFoundError(user.id)
-
-            session.query(User).filter_by(id=user.id).update(dict(
-                username=user.username,
-                pause_in_weeks=user.pause_in_weeks,
-                loc=user.loc
+            session.query(Meet).filter_by(uid2=id).update(dict(
+                uid2="deleted"
             ))
 
             session.commit()
 
-    def get_by_id(self, id: str) -> User:
+    def get_by_spec(self, season: str) -> Iterator[Meet]:
         with self.session_factory() as session:
-            user = session.query(User).filter(User.id == id).first()
-            if not user:
-                raise UserNotFoundError(id)
-            return user
+            meets = session.query(Meet).filter(season=season)
+            if not meets:
+                raise MeetNotFoundError(id)
+            return meets
 
-    def list(self) -> Iterator[User]:
-        with self.session_factory() as session:
-            return session.query(User).all()
-
-    def list_ids(self, only_available: bool = False) -> Iterator[User]:
-        with self.session_factory() as session:
-            if only_available:
-                users = session.query(User).filter(User.pause_in_weeks == "0").all()
-            else:
-                users = session.query(User).all()
-
-            if users:
-                raise Exception("")
-            return users
