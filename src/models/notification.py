@@ -16,8 +16,7 @@ class Notification(Base):
     next_week = Column(Boolean, unique=False, default=False)
 
     def __repr__(self):
-        return f'<Notification(id="{self.id}", ' \
-               f'uid="{self.uid}", ' \
+        return f'<Notification(uid="{self.uid}", ' \
                f'info="{self.info}", ' \
                f'reminder="{self.reminder}", ' \
                f'feedback="{self.feedback}", ' \

@@ -12,7 +12,7 @@ from mysql.connector import pooling
 from utils import config, season
 
 from daemons import week
-from database.dao import meetDao, ratingDao, notificationDao
+from database.dao import meetDao, notificationDao
 from database import exceptions
 from database.interface import connector
 from constants import messages, elements
@@ -22,6 +22,7 @@ from utils import msg
 
 from database import database
 from database.repo import user as u_repo
+from database.repo import rating as r_repo
 from models import user
 
 # new
@@ -138,7 +139,7 @@ def flow_quit(body, ack, say):
 
     uid = body['user_id']
     user_repo.delete_by_id(uid)
-    ratingDAO.delete_by_id(uid)
+    rating_repo.delete_by_id(uid)
     meetDAO.delete_by_id(uid)
 
     ack()
@@ -230,7 +231,7 @@ def flow_participate_1(ack, body, action, logr, client, say):
         new_user = user.User(id=body["user"]["id"], username=body["user"]["username"], pause_in_weeks="0")
 
         user_repo.add(new_user)
-        # ratingDAO.add_by_id(new_user.id)
+        rating_repo.add(new_user.id)
 
         blocks = [
             {
@@ -360,7 +361,10 @@ def flow_meet_was(ack, body, action, logger, client, say):
         season.get(), uid
     )
 
-    ratingDAO.change_by_ids(uid, partner_uid, 0.1)
+    # TODO: add ex handling
+    rating = rating_repo.get_by_ids(uid, partner_uid).value
+    rating.value += 0.1
+    rating_repo.update(rating)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -387,7 +391,10 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
         season.get(), uid
     )
 
-    ratingDAO.change_by_ids(uid, partner_uid, -0.1)
+    # TODO: add ex handling
+    rating = rating_repo.get_by_ids(uid, partner_uid).value
+    rating.value -= 0.1
+    rating_repo.update(rating)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -461,19 +468,9 @@ if __name__ == "__main__":
         config["database"]["db"]
     )
 
-    # db = providers.Singleton(
-    #     database.Database, db_url=db_url
-    # )
-
     db = database.Database(db_url)
-
-    # print(db.provided.session)
-
     user_repo = u_repo.UserRepository(session_factory=db.session)
-    # user_repo = providers.Factory(
-    #     u_repo.UserRepository,
-    #     session_factory=db.provided.session,
-    # )
+    rating_repo = r_repo.RatingRepository(session_factory=db.session)
 
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="default",
@@ -489,7 +486,6 @@ if __name__ == "__main__":
     connector = connector.Connector(connection_pool)
 
     meetDAO = meetDao.MeetDao(connector)
-    ratingDAO = ratingDao.RatingDao(connector)
     notificationDAO = notificationDao.NotificationDao(connector)
 
     # week = threading.Thread(

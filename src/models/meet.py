@@ -17,7 +17,6 @@ class Meet(Base):
 
     def __repr__(self):
         return f'<Meet(id="{self.id}", ' \
-               f'id="{self.id}", ' \
                f'season="{self.season}", ' \
                f'uid1="{self.uid1}", ' \
                f'uid2="{self.uid2}", ' \

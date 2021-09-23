@@ -24,5 +24,9 @@ class NotificationNotFoundError(NotFoundError):
     entity_name: str = 'Notification'
 
 
+class RatingNotFoundError(NotFoundError):
+    entity_name: str = 'Rating'
+
+
 class UserNotFoundError(NotFoundError):
     entity_name: str = 'User'

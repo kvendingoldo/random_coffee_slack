@@ -30,7 +30,7 @@ class NotificationRepository:
         with self.session_factory() as session:
             entity: User = session.query(User).filter_by(id=user.id).first()
             if not entity:
-                raise UserNotFoundError(user.id)
+                raise NotificationNotFoundError(user.id)
 
             session.query(User).filter_by(id=user.id).update(dict(
                 username=user.username,

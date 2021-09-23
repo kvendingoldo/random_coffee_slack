@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS meets
     PRIMARY KEY (id)
 );
 
--- TODO(asharov): Delete id later
 CREATE TABLE IF NOT EXISTS rating
 (
     id    INT          NOT NULL AUTO_INCREMENT,
@@ -32,10 +31,11 @@ CREATE TABLE IF NOT EXISTS rating
 
 CREATE TABLE IF NOT EXISTS notifications
 (
-    uid       VARCHAR(100) NOT NULL,
+    id       VARCHAR(100) NOT NULL,
     info      BOOLEAN      NOT NULL DEFAULT false,
     reminder  BOOLEAN      NOT NULL DEFAULT false,
     feedback  BOOLEAN      NOT NULL DEFAULT false,
     next_week BOOLEAN      NOT NULL DEFAULT false,
-    PRIMARY KEY (uid)
+    PRIMARY KEY (id),
+    UNIQUE KEY (id)
 );

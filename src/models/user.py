@@ -17,6 +17,5 @@ class User(Base):
     def __repr__(self):
         return f'<User(id="{self.id}", ' \
                f'username="{self.username}", ' \
-               f'uid="{self.uid}", ' \
                f'pause_in_weeks="{self.pause_in_weeks}", ' \
                f'loc="{self.loc}")>'
