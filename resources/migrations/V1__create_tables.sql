@@ -1,15 +1,13 @@
 use coffee;
 
--- TODO(asharov): Delete id later
 CREATE TABLE IF NOT EXISTS users
 (
-    id             INT          NOT NULL AUTO_INCREMENT,
+    id             VARCHAR(100) NOT NULL,
     username       VARCHAR(100) NOT NULL,
-    uid            VARCHAR(100) NOT NULL,
     loc            VARCHAR(100) NOT NULL,
     pause_in_weeks VARCHAR(3)   NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (uid)
+    PRIMARY KEY (id),
+    UNIQUE KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS meets
@@ -19,7 +17,7 @@ CREATE TABLE IF NOT EXISTS meets
     uid1      VARCHAR(100) NOT NULL,
     uid2      VARCHAR(100) NOT NULL,
     completed BOOLEAN      NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (id)
 );
 
 -- TODO(asharov): Delete id later
@@ -29,7 +27,7 @@ CREATE TABLE IF NOT EXISTS rating
     uid1  VARCHAR(100) NOT NULL,
     uid2  VARCHAR(100) NOT NULL,
     value DOUBLE       NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS notifications
@@ -39,5 +37,5 @@ CREATE TABLE IF NOT EXISTS notifications
     reminder  BOOLEAN      NOT NULL DEFAULT false,
     feedback  BOOLEAN      NOT NULL DEFAULT false,
     next_week BOOLEAN      NOT NULL DEFAULT false,
-    PRIMARY KEY (`uid`)
+    PRIMARY KEY (uid)
 );

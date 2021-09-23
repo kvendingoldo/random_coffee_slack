@@ -192,15 +192,17 @@ def care(client, userDAO, meetDAO, notificationDao, config):
         users = userDAO.list()
         user_avail_ids = userDAO.list_ids(only_available=True)
 
-        if weekday == 1:
+        if weekday < 5:
             if len(user_avail_ids) > 1:
                 meetDAO.create(user_avail_ids, config)
+        elif weekday == 5:
+            # create meet from pull
+            pass
         for user in users:
-            if weekday == 1:
+            if weekday <= 5:
                 meet_info(client, meetDAO, notificationDao, user)
-            elif weekday == 3:
                 meet_reminder(client, meetDAO, notificationDao, user)
-            elif weekday == 5:
+            elif weekday == 6:
                 meet_feedback(client, meetDAO, notificationDao, user)
             elif weekday == 7:
                 notificationDao.change_all(user.uid, "0")

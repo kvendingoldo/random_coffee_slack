@@ -6,3 +6,4 @@
 * flow: choice a location in which you wanna have meeting `<online|...>`?
 5. pairing algo should work until Friday
 6. fix an issue caused by 2 slack clients
+7. migrate to SQLAlchemy

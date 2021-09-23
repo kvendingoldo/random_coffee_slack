@@ -8,7 +8,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 from loguru import logger
 from mysql.connector import pooling
 
-from entities import user
+# from entities import user
 from utils import config, season
 
 from daemons import week
@@ -17,6 +17,14 @@ from database import exceptions
 from database.interface import connector
 from constants import messages, elements
 from utils import msg
+
+# new
+from dependency_injector import providers
+from database import database
+from database.repo import user as u_repo
+from models import user
+
+# new
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -199,11 +207,13 @@ def location(ack, body, action, logr, client, say):
     logger.info("flow::location")
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
+    # usr = userDAO.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
         usr.loc = body["actions"][0]["selected_option"]["value"]
-        userDAO.update(usr)
+
+        user_repo.update(usr)
 
     flow_participate_2(ack, body, action, logr, client, say)
 
@@ -214,14 +224,15 @@ def flow_participate_1(ack, body, action, logr, client, say):
     ack()
 
     try:
-        msg_user = userDAO.get_by_id(body["user"]["id"])
+        msg_user = user_repo.get_by_id(body["user"]["id"])
+        # userDAO.get_by_id(body["user"]["id"])
         msg_user.pause_in_weeks = "0"
-        userDAO.update(msg_user)
-    except exceptions.NoResultFound as ex:
-        new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"], pause_in_weeks="0")
+        # userDAO.update(msg_user)
+    except u_repo.UserNotFoundError as ex:
+        new_user = user.User(id=body["user"]["id"], username=body["user"]["username"], pause_in_weeks="0")
 
-        userDAO.add(new_user)
-        ratingDAO.add_by_id(new_user.uid)
+        user_repo.add(new_user)
+        #ratingDAO.add_by_id(new_user.id)
 
         blocks = [
             {
@@ -444,6 +455,27 @@ def flow_meet_had(ack, body, action, logger, client, say):
 
 if __name__ == "__main__":
     logger.info("Bot launching ...")
+
+    db_url = "mysql://{}:{}@{}:{}/{}".format(
+        config["database"]["username"], config["database"]["password"],
+        config["database"]["host"], config["database"]["port"],
+        config["database"]["db"]
+    )
+
+
+    # db = providers.Singleton(
+    #     database.Database, db_url=db_url
+    # )
+
+    db = database.Database(db_url)
+
+    #print(db.provided.session)
+
+    user_repo = u_repo.UserRepository(session_factory=db.session)
+    # user_repo = providers.Factory(
+    #     u_repo.UserRepository,
+    #     session_factory=db.provided.session,
+    # )
 
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="default",
