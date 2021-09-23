@@ -12,7 +12,7 @@ from mysql.connector import pooling
 from utils import config, season
 
 from daemons import week
-from database.dao import meetDao, userDao, ratingDao, notificationDao
+from database.dao import meetDao, ratingDao, notificationDao
 from database import exceptions
 from database.interface import connector
 from constants import messages, elements
@@ -45,8 +45,8 @@ def rcb_command(body, ack, say):
             flow_quit(body, ack, say)
         elif msg == "stop":
             try:
-                _ = userDAO.get_by_id(body["user_id"])
-            except exceptions.NoResultFound:
+                _ = user_repo.get_by_id(body["user_id"])
+            except exceptions.UserNotFoundError:
                 ack()
                 say(text=messages.USER_NOT_FOUND)
             else:
@@ -137,7 +137,7 @@ def flow_quit(body, ack, say):
     logger.info("flow::quit")
 
     uid = body['user_id']
-    userDAO.delete_by_id(uid)
+    user_repo.delete_by_id(uid)
     ratingDAO.delete_by_id(uid)
     meetDAO.delete_by_id(uid)
 
@@ -208,11 +208,9 @@ def location(ack, body, action, logr, client, say):
     ack()
 
     usr = user_repo.get_by_id(body["user"]["id"])
-    # usr = userDAO.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
         usr.loc = body["actions"][0]["selected_option"]["value"]
-
         user_repo.update(usr)
 
     flow_participate_2(ack, body, action, logr, client, say)
@@ -225,14 +223,14 @@ def flow_participate_1(ack, body, action, logr, client, say):
 
     try:
         msg_user = user_repo.get_by_id(body["user"]["id"])
-        # userDAO.get_by_id(body["user"]["id"])
         msg_user.pause_in_weeks = "0"
-        # userDAO.update(msg_user)
+
+        user_repo.update(msg_user)
     except u_repo.UserNotFoundError as ex:
         new_user = user.User(id=body["user"]["id"], username=body["user"]["username"], pause_in_weeks="0")
 
         user_repo.add(new_user)
-        #ratingDAO.add_by_id(new_user.id)
+        # ratingDAO.add_by_id(new_user.id)
 
         blocks = [
             {
@@ -294,9 +292,10 @@ def flow_participate_2(ack, body, action, logr, client, say):
 def flow_next_week_yes(ack, body, action, logr, client, say):
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
-    userDAO.update(usr)
+
+    user_repo.update(usr)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -317,9 +316,9 @@ def flow_next_week_yes(ack, body, action, logr, client, say):
 def stop_wrapper(ack, body, client, period, message):
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = period
-    userDAO.update(usr)
+    user_repo.update(usr)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -462,14 +461,13 @@ if __name__ == "__main__":
         config["database"]["db"]
     )
 
-
     # db = providers.Singleton(
     #     database.Database, db_url=db_url
     # )
 
     db = database.Database(db_url)
 
-    #print(db.provided.session)
+    # print(db.provided.session)
 
     user_repo = u_repo.UserRepository(session_factory=db.session)
     # user_repo = providers.Factory(
@@ -490,16 +488,15 @@ if __name__ == "__main__":
 
     connector = connector.Connector(connection_pool)
 
-    userDAO = userDao.UserDAO(connector)
     meetDAO = meetDao.MeetDao(connector)
     ratingDAO = ratingDao.RatingDao(connector)
     notificationDAO = notificationDao.NotificationDao(connector)
 
-    week = threading.Thread(
-        target=week.care,
-        args=(app.client, userDAO, meetDAO, notificationDAO, config,)
-    )
-    week.start()
+    # week = threading.Thread(
+    #     target=week.care,
+    #     args=(app.client, userDAO, meetDAO, notificationDAO, config,)
+    # )
+    # week.start()
 
     bot = threading.Thread(target=SocketModeHandler(app, config["slack"]["appToken"]).start(), args=())
     bot.start()
