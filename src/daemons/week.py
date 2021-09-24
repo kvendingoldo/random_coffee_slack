@@ -219,18 +219,21 @@ def ask_about_next_week(sclient, notificationDao, user):
 def care(client, user_repo, meet_repo, notification_repo, config):
     while True:
         season_id = season.get()
-        weekday = 5
+        weekday = 4
         # date.today().weekday() + 1
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
 
         if weekday < 5:
-            # meet_repo.create(users, config)
-            pass
+            meet_repo.create(
+                [user.id for user in users]
+            )
         elif weekday == 5:
-            # create meet from pool
-            pass
+            meet_repo.create(
+                users=[user.id for user in users],
+                additional_users=config["bot"]["additionalUsers"]
+            )
         for user in users:
             if weekday <= 5:
                 meets = meet_repo.list(spec={"season": season_id, "uid1": user.id}) + \

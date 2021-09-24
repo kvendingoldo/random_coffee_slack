@@ -2,6 +2,8 @@
 
 import random
 
+from loguru import logger
+
 from contextlib import AbstractContextManager
 from typing import Callable, Iterator, Mapping
 
@@ -18,83 +20,102 @@ class MeetRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
-    def create(self, users, config, type='random'):
-        # logger.info("Starting algorithm for create pairs")
+    def create(self, uids, additional_uids=None, type='random'):
+        logger.info("Starting algorithm to create meets")
 
+        if additional_uids is None:
+            additional_uids = []
         if type == 'random':
-            self.__create_random(users, config)
+            self.__create_random(uids, additional_uids)
 
-        # logger.info("Algorithm for creating pairs has successfully completed")
+        logger.info("Algorithm for creating pairs has successfully completed")
 
-    def check_exist(self, season, spec: Mapping = None):
-        pass
-
-    def __create_random(self, users, config):
-        season = season.get()
+    def __create_random(self, uids, additional_users):
+        season_id = season.get()
 
         for_rand_distr = []
 
-        while len(users) >= 1:
-            cur_user = users[0]
+        while len(uids) >= 1:
+            cur_uid = uids[0]
 
-            # if len(uids) == 1:
-            #     if not self.check_exist_by_id(uid, season_id):
-            #         for_rand_distr.append(uid)
-            #     break
-
-            if self.__check_exist(cur_user, season):
-                users.remove(cur_user)
+            if self.check_exist(season_id, {"uid1": cur_uid}) or self.check_exist(season_id, {"uid2": cur_uid}):
+                uids.remove(cur_uid)
                 continue
 
+            if len(uids) == 1:
+                for_rand_distr.append(cur_uid)
+                break
+
             with self.session_factory() as session:
-                # список всех у кого есть мит uid1, uid2
-                meets = session.query(Meet).filter_by(season=season)
+                # take all meets in the current season
+                meets = session.query(Meet).filter_by(season=season_id)
 
-            # Take a shuffled list of available users which do not have a meet in the current season
+            # Take a shuffled list of available users who do not have a meet in the current season
             potential = []
-
-            available_users = [usr for usr in users if usr.id != cur_user.id]
-            for a_usr in available_users:
+            for user in uids:
+                if user.id == cur_uid.id:
+                    continue
                 take = True
                 for meet in meets:
-                    if a_usr.id == meet.uid1 or a_usr.id == meet.uid2:
+                    if user.id == meet.uid1 or user.id == meet.uid2:
                         take = False
                         break
                 if take:
-                    potential.append(a_usr)
+                    potential.append(user)
+
             random.shuffle(potential)
 
             if len(potential) > 0:
-                pair = potential[0]
+                pair_uid = potential[0]
 
-                if self.__check_exist(season.get("previous"), {"uid1": cur_user.id, "uid2": pair.id}):
-                    for_rand_distr.append(uid)
+                # NOTE: check that uid1 and uid2 didn't have a meet 1 & 2 weeks ago
+                if self.check_exist(season.get("delta", 7), {"uid1": cur_uid, "uid2": pair_uid}) or \
+                    self.check_exist(season.get("delta", 7), {"uid1": pair_uid, "uid2": cur_uid}) or \
+                    self.check_exist(season.get("delta", 14), {"uid1": cur_uid, "uid2": pair_uid}) or \
+                    self.check_exist(season.get("delta", 14), {"uid1": pair_uid, "uid2": cur_uid}):
+                    for_rand_distr.append(cur_uid)
                 else:
-                    # TODO
-                    self.add(cur_user, pair, season)
-                    users.remove(pair)
+                    self.add(Meet(season=season_id, uid1=cur_uid, uid2=pair_uid))
+                    uids.remove(pair_uid)
             else:
-                # TODO
-                if len(uids) > 0:
-                    for_rand_distr.append(uid)
-                    uids.remove(uid)
+                logger.info(f"Meet can't be create for {cur_uid}; No potential users found")
+                uids.remove(cur_uid)
 
         if for_rand_distr:
-            if (len(for_rand_distr) % 2) == 1:
-                for_rand_distr.append(config["bot"]["additionalUsers"][0])
-
-            while len(for_rand_distr) > 0:
+            while len(for_rand_distr) > 1:
                 uid1 = for_rand_distr[0]
+
                 # Pick up random uid except for uid1
                 uid2 = random.choice(
                     [uid for uid in for_rand_distr if uid != uid1]
                 )
 
-                self.add_by_ids(uid1, uid2, season_cur_id)
+                self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
                 for_rand_distr.remove(uid1)
                 for_rand_distr.remove(uid2)
 
+        if len(for_rand_distr) == 1:
+            uid = for_rand_distr[0]
+            if additional_users:
+                self.add(
+                    Meet(season=season_id, uid1=uid, uid2=random.choice(additional_users))
+                )
+            else:
+                logger.info(f"List of additional users is empty. Meet can not be created for user {uid}")
+
+    def check_exist(self, season, spec: Mapping = None):
+        with self.session_factory() as session:
+            meets = session.query(Meet).filter(season == season)
+            if not meets:
+                raise MeetNotFoundError("")
+
+            if len(repo.filtration(spec, meets)) > 0:
+                return True
+            else:
+                return False
+
     def add(self, meet: Meet) -> Meet:
+        # ADD NOTIFICATION!!!!
         with self.session_factory() as session:
             session.add(meet)
             session.commit()
