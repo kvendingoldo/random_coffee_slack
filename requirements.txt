@@ -1,8 +1,6 @@
 slack_bolt==1.9.1
 loguru==0.5.3
-mysql-connector-python==8.0.25
 pyyaml==5.4.1
-
-sqlalchemy
-configparser
-mysqlclient
+sqlalchemy==1.4.25
+configparser==5.0.2
+mysqlclient==2.0.3

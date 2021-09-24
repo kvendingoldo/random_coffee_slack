@@ -2,14 +2,11 @@
 
 from contextlib import contextmanager, AbstractContextManager
 from typing import Callable
-# todo: change to loguru
-import logging
+from loguru import logger
 
 from sqlalchemy import create_engine, orm
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
-
-logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
