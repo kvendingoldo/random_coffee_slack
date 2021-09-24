@@ -56,7 +56,7 @@ class MeetRepository:
                     continue
                 take = True
                 for meet in meets:
-                    if uid == meet.uid1 or uid == meet.uid2:
+                    if uid in [meet.uid1, meet.uid2]:
                         take = False
                         break
                 if take:

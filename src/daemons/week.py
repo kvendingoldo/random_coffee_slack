@@ -2,23 +2,22 @@
 
 import time
 
-from loguru import logger
-
 from datetime import date
+from loguru import logger
 from utils import season
 from constants import messages, elements
 from models.notification import Notification
 
 
-def meet_msg(client, meet, notification_repo, type, msg_text, msg_blocks=None, inline_msg_block=False):
+def meet_msg(client, meet, notification_repo, msg_type, msg_text, msg_blocks=None, inline_msg_block=False):
     if msg_blocks is None:
         msg_blocks = []
 
     try:
         ntf = notification_repo.list({"meet_id": meet.id})[0]
 
-        if getattr(ntf, type):
-            logger.info(f"Users {meet.uid1}, {meet.uid2} has already notified about {type}")
+        if getattr(ntf, msg_type):
+            logger.info(f"Users {meet.uid1}, {meet.uid2} has already notified about {msg_type}")
         else:
             if inline_msg_block:
                 client.chat_postMessage(
@@ -32,7 +31,7 @@ def meet_msg(client, meet, notification_repo, type, msg_text, msg_blocks=None, i
 
                     }] + msg_blocks
                 )
-                logger.info(f"{type} message sent for {meet.uid1} (pair: {meet.uid2})")
+                logger.info(f"{msg_type} message sent for {meet.uid1} (pair: {meet.uid2})")
 
                 client.chat_postMessage(
                     channel=meet.uid2,
@@ -45,22 +44,22 @@ def meet_msg(client, meet, notification_repo, type, msg_text, msg_blocks=None, i
 
                     }] + msg_blocks
                 )
-                logger.info(f"{type} message sent for {meet.uid2} (pair: {meet.uid1})")
+                logger.info(f"{msg_type} message sent for {meet.uid2} (pair: {meet.uid1})")
             else:
                 client.chat_postMessage(
                     channel=meet.uid1, text=msg_text.format(meet.uid2), blocks=msg_blocks
                 )
-                logger.info(f"{type} message sent for {meet.uid1} (pair: {meet.uid2})")
+                logger.info(f"{msg_type} message sent for {meet.uid1} (pair: {meet.uid2})")
 
                 client.chat_postMessage(
                     channel=meet.uid2, text=msg_text.format(meet.uid1), blocks=msg_blocks
                 )
-                logger.info(f"{type} message sent for {meet.uid2} (pair: {meet.uid1})")
+                logger.info(f"{msg_type} message sent for {meet.uid2} (pair: {meet.uid1})")
 
-            setattr(ntf, type, True)
+            setattr(ntf, msg_type, True)
             notification_repo.update(ntf)
     except Exception as ex:
-        logger.error(f"{type} message didn't send for meet #{meet.id}, error: {ex}")
+        logger.error(f"{msg_type} message didn't send for meet #{meet.id}, error: {ex}")
 
 
 def care(client, user_repo, meet_repo, notification_repo, config):

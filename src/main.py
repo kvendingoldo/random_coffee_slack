@@ -54,7 +54,7 @@ def rcb_command(body, ack, say):
 
 
 @app.action("help")
-def action_help(ack, body, client, say):
+def action_help(ack, body, client):
     logger.info("flow::help")
 
     ack()
@@ -129,7 +129,7 @@ def flow_participate_0(body, ack, say):
 
 
 @app.action("location")
-def location(ack, body, action, client, say):
+def location(ack, body, client):
     logger.info(f"flow::location for user {body['user']['id']}")
 
     ack()
@@ -218,7 +218,7 @@ def flow_participate_2(ack, body, client):
 
 
 @app.action("flow_next_week_yes")
-def flow_next_week_yes(ack, body, action, client, say):
+def flow_next_week_yes(ack, body, client):
     ack()
 
     usr = user_repo.get_by_id(body["user"]["id"])
@@ -264,17 +264,17 @@ def stop_wrapper(ack, body, client, period, message):
 
 
 @app.action("flow_next_week_pause_1w")
-def flow_next_week_pause_1w(ack, body, client, say):
+def flow_next_week_pause_1w(ack, body, client):
     stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1W)
 
 
 @app.action("flow_next_week_pause_1m")
-def flow_next_week_pause_1m(ack, body, client, say):
+def flow_next_week_pause_1m(ack, body, client):
     stop_wrapper(ack, body, client, "4", messages.FLOW_WEEK_PAUSE_1M)
 
 
 @app.action("stop")
-def action_stop(ack, body, client, say):
+def action_stop(ack, body, client):
     stop_wrapper(ack, body, client, "inf", messages.ACTION_STOP)
 
 
@@ -322,7 +322,7 @@ def flow_meet_was_not(ack, body, client):
 
 
 @app.action("flow_meet_had")
-def flow_meet_had(ack, body, action, logger, client, say):
+def flow_meet_had(ack, body, client):
     ack()
 
     blocks = [{
