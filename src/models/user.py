@@ -9,10 +9,10 @@ from constants import tables
 class User(Base):
     __tablename__ = tables.USERS
 
-    id = Column(String, primary_key=True, unique=True)
-    username = Column(String, unique=False)
-    pause_in_weeks = Column(String, unique=False, default="0")
-    loc = Column(String, unique=False, default="none")
+    id = Column(String(48), primary_key=True, nullable=False, unique=True)
+    username = Column(String(92), nullable=False, unique=False)
+    pause_in_weeks = Column(String(2), nullable=False, unique=False, default="0")
+    loc = Column(String(24), nullable=False, unique=False, default="none")
 
     def __repr__(self):
         return f'<User(id="{self.id}", ' \

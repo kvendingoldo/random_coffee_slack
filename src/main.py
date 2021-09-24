@@ -351,6 +351,7 @@ if __name__ == "__main__":
     )
 
     db = database.Database(db_url)
+    db.create_database()
 
     user_repo = UserRepository(session_factory=db.session)
     notification_repo = NotificationRepository(session_factory=db.session)
