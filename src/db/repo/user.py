@@ -5,9 +5,9 @@ from typing import Callable, Iterator, Mapping, TypeVar
 
 from sqlalchemy.orm import Session
 
-from utils import filter
+from utils import repo
 from models.user import User
-from database.exceptions import UserNotFoundError
+from db.exceptions import UserNotFoundError
 
 
 class UserRepository:
@@ -55,4 +55,4 @@ class UserRepository:
         with self.session_factory() as session:
             objs = session.query(User).all()
 
-        return filter.filtration(spec, objs)
+        return repo.filtration(spec, objs)

@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, String
 
-from database.database import Base
+from db.database import Base
 from constants import tables
 
 

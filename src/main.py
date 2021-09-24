@@ -135,12 +135,10 @@ def handle_message_events(body, say):
 
 
 def flow_quit(body, ack, say):
-    logger.info(f"flow::quit for user {body['user_id']}")
-
     uid = body['user_id']
+
+    logger.info(f"flow::quit for user {uid}")
     user_repo.delete_by_id(uid)
-    rating_repo.delete_by_id(uid)
-    # meet_repo.delete_by_id(uid)
 
     ack()
     say(text=messages.FLOW_QUIT)
@@ -220,7 +218,7 @@ def location(ack, body, action, client, say):
 
 @app.action("flow_participate_1")
 def flow_participate_1(ack, body, client):
-    logger.info(f"flow::participate::1 for user {body['user_id']}")
+    logger.info(f"flow::participate::1 for user {body['user']['id']}")
     ack()
 
     try:
@@ -476,16 +474,15 @@ if __name__ == "__main__":
     db = database.Database(db_url)
 
     user_repo = UserRepository(session_factory=db.session)
+    notification_repo = NotificationRepository(session_factory=db.session)
     rating_repo = RatingRepository(session_factory=db.session)
     meet_repo = MeetRepository(session_factory=db.session)
 
-    print(user_repo.list({'username': 'kvendingoldo'}))
-
-    # week = threading.Thread(
-    #     target=week.care,
-    #     args=(app.client, userDAO, meetDAO, notificationDAO, config,)
-    # )
-    # week.start()
+    week = threading.Thread(
+        target=week.care,
+        args=(app.client, user_repo, meet_repo, notification_repo, config,)
+    )
+    week.start()
 
     bot = threading.Thread(target=SocketModeHandler(app, config["slack"]["appToken"]).start(), args=())
     bot.start()

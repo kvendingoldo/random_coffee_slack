@@ -45,6 +45,10 @@ MEET_INFO = "Hey!👋 \n\n" \
             "This week your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
             "Slack them now to set up a meeting."
 
+MEET_INFO_ADDITIONAL = "Hey!👋 \n\n" \
+                       "This week you have an additional Random Coffee partner, it is <@{0}>!\n" \
+                       "Slack them now to set up a meeting."
+
 MEET_REMINDER = "✉️ How are things?\n\n" \
                 "Meed-week is the best day to set up a meeting with your coffee partner!\n\n" \
                 "Slack them now to set up a meeting."

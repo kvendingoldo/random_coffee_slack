@@ -6,11 +6,12 @@ from contextlib import AbstractContextManager
 from typing import Callable, Iterator, Mapping
 
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, and_
 
-from utils import filter, season
+from utils import repo, season
 
 from models.meet import Meet
-from database.exceptions import MeetNotFoundError
+from db.exceptions import MeetNotFoundError
 
 
 class MeetRepository:
@@ -25,7 +26,7 @@ class MeetRepository:
 
         # logger.info("Algorithm for creating pairs has successfully completed")
 
-    def __check_exist(self, season, spec: Mapping = None):
+    def check_exist(self, season, spec: Mapping = None):
         pass
 
     def __create_random(self, users, config):
@@ -62,7 +63,6 @@ class MeetRepository:
                 if take:
                     potential.append(a_usr)
             random.shuffle(potential)
-
 
             if len(potential) > 0:
                 pair = potential[0]
@@ -101,17 +101,17 @@ class MeetRepository:
             session.refresh(meet)
             return meet
 
-    def delete_by_id(self, id: str) -> None:
+    def delete_all_by_uid(self, uid: str) -> None:
         with self.session_factory() as session:
-            entity: Meet = session.query(Meet).filter_by(uid1=id).first()
-            if not entity:
-                raise MeetNotFoundError(id)
-            session.delete(entity)
+            entities: Meet = session.query(Meet).filter(
+                or_(Meet.uid1 == uid, Meet.uid2 == uid)
+            )
 
-            # nope, delete!
-            session.query(Meet).filter_by(uid2=id).update(dict(
-                uid2="deleted"
-            ))
+            if not entities:
+                raise MeetNotFoundError("")
+
+            for entity in entities:
+                session.delete(entity)
 
             session.commit()
 
@@ -119,4 +119,4 @@ class MeetRepository:
         with self.session_factory() as session:
             objs = session.query(Meet).all()
 
-        return filter.filtration(spec, objs)
+        return repo.filtration(spec, objs)

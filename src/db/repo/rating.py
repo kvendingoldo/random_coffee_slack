@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import AbstractContextManager
-from typing import Callable, Iterator
+from typing import Callable
 
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 
 from models.rating import Rating
 from models.user import User
-from database.exceptions import RatingNotFoundError
+from db.exceptions import RatingNotFoundError
 
 
 class RatingRepository:
