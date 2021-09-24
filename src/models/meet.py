@@ -9,7 +9,7 @@ from constants import tables
 class Meet(Base):
     __tablename__ = tables.MEETS
 
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     season = Column(String, unique=False)
     uid1 = Column(String, unique=False)
     uid2 = Column(String, unique=False)

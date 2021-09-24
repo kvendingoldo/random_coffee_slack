@@ -116,7 +116,8 @@ class MeetDao:
         if result:
             return result[0][0]
         else:
-            raise exceptions.NoResultFound
+            pass
+            #raise exceptions.NoResultFound
 
     def get_status_by_id(self, season_id, uid):
         sql_statement = f"SELECT completed FROM meets WHERE " \
@@ -127,7 +128,8 @@ class MeetDao:
         if result:
             return bool(result[0][0])
         else:
-            raise exceptions.NoResultFound("")
+            pass
+            #raise exceptions.NoResultFound("")
 
     def check_exist_by_ids(self, uid1, uid2, season_id):
         sql_statement = f"SELECT season " \

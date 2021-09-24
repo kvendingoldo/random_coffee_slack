@@ -25,21 +25,20 @@ class NotificationRepository:
                 raise NotificationNotFoundError(uid)
             return bool(getattr(notification, column))
 
-    def update(self, user: User) -> None:
-        # todo
+    def get_by_uid(self, uid: str) -> Notification:
         with self.session_factory() as session:
-            entity: User = session.query(User).filter_by(id=user.id).first()
-            if not entity:
-                raise NotificationNotFoundError(user.id)
+            notification = session.query(Notification).filter(Notification.uid == uid).first()
+            if not notification:
+                raise NotificationNotFoundError(id)
+            return notification
 
-            session.query(User).filter_by(id=user.id).update(dict(
-                username=user.username,
-                pause_in_weeks=user.pause_in_weeks,
-                loc=user.loc
+    def update(self, notification: Notification) -> None:
+        with self.session_factory() as session:
+            session.query(Notification).filter_by(id=notification.id).update(dict(
+                info=notification.info,
+                reminder=notification.reminder,
+                feedback=notification.feedback,
+                next_week=notification.next_week
             ))
 
             session.commit()
-
-    def change_all(self, uid, notified="1"):
-        for column in COLUMNS:
-            self.change_column(uid, column, notified)

@@ -6,26 +6,19 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 from loguru import logger
-from mysql.connector import pooling
 
-# from entities import user
 from utils import config, season
 
 from daemons import week
-from database.dao import meetDao, notificationDao
-from database import exceptions
-from database.interface import connector
+
 from constants import messages, elements
 from utils import msg
 
-# new
-
-from database import database
+from database import database, exceptions
 from database.repo import user as u_repo
 from database.repo import rating as r_repo
+from database.repo import meet as m_repo
 from models import user
-
-# new
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -130,26 +123,31 @@ def flow_stop(ack, body):
 
 
 @app.event("message")
-def handle_message_events(body, logger):
-    logger.info("Handled message event, body: ", body)
+def handle_message_events(body, say):
+    pass
+    # logger.debug(f"Handled message event, body: {body}")
+    # TODO
+    # if body["event"]["type"] == "message":
+    #     say(text=messages.COMMAND_NOT_FOUND)
 
 
 def flow_quit(body, ack, say):
-    logger.info("flow::quit")
+    logger.info(f"flow::quit for user {body['user_id']}")
 
     uid = body['user_id']
     user_repo.delete_by_id(uid)
     rating_repo.delete_by_id(uid)
-    meetDAO.delete_by_id(uid)
+    # meet_repo.delete_by_id(uid)
 
     ack()
     say(text=messages.FLOW_QUIT)
 
 
 def flow_participate_0(body, ack, say):
-    logger.info("flow::participate::0")
+    logger.info(f"flow::participate::0 for user {body['user_id']}")
 
     ack()
+    # todo: replace to client
     say(
         blocks=[
             {
@@ -198,14 +196,14 @@ def flow_participate_0(body, ack, say):
                     }
                 ]
             }
-        ],
-        text=""
+        ]
     )
 
 
 @app.action("location")
-def location(ack, body, action, logr, client, say):
-    logger.info("flow::location")
+def location(ack, body, action, client, say):
+    logger.info(f"flow::location for user {body['user']['id']}")
+
     ack()
 
     usr = user_repo.get_by_id(body["user"]["id"])
@@ -214,12 +212,12 @@ def location(ack, body, action, logr, client, say):
         usr.loc = body["actions"][0]["selected_option"]["value"]
         user_repo.update(usr)
 
-    flow_participate_2(ack, body, action, logr, client, say)
+    flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_1")
-def flow_participate_1(ack, body, action, logr, client, say):
-    logger.info("flow::participate::1 ::: ", body)
+def flow_participate_1(ack, body, client):
+    logger.info(f"flow::participate::1 for user {body['user_id']}")
     ack()
 
     try:
@@ -256,15 +254,17 @@ def flow_participate_1(ack, body, action, logr, client, say):
         client.chat_update(
             channel=body['channel']['id'],
             ts=msg.get_ts(body),
+            text="",
             blocks=blocks
         )
     else:
-        flow_participate_2(ack, body, action, logr, client, say)
+        flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_2")
-def flow_participate_2(ack, body, action, logr, client, say):
-    logger.info("flow::participate::2 ::: ", body)
+def flow_participate_2(ack, body, client):
+    logger.info(f"flow::participate::2 for user {body['user']['id']}")
+
     ack()
 
     blocks = [
@@ -290,7 +290,7 @@ def flow_participate_2(ack, body, action, logr, client, say):
 
 
 @app.action("flow_next_week_yes")
-def flow_next_week_yes(ack, body, action, logr, client, say):
+def flow_next_week_yes(ack, body, action, client, say):
     ack()
 
     usr = user_repo.get_by_id(body["user"]["id"])
@@ -357,9 +357,10 @@ def flow_meet_was(ack, body, action, logger, client, say):
 
     uid = body["user"]["id"]
 
-    partner_uid = meetDAO.get_uid2_by_id(
-        season.get(), uid
-    )
+    # TODO
+    # partner_uid = meetDAO.get_uid2_by_id(
+    #        season.get(), uid
+    # )
 
     # TODO: add ex handling
     rating = rating_repo.get_by_ids(uid, partner_uid).value
@@ -387,9 +388,10 @@ def flow_meet_was_not(ack, body, action, logger, client, say):
 
     uid = body["user"]["id"]
 
-    partner_uid = meetDAO.get_uid2_by_id(
-        season.get(), uid
-    )
+    # TODO
+    # partner_uid = meetDAO.get_uid2_by_id(
+    #     season.get(), uid
+    # )
 
     # TODO: add ex handling
     rating = rating_repo.get_by_ids(uid, partner_uid).value
@@ -469,24 +471,12 @@ if __name__ == "__main__":
     )
 
     db = database.Database(db_url)
+
     user_repo = u_repo.UserRepository(session_factory=db.session)
     rating_repo = r_repo.RatingRepository(session_factory=db.session)
+    meet_repo = m_repo.MeetRepository(session_factory=db.session)
 
-    connection_pool = pooling.MySQLConnectionPool(
-        pool_name="default",
-        pool_size=5,
-        pool_reset_session=True,
-        host=config["database"]["host"],
-        port=config["database"]["port"],
-        database=config["database"]["db"],
-        user=config["database"]["username"],
-        password=config["database"]["password"]
-    )
-
-    connector = connector.Connector(connection_pool)
-
-    meetDAO = meetDao.MeetDao(connector)
-    notificationDAO = notificationDao.NotificationDao(connector)
+    print(user_repo.list({'username': 'kvendingoldo'}))
 
     # week = threading.Thread(
     #     target=week.care,

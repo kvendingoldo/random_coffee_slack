@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager, AbstractContextManager
 from typing import Callable
+# todo: change to loguru
 import logging
 
 from sqlalchemy import create_engine, orm
@@ -15,7 +16,17 @@ Base = declarative_base()
 
 class Database:
     def __init__(self, db_url: str) -> None:
-        self._engine = create_engine(db_url, echo=True)
+        self._engine = create_engine(
+            db_url,
+            echo=False,
+            echo_pool=False,
+            logging_name="sqlalchemy.engine",
+            pool_logging_name="sqlalchemy.pool",
+            max_overflow=1,
+            pool_pre_ping=True,
+            pool_size=5,
+            pool_recycle=1800
+        )
         self._session_factory = orm.scoped_session(
             orm.sessionmaker(
                 autocommit=False,

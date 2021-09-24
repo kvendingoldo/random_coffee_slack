@@ -9,7 +9,7 @@ from constants import tables
 class Rating(Base):
     __tablename__ = tables.RATING
 
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     uid1 = Column(String, unique=False)
     uid2 = Column(String, unique=False)
     value = Column(Float, unique=False)

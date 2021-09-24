@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import AbstractContextManager
-from typing import Callable, Iterator
+from typing import Callable, Iterator, Mapping, TypeVar
 
 from sqlalchemy.orm import Session
 
+from utils import filter
 from models.user import User
 from database.exceptions import UserNotFoundError
 
@@ -50,17 +51,8 @@ class UserRepository:
                 raise UserNotFoundError(id)
             return user
 
-    def list(self) -> Iterator[User]:
+    def list(self, spec: Mapping = None) -> Iterator[User]:
         with self.session_factory() as session:
-            return session.query(User).all()
+            objs = session.query(User).all()
 
-    def list_ids(self, only_available: bool = False) -> Iterator[User]:
-        with self.session_factory() as session:
-            if only_available:
-                users = session.query(User).filter(User.pause_in_weeks == "0").all()
-            else:
-                users = session.query(User).all()
-
-            if users:
-                raise Exception("")
-            return users
+        return filter.filtration(spec, objs)
