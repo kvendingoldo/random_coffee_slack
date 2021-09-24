@@ -201,3 +201,106 @@ MEET_NEXT = [
         ]
     }
 ]
+
+MEET_HAD = [
+    {
+        "type": "actions",
+        "elements": [
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Awesome!"
+                },
+                "style": "primary",
+                "action_id": "flow_meet_was"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Could be better"
+                },
+                "style": "primary",
+                "action_id": "flow_meet_was_not"
+            }
+        ]
+    }
+]
+
+FLOW_PART_0 = [
+    {
+        "type": "actions",
+        "elements": [
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Join"
+                },
+                "style": "primary",
+                "action_id": "flow_participate_1"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Help"
+                },
+                "action_id": "help"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Cancel"
+                },
+                "style": "danger",
+                "action_id": "stop"
+            }
+        ]
+    }
+]
+
+FLOW_STOP = [
+    {
+        "type": "actions",
+        "elements": [
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "One-week pause"
+                },
+                "style": "danger",
+                "action_id": "flow_next_week_pause_1w"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "One-month pause"
+                },
+                "style": "danger",
+                "action_id": "flow_next_week_pause_1m"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Stop bot permanently"
+                },
+                "style": "danger",
+                "action_id": "stop"
+            }
+        ]
+    }
+]

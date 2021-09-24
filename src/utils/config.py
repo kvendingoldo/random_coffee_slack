@@ -16,7 +16,6 @@ def load(yaml_path):
     config["slack"] = {
         "botToken": slack_bot_token,
         "appToken": slack_app_token
-
     }
 
     config["database"]["password"] = db_password

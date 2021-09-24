@@ -78,50 +78,13 @@ def flow_stop(ack, body):
     app.client.chat_postMessage(
         channel=body["user_id"],
         text="",
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_STOP
-                },
+        blocks=[{
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_STOP
             },
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "One-week pause"
-                        },
-                        "style": "danger",
-                        "action_id": "flow_next_week_pause_1w"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "One-month pause"
-                        },
-                        "style": "danger",
-                        "action_id": "flow_next_week_pause_1m"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Stop bot permanently"
-                        },
-                        "style": "danger",
-                        "action_id": "stop"
-                    }
-                ]
-            }
-        ]
+        }] + elements.FLOW_STOP
     )
 
 
@@ -148,56 +111,20 @@ def flow_participate_0(body, ack, say):
     logger.info(f"flow::participate::0 for user {body['user_id']}")
 
     ack()
-    # todo: replace to client
+    # TODO: replace to client
     say(
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_PARTICIPATE_0
-                },
-                "accessory": {
-                    "type": "image",
-                    "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
-                    "alt_text": "cute donut"
-                }
+        blocks=[{
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_PARTICIPATE_0
             },
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Join"
-                        },
-                        "style": "primary",
-                        "action_id": "flow_participate_1"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Help"
-                        },
-                        "action_id": "help"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Cancel"
-                        },
-                        "style": "danger",
-                        "action_id": "stop"
-                    }
-                ]
+            "accessory": {
+                "type": "image",
+                "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
+                "alt_text": "cute donut"
             }
-        ]
+        }] + elements.FLOW_PART_0
     )
 
 
@@ -398,41 +325,14 @@ def flow_meet_was_not(ack, body, client):
 def flow_meet_had(ack, body, action, logger, client, say):
     ack()
 
-    blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": messages.FLOW_MEET_HAD
-            },
-
+    blocks = [{
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": messages.FLOW_MEET_HAD
         },
-        {
-            "type": "actions",
-            "elements": [
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "emoji": True,
-                        "text": "Awesome!"
-                    },
-                    "style": "primary",
-                    "action_id": "flow_meet_was"
-                },
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "emoji": True,
-                        "text": "Could be better"
-                    },
-                    "style": "primary",
-                    "action_id": "flow_meet_was_not"
-                }
-            ]
-        }
-    ]
+
+    }] + elements.MEET_HAD
 
     client.chat_update(
         channel=body['channel']['id'],
