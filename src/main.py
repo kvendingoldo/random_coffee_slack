@@ -14,10 +14,13 @@ from daemons import week
 from constants import messages, elements
 from utils import msg
 
-from database import database, exceptions
-from database.repo import user as u_repo
-from database.repo import rating as r_repo
-from database.repo import meet as m_repo
+from db import database
+from db.exceptions import UserNotFoundError
+from db.repo.user import UserRepository
+from db.repo.notification import NotificationRepository
+from db.repo.rating import RatingRepository
+from db.repo.meet import MeetRepository
+
 from models import user
 
 config = config.load("../resources/config.yml")
@@ -40,7 +43,7 @@ def rcb_command(body, ack, say):
         elif msg == "stop":
             try:
                 _ = user_repo.get_by_id(body["user_id"])
-            except exceptions.UserNotFoundError:
+            except UserNotFoundError:
                 ack()
                 say(text=messages.USER_NOT_FOUND)
             else:
@@ -225,7 +228,7 @@ def flow_participate_1(ack, body, client):
         msg_user.pause_in_weeks = "0"
 
         user_repo.update(msg_user)
-    except u_repo.UserNotFoundError as ex:
+    except UserNotFoundError as ex:
         new_user = user.User(id=body["user"]["id"], username=body["user"]["username"], pause_in_weeks="0")
 
         user_repo.add(new_user)
@@ -472,9 +475,9 @@ if __name__ == "__main__":
 
     db = database.Database(db_url)
 
-    user_repo = u_repo.UserRepository(session_factory=db.session)
-    rating_repo = r_repo.RatingRepository(session_factory=db.session)
-    meet_repo = m_repo.MeetRepository(session_factory=db.session)
+    user_repo = UserRepository(session_factory=db.session)
+    rating_repo = RatingRepository(session_factory=db.session)
+    meet_repo = MeetRepository(session_factory=db.session)
 
     print(user_repo.list({'username': 'kvendingoldo'}))
 
