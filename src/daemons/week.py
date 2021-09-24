@@ -66,7 +66,7 @@ def meet_msg(client, meet, notification_repo, type, msg_text, msg_blocks=None, i
 def care(client, user_repo, meet_repo, notification_repo, config):
     while True:
         season_id = season.get()
-        weekday = 7
+        weekday = 4
         # date.today().weekday() + 1
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
@@ -85,7 +85,10 @@ def care(client, user_repo, meet_repo, notification_repo, config):
 
         # NOTE: create notifications
         if weekday <= 5:
-            ntf_meet_ids = [ntf.meet_id for ntf in notification_repo.list()]
+            try:
+                ntf_meet_ids = [ntf.meet_id for ntf in notification_repo.list()]
+            except Exception as ex:
+                ntf_meet_ids = []
 
             for meet in meet_repo.list(spec={"season": season_id}):
                 if meet.id in ntf_meet_ids:

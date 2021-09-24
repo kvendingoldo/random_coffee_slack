@@ -270,7 +270,7 @@ def flow_next_week_pause_1w(ack, body, client, say):
 
 @app.action("flow_next_week_pause_1m")
 def flow_next_week_pause_1m(ack, body, client, say):
-    stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1M)
+    stop_wrapper(ack, body, client, "4", messages.FLOW_WEEK_PAUSE_1M)
 
 
 @app.action("stop")

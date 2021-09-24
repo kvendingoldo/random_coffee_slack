@@ -11,7 +11,7 @@ class User(Base):
 
     id = Column(String(48), primary_key=True, nullable=False, unique=True)
     username = Column(String(92), nullable=False, unique=False)
-    pause_in_weeks = Column(String(2), nullable=False, unique=False, default="0")
+    pause_in_weeks = Column(String(10), nullable=False, unique=False, default="0")
     loc = Column(String(24), nullable=False, unique=False, default="none")
 
     def __repr__(self):

@@ -41,7 +41,7 @@ FLOW_MEET_HAD = ":eyes: How it was?"
 FLOW_MEET_RATE = "Thank you for response!"
 
 MEET_INFO = "Hey!👋 \n\n" \
-            "This week your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
+            "Your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
             "Slack them now to set up a meeting."
 
 MEET_REMINDER = "✉️ How are things?\n\n" \

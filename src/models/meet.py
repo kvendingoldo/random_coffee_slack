@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column, Boolean, Integer, String, ForeignKey
-
 from db.database import Base
 from constants import tables
 
