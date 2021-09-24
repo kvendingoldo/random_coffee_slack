@@ -15,6 +15,7 @@ class Notification(Base):
     reminder = Column(Boolean, unique=False, default=False)
     feedback = Column(Boolean, unique=False, default=False)
     next_week = Column(Boolean, unique=False, default=False)
+    meet_id = Column(Integer, unique=True)
 
     def __repr__(self):
         return f'<Notification(id="{self.id}", ' \
@@ -22,4 +23,5 @@ class Notification(Base):
                f'info="{self.info}", ' \
                f'reminder="{self.reminder}", ' \
                f'feedback="{self.feedback}", ' \
-               f'next_week="{self.next_week}")>'
+               f'next_week="{self.next_week}", ' \
+               f'meet_id="{self.meet_id}")>'

@@ -227,19 +227,21 @@ def care(client, user_repo, meet_repo, notification_repo, config):
 
         if weekday < 5:
             meet_repo.create(
-                [user.id for user in users]
+                uids=[user.id for user in users]
             )
+            # TODO: create notifications
         elif weekday == 5:
             meet_repo.create(
-                users=[user.id for user in users],
-                additional_users=config["bot"]["additionalUsers"]
+                uids=[user.id for user in users],
+                additional_uids=config["bot"]["additionalUsers"]
             )
+            # TODO: create notifications
         for user in users:
             if weekday <= 5:
                 meets = meet_repo.list(spec={"season": season_id, "uid1": user.id}) + \
                         meet_repo.list(spec={"season": season_id, "uid2": user.id})
 
-                meet_info(client, user, meets, notification_repo)
+                #meet_info(client, user, meets, notification_repo)
                 # meet_reminder(client, meetDAO, notificationDao, user)
             elif weekday == 6:
                 pass

@@ -52,16 +52,16 @@ class MeetRepository:
 
             # Take a shuffled list of available users who do not have a meet in the current season
             potential = []
-            for user in uids:
-                if user.id == cur_uid.id:
+            for uid in uids:
+                if uid == cur_uid:
                     continue
                 take = True
                 for meet in meets:
-                    if user.id == meet.uid1 or user.id == meet.uid2:
+                    if uid == meet.uid1 or uid == meet.uid2:
                         take = False
                         break
                 if take:
-                    potential.append(user)
+                    potential.append(uid)
 
             random.shuffle(potential)
 
@@ -77,6 +77,7 @@ class MeetRepository:
                 else:
                     self.add(Meet(season=season_id, uid1=cur_uid, uid2=pair_uid))
                     uids.remove(pair_uid)
+                    logger.info(f"Meet created for pair ({cur_uid}, {pair_uid})")
             else:
                 logger.info(f"Meet can't be create for {cur_uid}; No potential users found")
                 uids.remove(cur_uid)
@@ -93,15 +94,17 @@ class MeetRepository:
                 self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
                 for_rand_distr.remove(uid1)
                 for_rand_distr.remove(uid2)
+                logger.info(f"Meet created for pair ({uid1}, {uid2})")
 
         if len(for_rand_distr) == 1:
-            uid = for_rand_distr[0]
+            uid1 = for_rand_distr[0]
             if additional_users:
-                self.add(
-                    Meet(season=season_id, uid1=uid, uid2=random.choice(additional_users))
-                )
+                uid2 = random.choice(additional_users)
+
+                logger.info(f"Meet created for pair ({uid1}, {uid2})")
+                self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
             else:
-                logger.info(f"List of additional users is empty. Meet can not be created for user {uid}")
+                logger.info(f"List of additional users is empty. Meet can not be created for user {uid1}")
 
     def check_exist(self, season, spec: Mapping = None):
         with self.session_factory() as session:
@@ -115,7 +118,6 @@ class MeetRepository:
                 return False
 
     def add(self, meet: Meet) -> Meet:
-        # ADD NOTIFICATION!!!!
         with self.session_factory() as session:
             session.add(meet)
             session.commit()
