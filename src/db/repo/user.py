@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import AbstractContextManager
-from typing import Callable, Iterator, Mapping, TypeVar
+from typing import Callable, Iterator, Mapping
 
 from sqlalchemy.orm import Session
 
@@ -30,12 +30,7 @@ class UserRepository:
             session.commit()
 
     def update(self, user: User) -> None:
-        # todo
         with self.session_factory() as session:
-            entity: User = session.query(User).filter_by(id=user.id).first()
-            if not entity:
-                raise UserNotFoundError(user.id)
-
             session.query(User).filter_by(id=user.id).update(dict(
                 username=user.username,
                 pause_in_weeks=user.pause_in_weeks,

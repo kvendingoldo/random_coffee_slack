@@ -13,8 +13,8 @@ INSERT INTO rating (uid1, uid2, value) VALUES ('USR1', 'USR2', 1);
 INSERT INTO rating (uid1, uid2, value) VALUES ('USR2', 'USR0', 1);
 INSERT INTO rating (uid1, uid2, value) VALUES ('USR2', 'USR1', 1);
 
--- notification
-INSERT INTO notifications (info, reminder, feedback, next_week) VALUES (0, 0, 0, 0);
-
 -- meets
-INSERT INTO meets (season, uid1, uid2, completed, ntf_id) VALUES ('202100', 'USR0', 'USR2', 1, 3);
+INSERT INTO meets (season, uid1, uid2, completed) VALUES ('202100', 'USR0', 'USR2', 1);
+
+-- notification
+INSERT INTO notifications (info, reminder, feedback, next_week, meet_id) VALUES (0, 0, 0, 0, 1);

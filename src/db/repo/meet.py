@@ -2,13 +2,12 @@
 
 import random
 
-from loguru import logger
-
 from contextlib import AbstractContextManager
 from typing import Callable, Iterator, Mapping
 
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, and_
+from sqlalchemy import or_
+from loguru import logger
 
 from utils import repo, season
 

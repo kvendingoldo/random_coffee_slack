@@ -296,7 +296,6 @@ def flow_next_week_yes(ack, body, action, client, say):
 
     usr = user_repo.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
-
     user_repo.update(usr)
 
     client.chat_update(
@@ -352,20 +351,22 @@ def action_stop(ack, body, client, say):
     stop_wrapper(ack, body, client, "inf", messages.ACTION_STOP)
 
 
-@app.action("flow_meet_was")
-def flow_meet_was(ack, body, action, logger, client, say):
+def flow_meet_rate(ack, body, client, sign):
     ack()
 
     uid = body["user"]["id"]
+    season_id = season.get()
 
-    # TODO
-    # partner_uid = meetDAO.get_uid2_by_id(
-    #        season.get(), uid
-    # )
+    if meet_repo.list(spec={"season": season_id, "uid1": uid}):
+        uid2 = meet_repo.list(spec={"season": season_id, "uid1": uid})[0].uid2
+    else:
+        uid2 = meet_repo.list(spec={"season": season_id, "uid2": uid})[0].uid1
 
-    # TODO: add ex handling
-    rating = rating_repo.get_by_ids(uid, partner_uid).value
-    rating.value += 0.1
+    rating = rating_repo.get_by_ids(uid, uid2)
+    if sign == "+":
+        rating.value += 0.1
+    else:
+        rating.value -= 0.1
     rating_repo.update(rating)
 
     client.chat_update(
@@ -376,43 +377,21 @@ def flow_meet_was(ack, body, action, logger, client, say):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": messages.FLOW_MEET_WAS
+                    "text": messages.FLOW_MEET_RATE
                 }
             }
         ]
     )
+
+
+@app.action("flow_meet_was")
+def flow_meet_was(ack, body, client):
+    flow_meet_rate(ack, body, client, "+")
 
 
 @app.action("flow_meet_was_not")
-def flow_meet_was_not(ack, body, action, logger, client, say):
-    ack()
-
-    uid = body["user"]["id"]
-
-    # TODO
-    # partner_uid = meetDAO.get_uid2_by_id(
-    #     season.get(), uid
-    # )
-
-    # TODO: add ex handling
-    rating = rating_repo.get_by_ids(uid, partner_uid).value
-    rating.value -= 0.1
-    rating_repo.update(rating)
-
-    client.chat_update(
-        channel=body['channel']['id'],
-        ts=msg.get_ts(body),
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_MEET_WASNT
-
-                }
-            }
-        ]
-    )
+def flow_meet_was_not(ack, body, client):
+    flow_meet_rate(ack, body, client, "-")
 
 
 @app.action("flow_meet_had")

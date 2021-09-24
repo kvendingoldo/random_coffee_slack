@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import AbstractContextManager
-from typing import Callable
+from typing import Callable, Iterator, Mapping
 
 from sqlalchemy.orm import Session
 
+from utils import repo
 from models.notification import Notification
 from db.exceptions import NotificationNotFoundError
 
@@ -34,13 +35,6 @@ class NotificationRepository:
                 # raise NotificationNotFoundError(uid)
             return bool(getattr(notification, column))
 
-    def get_by_uid(self, uid: str) -> Notification:
-        with self.session_factory() as session:
-            notification = session.query(Notification).filter(Notification.uid == uid).first()
-            if not notification:
-                raise NotificationNotFoundError("")
-            return notification
-
     def update(self, notification: Notification) -> None:
         with self.session_factory() as session:
             try:
@@ -56,3 +50,10 @@ class NotificationRepository:
                 session.add(notification)
                 session.commit()
                 session.refresh(notification)
+
+    def list(self, spec: Mapping = None) -> Iterator[Notification]:
+        with self.session_factory() as session:
+            objs = session.query(Notification).all()
+            if not objs:
+                raise NotificationNotFoundError("")
+        return repo.filtration(spec, objs)
