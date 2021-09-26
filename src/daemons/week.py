@@ -2,209 +2,114 @@
 
 import time
 
-from loguru import logger
-
 from datetime import date
-from utils import season
-from constants import messages
+from loguru import logger
+from utils import season, repo
+from constants import messages, elements
+from models.notification import Notification
+from db.exceptions import NotificationNotFoundError
 
 
-def meet_info(client, meetDao, notificationDao, user):
+def meet_msg(client, ntf_repo, pair, msg_type, msg_text, msg_blocks=None, inline_msg_block=False):
+    if msg_blocks is None:
+        msg_blocks = []
+
     try:
-        if notificationDao.is_notified(user.uid, "info"):
-            logger.info(f"{user.uid} has already notified about meet")
+        ntf = ntf_repo.list({"id": pair["id"]})[0]
+        if getattr(ntf, msg_type):
+            logger.info(f"Users {pair['uid1']}, {pair['uid2']} has already notified about {msg_type}")
         else:
-            notificationDao.change_column(user.uid, "info", "1")
-
-            # TODO(asharov): send notification about all meets
-            uid = meetDao.get_uid2_by_id(
-                season.get(), user.uid
-            )
-
-            client.chat_postMessage(
-                channel=user.uid,
-                text=messages.MEET_INFO.format(uid)
-            )
-
-            logger.info(f"Info message sent for {user.uid}")
-    except:
-        logger.error(f"Info message didn't send for {user.uid}")
-
-
-def meet_reminder(client, meetDao, notificationDao, user):
-    completed = meetDao.get_status_by_id(season.get(), user.uid)
-
-    if not completed:
-        if notificationDao.is_notified(user.uid, "reminder"):
-            logger.info(f"{user.uid} has been notified of reminder")
-        else:
-            notificationDao.change_column(user.uid, "reminder", "1")
-            client.chat_postMessage(
-                channel=user.uid,
-                text="",
-                blocks=[
-                    {
+            if inline_msg_block:
+                client.chat_postMessage(
+                    channel=pair['uid1'],
+                    blocks=[{
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": messages.MEET_REMINDER
+                            "text": msg_text.format(pair['uid2'])
                         },
 
-                    },
-                    {
-                        "type": "actions",
-                        "elements": [
-                            {
-                                "type": "button",
-                                "text": {
-                                    "type": "plain_text",
-                                    "emoji": True,
-                                    "text": "We've already had a meeting"
-                                },
-                                "style": "primary",
-                                "action_id": "flow_meet_had"
-                            }
-                        ]
-                    }
-                ]
+                    }] + msg_blocks
+                )
+            else:
+                client.chat_postMessage(
+                    channel=pair['uid1'], text=msg_text.format(pair['uid2']), blocks=msg_blocks
+                )
+
+            logger.info(f"{msg_type} message sent for {pair['uid1']} (pair: {pair['uid2']})")
+
+            setattr(ntf, msg_type, True)
+            ntf_repo.update(ntf)
+
+    except Exception as ex:
+        logger.error(f"{msg_type} message didn't send for user #{pair['uid1']}, error: {ex}")
+
+
+def care(client, user_repo, meet_repo, ntf_repo, config):
+    while True:
+        season_id = season.get()
+        weekday = 5
+        # date.today().weekday() + 1
+        users = user_repo.list(spec={"pause_in_weeks": "0"})
+
+        logger.info(f"Care about the current week. Today is {weekday} day of week ...")
+
+        # NOTE: create meets
+        if weekday < 5:
+            meet_repo.create(
+                uids=[user.id for user in users]
+            )
+        elif weekday == 5:
+            meet_repo.create(
+                uids=[user.id for user in users],
+                additional_uids=config["bot"]["additionalUsers"]
             )
 
+        meets = meet_repo.list(spec={"season": season_id})
+        pairs = []
 
-def meet_feedback(client, meetsDao, notificationDao, user):
-    if notificationDao.is_notified(user.uid, "feedback"):
-        logger.info(f"{user.uid} has already notified about feedback")
-    else:
-        notificationDao.change_column(user.uid, "feedback", "1")
+        # NOTE: Create pairs (it's the same as meets, but more convenient form
+        for meet in meets:
+            pairs.append({"uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id,
+                          "id": repo.calc_ntf_hash(meet.uid1, meet.uid2, meet.id)})
+            pairs.append({"uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id,
+                          "id": repo.calc_ntf_hash(meet.uid2, meet.uid1, meet.id)})
 
-        uid = meetsDao.get_uid2_by_id(season.get(), user.uid)
+        # NOTE: notify users
+        for pair in pairs:
+            if weekday <= 5:
+                try:
+                    ntf = ntf_repo.list({"id": pair["id"]})
+                    if not ntf:
+                        ntf_repo.add(Notification(id=pair['id'], meet_id=pair['meet_id']))
+                        logger.info(f"Notification for meet {pair['meet_id']} has created")
+                except NotificationNotFoundError:
+                    ntf_repo.add(Notification(id=pair['id'], meet_id=pair['meet_id']))
+                    logger.info(f"Notification for meet {pair['meet_id']} has created")
 
-        client.chat_postMessage(
-            channel=user.uid,
-            text="",
-            blocks=[
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": messages.MEET_FEEDBACK.format(uid)
-                    },
-                },
-                {
-                    "type": "actions",
-                    "elements": [
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "Yes"
-                            },
-                            "style": "primary",
-                            "action_id": "flow_meet_was"
-                        },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "No"
-                            },
-                            "style": "danger",
-                            "action_id": "flow_meet_was_not"
-                        }
-                    ]
-                }
-            ]
-        )
-
-
-def ask_about_next_week(sclient, notificationDao, user):
-    if notificationDao.is_notified(user.uid, "next_week"):
-        logger.info(f"{user.uid} has already notified about next week")
-    else:
-        notificationDao.change_column(user.uid, "next_week", "1")
-
-        sclient.chat_postMessage(
-            channel=user.uid,
-            text="",
-            blocks=[
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": messages.MEET_NEXT
-
-                    },
-
-                },
-                {
-                    "type": "actions",
-                    "elements": [
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "Sure!"
-                            },
-                            "style": "primary",
-                            "action_id": "flow_next_week_yes"
-                        },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "One-week pause"
-                            },
-                            "style": "danger",
-                            "action_id": "flow_next_week_pause_1w"
-                        },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "One-month pause"
-                            },
-                            "style": "danger",
-                            "action_id": "flow_next_week_pause_1m"
-                        },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "emoji": True,
-                                "text": "Stop bot permanently"
-                            },
-                            "style": "danger",
-                            "action_id": "stop"
-                        }
-                    ]
-                }
-            ]
-        )
-
-
-def care(client, userDAO, meetDAO, notificationDao, config):
-    while True:
-        weekday = date.today().weekday() + 1
-        users = userDAO.list()
-        user_avail_ids = userDAO.list_ids(only_available=True)
-
-        if weekday == 1:
-            if len(user_avail_ids) > 1:
-                meetDAO.create(user_avail_ids, config)
-        for user in users:
-            if weekday == 1:
-                meet_info(client, meetDAO, notificationDao, user)
-            elif weekday == 3:
-                meet_reminder(client, meetDAO, notificationDao, user)
-            elif weekday == 5:
-                meet_feedback(client, meetDAO, notificationDao, user)
+                meet_msg(client, ntf_repo, pair, "info", messages.MEET_INFO)
+                meet_msg(
+                    client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
+                )
+            elif weekday == 6:
+                meet_msg(
+                    client, ntf_repo, pair, "feedback", messages.MEET_FEEDBACK, elements.MEET_FEEDBACK,
+                    True
+                )
             elif weekday == 7:
-                notificationDao.change_all(user.uid, "0")
-                ask_about_next_week(client, notificationDao, user)
-                userDAO.decrement_users_pause(1)
+                meet_msg(
+                    client, ntf_repo, pair, "next_week", messages.MEET_NEXT, elements.MEET_NEXT, True
+                )
+
+        # NOTE: Change pause_in_weeks for all users
+        # NOTE: nullify notifications for all users
+        if weekday == 7:
+            for usr in user_repo.list():
+                if int(usr.pause_in_weeks) > 0:
+                    usr.pause_in_weeks = str(int(usr.pause_in_weeks) - 1)
+                    user_repo.update(usr)
+
+            for ntf in ntf_repo.list():
+                ntf_repo.nullify(ntf)
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])

@@ -18,5 +18,8 @@ services:
     restart: always
     env_file:
       - ${BOT_HOME}/resources/.env
+    environment:
+        RCB_LOG_DIR: ${BOT_HOME}/logs
     volumes:
       - ${BOT_HOME}/resources/config.yml:/home/rcb/bot/resources/config.yml
+      - ${BOT_HOME}/logs:/home/rcb/bot/logs

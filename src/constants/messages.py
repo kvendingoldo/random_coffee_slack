@@ -38,15 +38,14 @@ FLOW_WEEK_PAUSE_1W = "I see. Let's do this again next week!"
 FLOW_WEEK_PAUSE_1M = "I see. I will get back to you in a month!"
 
 FLOW_MEET_HAD = ":eyes: How it was?"
-FLOW_MEET_WAS = "Thank you for response!"
-FLOW_MEET_WASNT = "Thank you for response!"
+FLOW_MEET_RATE = "Thank you for response!"
 
 MEET_INFO = "Hey!👋 \n\n" \
-            "This week your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
+            "Your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
             "Slack them now to set up a meeting."
 
 MEET_REMINDER = "✉️ How are things?\n\n" \
-                "Meed-week is the best day to set up a meeting with your coffee partner!\n\n" \
+                "Meed-week is the best day to set up a meeting with your coffee partner (<@{0}>)!\n\n" \
                 "Slack them now to set up a meeting."
 
 MEET_FEEDBACK = "The week is over! \n\n" \

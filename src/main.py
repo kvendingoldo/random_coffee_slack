@@ -1,22 +1,31 @@
 # -*- coding: utf-8 -*-
 
 import threading
+import os
+
+from datetime import datetime
 
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 from loguru import logger
-from mysql.connector import pooling
 
-from entities import user
 from utils import config, season
 
 from daemons import week
-from database.dao import meetDao, userDao, ratingDao, notificationDao
-from database import exceptions
-from database.interface import connector
+
 from constants import messages, elements
 from utils import msg
+
+from db import database
+from db.exceptions import UserNotFoundError, NotificationNotFoundError
+from db.repo.user import UserRepository
+from db.repo.notification import NotificationRepository
+from db.repo.rating import RatingRepository
+from db.repo.meet import MeetRepository
+
+from models.user import User
+from models.notification import Notification
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -37,8 +46,8 @@ def rcb_command(body, ack, say):
             flow_quit(body, ack, say)
         elif msg == "stop":
             try:
-                _ = userDAO.get_by_id(body["user_id"])
-            except exceptions.NoResultFound:
+                _ = user_repo.get_by_id(body["user_id"])
+            except UserNotFoundError:
                 ack()
                 say(text=messages.USER_NOT_FOUND)
             else:
@@ -49,7 +58,7 @@ def rcb_command(body, ack, say):
 
 
 @app.action("help")
-def action_help(ack, body, client, say):
+def action_help(ack, body, client):
     logger.info("flow::help")
 
     ack()
@@ -73,155 +82,88 @@ def flow_stop(ack, body):
     app.client.chat_postMessage(
         channel=body["user_id"],
         text="",
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_STOP
-                },
+        blocks=[{
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_STOP
             },
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "One-week pause"
-                        },
-                        "style": "danger",
-                        "action_id": "flow_next_week_pause_1w"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "One-month pause"
-                        },
-                        "style": "danger",
-                        "action_id": "flow_next_week_pause_1m"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Stop bot permanently"
-                        },
-                        "style": "danger",
-                        "action_id": "stop"
-                    }
-                ]
-            }
-        ]
+        }] + elements.FLOW_STOP
     )
 
 
 @app.event("message")
-def handle_message_events(body, logger):
-    logger.info("Handled message event, body: ", body)
+def handle_message_events(body, say):
+    pass
+    # logger.debug(f"Handled message event, body: {body}")
+    # TODO
+    # if body["event"]["type"] == "message":
+    #     say(text=messages.COMMAND_NOT_FOUND)
 
 
 def flow_quit(body, ack, say):
-    logger.info("flow::quit")
-
     uid = body['user_id']
-    userDAO.delete_by_id(uid)
-    ratingDAO.delete_by_id(uid)
-    meetDAO.delete_by_id(uid)
+
+    logger.info(f"flow::quit for user {uid}")
+    user_repo.delete_by_id(uid)
 
     ack()
     say(text=messages.FLOW_QUIT)
 
 
 def flow_participate_0(body, ack, say):
-    logger.info("flow::participate::0")
+    logger.info(f"flow::participate::0 for user {body['user_id']}")
 
     ack()
+    # TODO: replace to client
     say(
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_PARTICIPATE_0
-                },
-                "accessory": {
-                    "type": "image",
-                    "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
-                    "alt_text": "cute donut"
-                }
+        blocks=[{
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_PARTICIPATE_0
             },
-            {
-                "type": "actions",
-                "elements": [
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Join"
-                        },
-                        "style": "primary",
-                        "action_id": "flow_participate_1"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Help"
-                        },
-                        "action_id": "help"
-                    },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "emoji": True,
-                            "text": "Cancel"
-                        },
-                        "style": "danger",
-                        "action_id": "stop"
-                    }
-                ]
+            "accessory": {
+                "type": "image",
+                "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
+                "alt_text": "cute donut"
             }
-        ],
-        text=""
+        }] + elements.FLOW_PART_0
     )
 
 
 @app.action("location")
-def location(ack, body, action, logr, client, say):
-    logger.info("flow::location")
+def location(ack, body, client):
+    logger.info(f"flow::location for user {body['user']['id']}")
+
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
 
     if usr.loc == "none":
         usr.loc = body["actions"][0]["selected_option"]["value"]
-        userDAO.update(usr)
+        user_repo.update(usr)
 
-    flow_participate_2(ack, body, action, logr, client, say)
+    flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_1")
-def flow_participate_1(ack, body, action, logr, client, say):
-    logger.info("flow::participate::1 ::: ", body)
+def flow_participate_1(ack, body, client):
+    uid = body["user"]["id"]
+
+    logger.info(f"flow::participate::1 for user {uid}")
     ack()
 
     try:
-        msg_user = userDAO.get_by_id(body["user"]["id"])
+        msg_user = user_repo.get_by_id(uid)
         msg_user.pause_in_weeks = "0"
-        userDAO.update(msg_user)
-    except exceptions.NoResultFound as ex:
-        new_user = user.User(username=body["user"]["username"], uid=body["user"]["id"], pause_in_weeks="0")
 
-        userDAO.add(new_user)
-        ratingDAO.add_by_id(new_user.uid)
+        user_repo.update(msg_user)
+    except UserNotFoundError as ex:
+        new_user = User(id=uid, username=body["user"]["username"], pause_in_weeks="0")
+
+        user_repo.add(new_user)
+        rating_repo.add(new_user.id)
 
         blocks = [
             {
@@ -246,15 +188,24 @@ def flow_participate_1(ack, body, action, logr, client, say):
         client.chat_update(
             channel=body['channel']['id'],
             ts=msg.get_ts(body),
+            text="",
             blocks=blocks
         )
-    else:
-        flow_participate_2(ack, body, action, logr, client, say)
+    try:
+        ntf = ntf_repo.get_by_uid(uid)
+        ntf_repo.nullify(ntf)
+    except NotificationNotFoundError as ex:
+        ntf_repo.add(
+            Notification(uid=uid, info=False, reminder=False, feedback=False, next_week=False)
+        )
+
+    flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_2")
-def flow_participate_2(ack, body, action, logr, client, say):
-    logger.info("flow::participate::2 ::: ", body)
+def flow_participate_2(ack, body, client):
+    logger.info(f"flow::participate::2 for user {body['user']['id']}")
+
     ack()
 
     blocks = [
@@ -280,12 +231,12 @@ def flow_participate_2(ack, body, action, logr, client, say):
 
 
 @app.action("flow_next_week_yes")
-def flow_next_week_yes(ack, body, action, logr, client, say):
+def flow_next_week_yes(ack, body, client):
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = "0"
-    userDAO.update(usr)
+    user_repo.update(usr)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -306,9 +257,9 @@ def flow_next_week_yes(ack, body, action, logr, client, say):
 def stop_wrapper(ack, body, client, period, message):
     ack()
 
-    usr = userDAO.get_by_id(body["user"]["id"])
+    usr = user_repo.get_by_id(body["user"]["id"])
     usr.pause_in_weeks = period
-    userDAO.update(usr)
+    user_repo.update(usr)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -326,31 +277,37 @@ def stop_wrapper(ack, body, client, period, message):
 
 
 @app.action("flow_next_week_pause_1w")
-def flow_next_week_pause_1w(ack, body, client, say):
+def flow_next_week_pause_1w(ack, body, client):
     stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1W)
 
 
 @app.action("flow_next_week_pause_1m")
-def flow_next_week_pause_1m(ack, body, client, say):
-    stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1M)
+def flow_next_week_pause_1m(ack, body, client):
+    stop_wrapper(ack, body, client, "4", messages.FLOW_WEEK_PAUSE_1M)
 
 
 @app.action("stop")
-def action_stop(ack, body, client, say):
+def action_stop(ack, body, client):
     stop_wrapper(ack, body, client, "inf", messages.ACTION_STOP)
 
 
-@app.action("flow_meet_was")
-def flow_meet_was(ack, body, action, logger, client, say):
+def flow_meet_rate(ack, body, client, sign):
     ack()
 
     uid = body["user"]["id"]
+    season_id = season.get()
 
-    partner_uid = meetDAO.get_uid2_by_id(
-        season.get(), uid
-    )
+    if meet_repo.list(spec={"season": season_id, "uid1": uid}):
+        uid2 = meet_repo.list(spec={"season": season_id, "uid1": uid})[0].uid2
+    else:
+        uid2 = meet_repo.list(spec={"season": season_id, "uid2": uid})[0].uid1
 
-    ratingDAO.change_by_ids(uid, partner_uid, 0.1)
+    rating = rating_repo.get_by_ids(uid, uid2)
+    if sign == "+":
+        rating.value += 0.1
+    else:
+        rating.value -= 0.1
+    rating_repo.update(rating)
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -360,80 +317,35 @@ def flow_meet_was(ack, body, action, logger, client, say):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": messages.FLOW_MEET_WAS
+                    "text": messages.FLOW_MEET_RATE
                 }
             }
         ]
     )
+
+
+@app.action("flow_meet_was")
+def flow_meet_was(ack, body, client):
+    flow_meet_rate(ack, body, client, "+")
 
 
 @app.action("flow_meet_was_not")
-def flow_meet_was_not(ack, body, action, logger, client, say):
-    ack()
-
-    uid = body["user"]["id"]
-
-    partner_uid = meetDAO.get_uid2_by_id(
-        season.get(), uid
-    )
-
-    ratingDAO.change_by_ids(uid, partner_uid, -0.1)
-
-    client.chat_update(
-        channel=body['channel']['id'],
-        ts=msg.get_ts(body),
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_MEET_WASNT
-
-                }
-            }
-        ]
-    )
+def flow_meet_was_not(ack, body, client):
+    flow_meet_rate(ack, body, client, "-")
 
 
 @app.action("flow_meet_had")
-def flow_meet_had(ack, body, action, logger, client, say):
+def flow_meet_had(ack, body, client):
     ack()
 
-    blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": messages.FLOW_MEET_HAD
-            },
-
+    blocks = [{
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": messages.FLOW_MEET_HAD
         },
-        {
-            "type": "actions",
-            "elements": [
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "emoji": True,
-                        "text": "Awesome!"
-                    },
-                    "style": "primary",
-                    "action_id": "flow_meet_was"
-                },
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "emoji": True,
-                        "text": "Could be better"
-                    },
-                    "style": "primary",
-                    "action_id": "flow_meet_was_not"
-                }
-            ]
-        }
-    ]
+
+    }] + elements.MEET_HAD
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -443,29 +355,30 @@ def flow_meet_had(ack, body, action, logger, client, say):
 
 
 if __name__ == "__main__":
+    log_dir = os.getenv("RCB_LOG_DIR")
+    print(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log")
+
+    logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
+
     logger.info("Bot launching ...")
 
-    connection_pool = pooling.MySQLConnectionPool(
-        pool_name="default",
-        pool_size=5,
-        pool_reset_session=True,
-        host=config["database"]["host"],
-        port=config["database"]["port"],
-        database=config["database"]["db"],
-        user=config["database"]["username"],
-        password=config["database"]["password"]
+    db_url = "mysql://{}:{}@{}:{}/{}".format(
+        config["database"]["username"], config["database"]["password"],
+        config["database"]["host"], config["database"]["port"],
+        config["database"]["db"]
     )
 
-    connector = connector.Connector(connection_pool)
+    db = database.Database(db_url)
+    db.create_database()
 
-    userDAO = userDao.UserDAO(connector)
-    meetDAO = meetDao.MeetDao(connector)
-    ratingDAO = ratingDao.RatingDao(connector)
-    notificationDAO = notificationDao.NotificationDao(connector)
+    user_repo = UserRepository(session_factory=db.session)
+    ntf_repo = NotificationRepository(session_factory=db.session)
+    rating_repo = RatingRepository(session_factory=db.session)
+    meet_repo = MeetRepository(session_factory=db.session)
 
     week = threading.Thread(
         target=week.care,
-        args=(app.client, userDAO, meetDAO, notificationDAO, config,)
+        args=(app.client, user_repo, meet_repo, ntf_repo, config,)
     )
     week.start()
 
