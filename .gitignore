@@ -42,3 +42,4 @@ venv/
 # Misc
 .env
 rcb.tar
+src/*.log

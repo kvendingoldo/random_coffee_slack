@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-USERS = 'users'
-MEETS = 'meets'
+USERS = 'user'
+MEETS = 'meet'
 RATING = 'rating'
-NOTIFICATIONS = 'notifications'
+NOTIFICATIONS = 'notification'

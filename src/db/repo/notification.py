@@ -16,6 +16,13 @@ class NotificationRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
+    def get_by_uid(self, uid: str) -> Notification:
+        with self.session_factory() as session:
+            ntf = session.query(Notification).filter(Notification.uid == uid).first()
+            if not ntf:
+                raise NotificationNotFoundError("")
+            return ntf
+
     def add(self, notification: Notification) -> Notification:
         with self.session_factory() as session:
             session.add(notification)
@@ -57,3 +64,11 @@ class NotificationRepository:
             if not objs:
                 raise NotificationNotFoundError("")
         return repo.filtration(spec, objs)
+
+    def nullify(self, notification: Notification) -> None:
+        notification.info = False
+        notification.reminder = False
+        notification.feedback = False
+        notification.next_week = False
+
+        self.update(notification)

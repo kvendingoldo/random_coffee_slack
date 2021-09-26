@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import threading
+import os
+
+from datetime import datetime
 
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -15,13 +18,14 @@ from constants import messages, elements
 from utils import msg
 
 from db import database
-from db.exceptions import UserNotFoundError
+from db.exceptions import UserNotFoundError, NotificationNotFoundError
 from db.repo.user import UserRepository
 from db.repo.notification import NotificationRepository
 from db.repo.rating import RatingRepository
 from db.repo.meet import MeetRepository
 
-from models import user
+from models.user import User
+from models.notification import Notification
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -145,16 +149,18 @@ def location(ack, body, client):
 
 @app.action("flow_participate_1")
 def flow_participate_1(ack, body, client):
-    logger.info(f"flow::participate::1 for user {body['user']['id']}")
+    uid = body["user"]["id"]
+
+    logger.info(f"flow::participate::1 for user {uid}")
     ack()
 
     try:
-        msg_user = user_repo.get_by_id(body["user"]["id"])
+        msg_user = user_repo.get_by_id(uid)
         msg_user.pause_in_weeks = "0"
 
         user_repo.update(msg_user)
     except UserNotFoundError as ex:
-        new_user = user.User(id=body["user"]["id"], username=body["user"]["username"], pause_in_weeks="0")
+        new_user = User(id=uid, username=body["user"]["username"], pause_in_weeks="0")
 
         user_repo.add(new_user)
         rating_repo.add(new_user.id)
@@ -185,8 +191,15 @@ def flow_participate_1(ack, body, client):
             text="",
             blocks=blocks
         )
-    else:
-        flow_participate_2(ack, body, client)
+    try:
+        ntf = ntf_repo.get_by_uid(uid)
+        ntf_repo.nullify(ntf)
+    except NotificationNotFoundError as ex:
+        ntf_repo.add(
+            Notification(uid=uid, info=False, reminder=False, feedback=False, next_week=False)
+        )
+
+    flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_2")
@@ -342,6 +355,11 @@ def flow_meet_had(ack, body, client):
 
 
 if __name__ == "__main__":
+    log_dir = os.getenv("RCB_LOG_DIR")
+    print(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log")
+
+    logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
+
     logger.info("Bot launching ...")
 
     db_url = "mysql://{}:{}@{}:{}/{}".format(
@@ -354,13 +372,13 @@ if __name__ == "__main__":
     db.create_database()
 
     user_repo = UserRepository(session_factory=db.session)
-    notification_repo = NotificationRepository(session_factory=db.session)
+    ntf_repo = NotificationRepository(session_factory=db.session)
     rating_repo = RatingRepository(session_factory=db.session)
     meet_repo = MeetRepository(session_factory=db.session)
 
     week = threading.Thread(
         target=week.care,
-        args=(app.client, user_repo, meet_repo, notification_repo, config,)
+        args=(app.client, user_repo, meet_repo, ntf_repo, config,)
     )
     week.start()
 

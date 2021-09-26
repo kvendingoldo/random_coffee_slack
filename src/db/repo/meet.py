@@ -19,12 +19,12 @@ class MeetRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
-    def create(self, uids, additional_uids=None, type='random'):
+    def create(self, uids, additional_uids=None, kind='random'):
         logger.info("Starting algorithm to create meets")
 
         if additional_uids is None:
             additional_uids = []
-        if type == 'random':
+        if kind == 'random':
             self.__create_random(uids, additional_uids)
 
         logger.info("Algorithm for creating pairs has successfully completed")
@@ -107,7 +107,7 @@ class MeetRepository:
 
     def check_exist(self, season, spec: Mapping = None):
         with self.session_factory() as session:
-            meets = session.query(Meet).filter(season == season)
+            meets = session.query(Meet).filter(Meet.season == season)
             if not meets:
                 raise MeetNotFoundError("")
 

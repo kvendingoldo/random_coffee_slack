@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Boolean, Integer, ForeignKey
+from sqlalchemy import Column, Boolean, Integer, ForeignKey, String
 
 from db.database import Base
 from constants import tables
@@ -9,7 +9,7 @@ from constants import tables
 class Notification(Base):
     __tablename__ = tables.NOTIFICATIONS
 
-    id = Column(Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
+    id = Column(String(48), primary_key=True, nullable=False, unique=True)
     info = Column(Boolean, unique=False, nullable=False, default=False)
     reminder = Column(Boolean, unique=False, nullable=False, default=False)
     feedback = Column(Boolean, unique=False, nullable=False, default=False)
