@@ -18,7 +18,7 @@ from constants import messages, elements
 from utils import msg
 
 from db import database
-from db.exceptions import UserNotFoundError, NotificationNotFoundError, RatingNotFoundError
+from db.exceptions import UserNotFoundError, RatingNotFoundError
 from db.repo.user import UserRepository
 from db.repo.notification import NotificationRepository
 from db.repo.rating import RatingRepository
@@ -26,7 +26,6 @@ from db.repo.meet import MeetRepository
 
 from models.user import User
 from models.rating import Rating
-from models.notification import Notification
 
 config = config.load("../resources/config.yml")
 app = App(
@@ -192,13 +191,6 @@ def flow_participate_1(ack, body, client):
             text="",
             blocks=blocks
         )
-    try:
-        ntf = ntf_repo.get_by_uid(uid)
-        ntf_repo.nullify(ntf)
-    except NotificationNotFoundError as ex:
-        ntf_repo.add(
-            Notification(uid=uid, info=False, reminder=False, feedback=False, next_week=False)
-        )
 
     flow_participate_2(ack, body, client)
 
@@ -295,18 +287,20 @@ def action_stop(ack, body, client):
 def flow_meet_rate(ack, body, client, sign):
     ack()
 
-    uid = body["user"]["id"]
+    uid1 = body["user"]["id"]
+    uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     season_id = season.get()
 
-    if meet_repo.list(spec={"season": season_id, "uid1": uid}):
-        uid2 = meet_repo.list(spec={"season": season_id, "uid1": uid})[0].uid2
-    else:
-        uid2 = meet_repo.list(spec={"season": season_id, "uid2": uid})[0].uid1
+    # TODO: add error handling
+    meet = (meet_repo.list(spec={"season": season_id, "uid1": uid1, "uid2": uid2}) + \
+            meet_repo.list(spec={"season": season_id, "uid2": uid1, "uid1": uid2}))[0]
+    meet.completed = True
+    meet_repo.update(meet)
 
     try:
-        rating = rating_repo.get_by_ids(uid, uid2)
+        rating = rating_repo.get_by_ids(uid1, uid2)
     except RatingNotFoundError:
-        rating = Rating(uid1=uid, uid2=uid2, rating=1.0)
+        rating = Rating(uid1=uid1, uid2=uid2, rating=1.0)
 
     if sign == "+":
         rating.value += 0.1
@@ -341,13 +335,14 @@ def flow_meet_was_not(ack, body, client):
 
 @app.action("flow_meet_had")
 def flow_meet_had(ack, body, client):
+    uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     ack()
 
     blocks = [{
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": messages.FLOW_MEET_HAD
+            "text": (messages.FLOW_MEET_HAD).format(uid2)
         },
 
     }] + elements.MEET_HAD

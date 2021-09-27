@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 
 
 def get_ts(body):
@@ -8,3 +9,9 @@ def get_ts(body):
         ts = body["message"]["ts"]
 
     return ts
+
+
+def get_uid(text):
+    uid = re.sub("<@|>", "", re.findall(r'(<@.*>)', text)[0])
+
+    return uid

@@ -124,6 +124,17 @@ class MeetRepository:
             session.refresh(meet)
             return meet
 
+    def update(self, meet: Meet) -> None:
+        with self.session_factory() as session:
+            session.query(Meet).filter_by(id=meet.id).update(dict(
+                season=meet.season,
+                uid1=meet.uid1,
+                uid2=meet.uid2,
+                completed=meet.completed
+            ))
+
+            session.commit()
+
     def delete_all_by_uid(self, uid: str) -> None:
         with self.session_factory() as session:
             entities: Meet = session.query(Meet).filter(

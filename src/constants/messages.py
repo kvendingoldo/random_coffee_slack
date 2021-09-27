@@ -37,7 +37,7 @@ FLOW_WEEK_YES = "Great! Next Monday I’ll choose one more amazing coffee partne
 FLOW_WEEK_PAUSE_1W = "I see. Let's do this again next week!"
 FLOW_WEEK_PAUSE_1M = "I see. I will get back to you in a month!"
 
-FLOW_MEET_HAD = ":eyes: How it was?"
+FLOW_MEET_HAD = ":eyes: How it was with <@{0}>?"
 FLOW_MEET_RATE = "Thank you for response!"
 
 MEET_INFO = "Hey!👋 \n\n" \

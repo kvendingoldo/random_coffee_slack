@@ -8,3 +8,4 @@
 - [ ] fix an issue caused by 2 slack clients
 - [x] migrate to SQLAlchemy
 - [ ] notification system for major updates
+- [ ] notify uid2 if uid1 made /rcb quit

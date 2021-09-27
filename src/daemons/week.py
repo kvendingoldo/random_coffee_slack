@@ -48,7 +48,7 @@ def meet_msg(client, ntf_repo, pair, msg_type, msg_text, msg_blocks=None, inline
 def care(client, user_repo, meet_repo, ntf_repo, config):
     while True:
         season_id = season.get()
-        weekday = date.today().weekday() + 1
+        weekday = 5  # date.today().weekday() + 1
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
@@ -106,9 +106,11 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                     info_msg = messages.MEET_INFO_NOT_UNIQUE
 
                 meet_msg(client, ntf_repo, pair, "info", info_msg)
-                meet_msg(
-                    client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
-                )
+
+                if weekday >= 3:
+                    meet_msg(
+                        client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
+                    )
             elif weekday == 6:
                 meet_msg(
                     client, ntf_repo, pair, "feedback", messages.MEET_FEEDBACK, elements.MEET_FEEDBACK,
@@ -120,14 +122,10 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                 )
 
         # NOTE: Change pause_in_weeks for all users
-        # NOTE: nullify notifications for all users
         if weekday == 7:
             for usr in user_repo.list():
                 if int(usr.pause_in_weeks) > 0:
                     usr.pause_in_weeks = str(int(usr.pause_in_weeks) - 1)
                     user_repo.update(usr)
-
-            for ntf in ntf_repo.list():
-                ntf_repo.nullify(ntf)
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])
