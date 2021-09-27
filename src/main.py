@@ -123,11 +123,7 @@ def flow_participate_0(body, ack, say):
                 "type": "mrkdwn",
                 "text": messages.FLOW_PARTICIPATE_0
             },
-            "accessory": {
-                "type": "image",
-                "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
-                "alt_text": "cute donut"
-            }
+            "accessory": elements.DONUT
         }] + elements.FLOW_PART_0
     )
 
@@ -208,11 +204,7 @@ def flow_participate_2(ack, body, client):
                 "type": "mrkdwn",
                 "text": messages.FLOW_PARTICIPATE_2
             },
-            "accessory": {
-                "type": "image",
-                "image_url": "https://image.freepik.com/free-vector/cute-unicorn-vector-with-donut-cartoon_70350-110.jpg",
-                "alt_text": "cute donut"
-            }
+            "accessory": elements.DONUT
         }
     ]
 

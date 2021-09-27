@@ -48,7 +48,7 @@ def meet_msg(client, ntf_repo, pair, msg_type, msg_text, msg_blocks=None, inline
 def care(client, user_repo, meet_repo, ntf_repo, config):
     while True:
         season_id = season.get()
-        weekday = 5  # date.today().weekday() + 1
+        weekday = date.today().weekday() + 1
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")

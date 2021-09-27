@@ -108,6 +108,12 @@ LOCATIONS = [
     }
 ]
 
+DONUT = {
+    "type": "image",
+    "image_url": "https://files.slack.com/files-pri/T1H4XT8DV-F02FKRZ2QK0/1000x1000_color.png?pub_secret=43aa14cb10",
+    "alt_text": "cute donut"
+}
+
 MEET_REMINDER = [
     {
         "type": "actions",
