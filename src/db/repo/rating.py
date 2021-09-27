@@ -36,7 +36,7 @@ class RatingRepository:
                 and_(Rating.uid1 == uid1, Rating.uid2 == uid2)
             ).first()
             if not user:
-                raise RatingNotFoundError(id)
+                raise RatingNotFoundError("")
             return user
 
     def delete_by_id(self, id: str) -> None:

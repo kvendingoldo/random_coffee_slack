@@ -37,7 +37,7 @@ class MeetRepository:
         while len(uids) >= 1:
             cur_uid = uids[0]
 
-            if self.check_exist(season_id, {"uid1": cur_uid}) or self.check_exist(season_id, {"uid2": cur_uid}):
+            if self.is_exist(season_id, {"or": {"uid1": cur_uid, "uid2": cur_uid}}):
                 uids.remove(cur_uid)
                 continue
 
@@ -68,10 +68,10 @@ class MeetRepository:
                 pair_uid = potential[0]
 
                 # NOTE: check that uid1 and uid2 didn't have a meet 1 & 2 weeks ago
-                if self.check_exist(season.get("delta", 7), {"uid1": cur_uid, "uid2": pair_uid}) or \
-                    self.check_exist(season.get("delta", 7), {"uid1": pair_uid, "uid2": cur_uid}) or \
-                    self.check_exist(season.get("delta", 14), {"uid1": cur_uid, "uid2": pair_uid}) or \
-                    self.check_exist(season.get("delta", 14), {"uid1": pair_uid, "uid2": cur_uid}):
+                if self.is_exist(season.get("delta", 7), {"uid1": cur_uid, "uid2": pair_uid}) or \
+                    self.is_exist(season.get("delta", 7), {"uid1": pair_uid, "uid2": cur_uid}) or \
+                    self.is_exist(season.get("delta", 14), {"uid1": cur_uid, "uid2": pair_uid}) or \
+                    self.is_exist(season.get("delta", 14), {"uid1": pair_uid, "uid2": cur_uid}):
                     for_rand_distr.append(cur_uid)
                 else:
                     self.add(Meet(season=season_id, uid1=cur_uid, uid2=pair_uid))
@@ -79,6 +79,7 @@ class MeetRepository:
                     logger.info(f"Meet created for pair ({cur_uid}, {pair_uid})")
             else:
                 logger.info(f"Meet can't be create for {cur_uid}; No potential users found")
+                for_rand_distr.append(cur_uid)
                 uids.remove(cur_uid)
 
         if for_rand_distr:
@@ -100,12 +101,12 @@ class MeetRepository:
             if additional_users:
                 uid2 = random.choice(additional_users)
 
-                logger.info(f"Meet created for pair ({uid1}, {uid2})")
+                logger.info(f"Meet created for pair ({uid1}, {uid2}); Pair has taken from additionalUsers")
                 self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
             else:
                 logger.info(f"List of additional users is empty. Meet can not be created for user {uid1}")
 
-    def check_exist(self, season, spec: Mapping = None):
+    def is_exist(self, season, spec: Mapping = None):
         with self.session_factory() as session:
             meets = session.query(Meet).filter(Meet.season == season)
             if not meets:

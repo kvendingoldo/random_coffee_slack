@@ -38,7 +38,7 @@ class NotificationRepository:
             notification = session.query(Notification).filter(Notification.uid == uid).first()
             if not notification:
                 return False
-                # return warn
+                # TODO: return warn
                 # raise NotificationNotFoundError(uid)
             return bool(getattr(notification, column))
 
@@ -53,7 +53,7 @@ class NotificationRepository:
                 ))
                 session.commit()
             except Exception as ex:
-                # add warn log
+                # TODO: add warn log
                 session.add(notification)
                 session.commit()
                 session.refresh(notification)

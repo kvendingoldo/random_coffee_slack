@@ -48,8 +48,7 @@ def meet_msg(client, ntf_repo, pair, msg_type, msg_text, msg_blocks=None, inline
 def care(client, user_repo, meet_repo, ntf_repo, config):
     while True:
         season_id = season.get()
-        weekday = 5
-        # date.today().weekday() + 1
+        weekday = date.today().weekday() + 1
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
@@ -70,24 +69,43 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
 
         # NOTE: Create pairs (it's the same as meets, but more convenient form
         for meet in meets:
-            pairs.append({"uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id,
-                          "id": repo.calc_ntf_hash(meet.uid1, meet.uid2, meet.id)})
-            pairs.append({"uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id,
-                          "id": repo.calc_ntf_hash(meet.uid2, meet.uid1, meet.id)})
+            unique_u1 = True
+            unique_u2 = True
+
+            if len(meet_repo.list({"season": season_id, "or": {"uid1": meet.uid1, "uid2": meet.uid1}})) > 1:
+                unique_u1 = False
+            if len(meet_repo.list({"season": season_id, "or": {"uid1": meet.uid2, "uid2": meet.uid2}})) > 1:
+                unique_u2 = False
+
+            pairs.append({
+                "uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id,
+                "id": repo.calc_ntf_hash(meet.uid1, meet.uid2, meet.id),
+                "unique": unique_u1
+            })
+            pairs.append({
+                "uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id,
+                "id": repo.calc_ntf_hash(meet.uid2, meet.uid1, meet.id),
+                "unique": unique_u2
+            })
 
         # NOTE: notify users
         for pair in pairs:
             if weekday <= 5:
                 try:
                     ntf = ntf_repo.list({"id": pair["id"]})
-                    if not ntf:
-                        ntf_repo.add(Notification(id=pair['id'], meet_id=pair['meet_id']))
-                        logger.info(f"Notification for meet {pair['meet_id']} has created")
                 except NotificationNotFoundError:
+                    ntf = []
+
+                if not ntf:
                     ntf_repo.add(Notification(id=pair['id'], meet_id=pair['meet_id']))
                     logger.info(f"Notification for meet {pair['meet_id']} has created")
 
-                meet_msg(client, ntf_repo, pair, "info", messages.MEET_INFO)
+                if pair['unique']:
+                    info_msg = messages.MEET_INFO
+                else:
+                    info_msg = messages.MEET_INFO_NOT_UNIQUE
+
+                meet_msg(client, ntf_repo, pair, "info", info_msg)
                 meet_msg(
                     client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
                 )

@@ -9,9 +9,16 @@ def filtration(spec, objs):
         for obj in objs:
             take = True
             for key in spec.keys():
-                if getattr(obj, key) != spec[key]:
-                    take = False
-                    break
+                if key == "or":
+                    for k_or in spec[key].keys():
+                        take = False
+                        if getattr(obj, k_or) == spec[key][k_or]:
+                            take = True
+                            break
+                else:
+                    if getattr(obj, key) != spec[key]:
+                        take = False
+                        break
             if take:
                 result.append(obj)
         return result

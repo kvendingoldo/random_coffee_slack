@@ -18,13 +18,14 @@ from constants import messages, elements
 from utils import msg
 
 from db import database
-from db.exceptions import UserNotFoundError, NotificationNotFoundError
+from db.exceptions import UserNotFoundError, NotificationNotFoundError, RatingNotFoundError
 from db.repo.user import UserRepository
 from db.repo.notification import NotificationRepository
 from db.repo.rating import RatingRepository
 from db.repo.meet import MeetRepository
 
 from models.user import User
+from models.rating import Rating
 from models.notification import Notification
 
 config = config.load("../resources/config.yml")
@@ -302,7 +303,11 @@ def flow_meet_rate(ack, body, client, sign):
     else:
         uid2 = meet_repo.list(spec={"season": season_id, "uid2": uid})[0].uid1
 
-    rating = rating_repo.get_by_ids(uid, uid2)
+    try:
+        rating = rating_repo.get_by_ids(uid, uid2)
+    except RatingNotFoundError:
+        rating = Rating(uid1=uid, uid2=uid2, rating=1.0)
+
     if sign == "+":
         rating.value += 0.1
     else:
@@ -356,7 +361,6 @@ def flow_meet_had(ack, body, client):
 
 if __name__ == "__main__":
     log_dir = os.getenv("RCB_LOG_DIR")
-    print(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log")
 
     logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
 
