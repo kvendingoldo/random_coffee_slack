@@ -23,9 +23,9 @@ RUN apk update \
  && pip3 install --no-cache-dir -r ${HOME}/bot/requirements.txt \
  && apk del build-deps gcc g++
 
+USER rcb
 COPY ./src ${HOME}/bot/src
 COPY ./resources ${HOME}/bot/resources
 
-USER 1000:1000
 WORKDIR ${HOME}/bot/src
 ENTRYPOINT ["python3", "main.py"]

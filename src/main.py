@@ -349,7 +349,8 @@ def flow_meet_had(ack, body, client):
 if __name__ == "__main__":
     log_dir = os.getenv("RCB_LOG_DIR")
 
-    logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
+    # TODO: temporary disabled
+    #logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
 
     logger.info("Bot launching ...")
 

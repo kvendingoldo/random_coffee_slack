@@ -9,3 +9,5 @@
 - [x] migrate to SQLAlchemy
 - [ ] notification system for major updates
 - [ ] notify uid2 if uid1 made /rcb quit
+- [ ] add setting for disabling notifications (it's needed for maintenance)
+- [ ] send help for random text that user sent to bot
