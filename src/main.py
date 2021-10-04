@@ -343,8 +343,28 @@ def flow_meet_was_not(ack, body, client):
     flow_meet_rate(ack, body, client, "-")
 
 
+@app.action("flow_meet_had_not")
+def flow_meet_had_not(ack, body, client):
+    ack()
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_MEET_HAD_NOT
+                }
+            }
+        ]
+    )
+
+
 @app.action("flow_meet_had")
 def flow_meet_had(ack, body, client):
+    uid1 = body["user"]["id"]
     uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     ack()
 
@@ -362,6 +382,16 @@ def flow_meet_had(ack, body, client):
         ts=msg.get_ts(body),
         blocks=blocks
     )
+
+    # TODO: Enable it after notifications rework
+    # ntf1 = ntf_repo.list({"id": uid1})[0]
+    # ntf2 = ntf_repo.list({"id": uid1})[0]
+    #
+    # ntf1.feedback = True
+    # ntf2.feedback = True
+    #
+    # ntf_repo.update(ntf1)
+    # ntf_repo.update(ntf2)
 
 
 if __name__ == "__main__":

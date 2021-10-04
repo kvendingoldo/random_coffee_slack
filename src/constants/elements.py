@@ -127,6 +127,16 @@ MEET_REMINDER = [
                 },
                 "style": "primary",
                 "action_id": "flow_meet_had"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Still waiting for a meeting"
+                },
+                "style": "primary",
+                "action_id": "flow_meet_had_not"
             }
         ]
     }
