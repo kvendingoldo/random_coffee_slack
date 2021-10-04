@@ -7,6 +7,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: coffee
+      TZ: GMT0
     ports:
       - "3306:3306"
     volumes:
@@ -20,6 +21,7 @@ services:
       - ${BOT_HOME}/resources/.env
     environment:
         RCB_LOG_DIR: ${BOT_HOME}/logs
+        TZ: GMT0
     volumes:
       - ${BOT_HOME}/resources/config.yml:/home/rcb/bot/resources/config.yml
       - ${BOT_HOME}/logs:/home/rcb/bot/logs
