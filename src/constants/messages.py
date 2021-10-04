@@ -5,9 +5,12 @@ COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command for getting help
 
 FLOW_HELP = "Available commands:\n" \
             "/rcb start - participate in Random Coffee meets\n" \
+            "/rcb status - get my current status\n" \
             "/rcb stop  - stop to participate in Random Coffee meets\n" \
             "/rcb quit  - quit from Random Coffee meets\n" \
             "/rcb help  - help\n"
+
+FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1}"
 
 FLOW_QUIT = "Sorry to see this decision. Hope to see you soon again. " \
             "Just write /rcb start again in this case. Information about you was deleted."
@@ -45,8 +48,8 @@ MEET_INFO = "Hey!👋 \n\n" \
             "Slack them now to set up a meeting."
 
 MEET_INFO_NOT_UNIQUE = "Hey!👋 \n\n" \
-            "You are lucky, this week you have one another partner, who is <@{0}>! \n\n" \
-            "Slack them now to set up a meeting."
+                       "You are lucky, this week you have one another partner, who is <@{0}>! \n\n" \
+                       "Slack them now to set up a meeting."
 
 MEET_REMINDER = "✉️ How are things?\n\n" \
                 "Meed-week is the best day to set up a meeting with your coffee partner (<@{0}>)!\n\n" \

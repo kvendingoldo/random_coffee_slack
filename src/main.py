@@ -44,6 +44,8 @@ def rcb_command(body, ack, say):
             say(text=messages.FLOW_HELP)
         elif msg == "quit":
             flow_quit(body, ack, say)
+        elif msg == "status":
+            flow_status(body, ack, say)
         elif msg == "stop":
             try:
                 _ = user_repo.get_by_id(body["user_id"])
@@ -99,6 +101,22 @@ def handle_message_events(body, say):
     # TODO
     # if body["event"]["type"] == "message":
     #     say(text=messages.COMMAND_NOT_FOUND)
+
+
+def flow_status(body, ack, say):
+    uid = body['user_id']
+
+    logger.info(f"flow::status for user {uid}")
+
+    pause_in_weeks = str(user_repo.get_by_id(uid).pause_in_weeks)
+
+    if pause_in_weeks == "0":
+        week_msg = "on this week"
+    else:
+        week_msg = f"in {pause_in_weeks} weeks"
+
+    ack()
+    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg))
 
 
 def flow_quit(body, ack, say):
@@ -292,7 +310,7 @@ def flow_meet_rate(ack, body, client, sign):
     try:
         rating = rating_repo.get_by_ids(uid1, uid2)
     except RatingNotFoundError:
-        rating = Rating(uid1=uid1, uid2=uid2, rating=1.0)
+        rating = Rating(uid1=uid1, uid2=uid2, value=1.0)
 
     if sign == "+":
         rating.value += 0.1
@@ -350,7 +368,7 @@ if __name__ == "__main__":
     log_dir = os.getenv("RCB_LOG_DIR")
 
     # TODO: temporary disabled
-    #logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
+    # logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
 
     logger.info("Bot launching ...")
 

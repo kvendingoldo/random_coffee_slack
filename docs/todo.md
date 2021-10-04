@@ -11,3 +11,6 @@
 - [ ] notify uid2 if uid1 made /rcb quit
 - [ ] add setting for disabling notifications (it's needed for maintenance)
 - [ ] send help for random text that user sent to bot
+- [ ] two notifications about the next week if user had two meets
+- [ ] change bot timezone
+- [ ] do not ask about meet if users marked that meet has been done
