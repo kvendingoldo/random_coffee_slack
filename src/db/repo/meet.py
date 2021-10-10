@@ -135,6 +135,14 @@ class MeetRepository:
 
             session.commit()
 
+    def delete(self, meet: Meet) -> None:
+        with self.session_factory() as session:
+            entity: Meet = session.query(Meet).filter(Meet.id == meet.id).first()
+            if not entity:
+                raise MeetNotFoundError(meet.id)
+            session.delete(entity)
+            session.commit()
+
     def delete_all_by_uid(self, uid: str) -> None:
         with self.session_factory() as session:
             entities: Meet = session.query(Meet).filter(

@@ -123,10 +123,12 @@ def flow_quit(body, ack, say):
     uid = body['user_id']
 
     logger.info(f"flow::quit for user {uid}")
-    user_repo.delete_by_id(uid)
 
     ack()
     say(text=messages.FLOW_QUIT)
+
+    notify_uid2_about_uid_quit(uid)
+    user_repo.delete_by_id(uid)
 
 
 def flow_participate_0(body, ack, say):
@@ -173,6 +175,8 @@ def flow_participate_1(ack, body, client):
         msg_user.pause_in_weeks = "0"
 
         user_repo.update(msg_user)
+
+        flow_participate_2(ack, body, client)
     except UserNotFoundError as ex:
         new_user = User(id=uid, username=body["user"]["username"], pause_in_weeks="0")
 
@@ -205,8 +209,6 @@ def flow_participate_1(ack, body, client):
             text="",
             blocks=blocks
         )
-
-    flow_participate_2(ack, body, client)
 
 
 @app.action("flow_participate_2")
@@ -257,6 +259,38 @@ def flow_next_week_yes(ack, body, client):
     )
 
 
+def notify_uid2_about_uid_quit(uid1: str) -> None:
+    season_id = season.get()
+
+    # TODO: add error handling
+    meets = meet_repo.list({"season": season_id, "or": {"uid1": uid1, "uid2": uid1}})
+
+    if len(meets) > 0:
+        meet = meets[0]
+        if meet.uid1 == uid1:
+            uid2 = meet.uid2
+        else:
+            uid2 = meet.uid1
+
+        # NOTE: Send message to uid2 that uid1 take a break
+        app.client.chat_postMessage(
+            channel=uid2,
+            text="",
+            blocks=[{
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_PARTNER_LEFT
+                },
+            }]
+        )
+
+        # Delete meet and all notifications about it
+        meet_repo.delete(meet)
+    else:
+        logger.info(f"User {uid1} didn't have a scheduled meet with anyone else")
+
+
 def stop_wrapper(ack, body, client, period, message):
     ack()
 
@@ -264,6 +298,9 @@ def stop_wrapper(ack, body, client, period, message):
     usr.pause_in_weeks = period
     user_repo.update(usr)
 
+    notify_uid2_about_uid_quit(usr.id)
+
+    # NOTE: Message for uid1 about successful pause
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),

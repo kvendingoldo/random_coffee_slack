@@ -19,6 +19,9 @@ FLOW_STOP = "Please, choose a period to stop participating"
 
 ACTION_STOP = "I’m looking forward to seeing you when you come back"
 
+FLOW_PARTNER_LEFT = "Looks like that your partner decided to take a break; " \
+                    "Do not worry, I'll find a new one, you get additional notification about it"
+
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \
                      "Weekly I'll randomly pick one exciting person for you to catch up with. " \
@@ -53,7 +56,7 @@ MEET_INFO_NOT_UNIQUE = "Hey!👋 \n\n" \
                        "Slack them now to set up a meeting."
 
 MEET_REMINDER = "✉️ How are things?\n\n" \
-                "Meed-week is the best day to set up a meeting with your coffee partner (<@{0}>)!\n\n" \
+                "Mid-week is the best day to set up a meeting with your coffee partner (<@{0}>)!\n\n" \
                 "Slack them now to set up a meeting."
 
 MEET_FEEDBACK = "The week is over! \n\n" \
