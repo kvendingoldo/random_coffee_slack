@@ -83,10 +83,11 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                 uids=[user.id for user in users]
             )
         elif weekday == 5:
-            meet_repo.create(
-                uids=[user.id for user in users],
-                additional_uids=config["bot"]["additionalUsers"]
-            )
+            if hour <= 13:
+                meet_repo.create(
+                    uids=[user.id for user in users],
+                    additional_uids=config["bot"]["additionalUsers"]
+                )
 
         meets = meet_repo.list(spec={"season": season_id})
         pairs = []
