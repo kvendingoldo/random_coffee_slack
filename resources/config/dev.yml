@@ -11,3 +11,11 @@ database:
 daemons:
   week:
     poolPeriod: 21600 # 6h
+
+notifications:
+  dryRun: false
+
+devMode:
+  enabled: true
+  weekday: 5
+  hour: 19

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['elements', 'messages', 'tables']
+__all__ = ['common', 'elements', 'messages']

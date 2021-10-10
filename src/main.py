@@ -14,17 +14,18 @@ from utils import config, season
 
 from daemons import week
 
-from constants import messages, elements
+from constants import messages, elements, common
 from utils import msg
 
 from db import database
-from db.exceptions import UserNotFoundError, RatingNotFoundError
+from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError
 from db.repo.user import UserRepository
 from db.repo.notification import NotificationRepository
 from db.repo.rating import RatingRepository
 from db.repo.meet import MeetRepository
 
 from models.user import User
+from models.notification import Notification
 from models.rating import Rating
 
 config = config.load("../resources/config.yml")
@@ -420,15 +421,12 @@ def flow_meet_had(ack, body, client):
         blocks=blocks
     )
 
-    # TODO: Enable it after notifications rework
-    # ntf1 = ntf_repo.list({"id": uid1})[0]
-    # ntf2 = ntf_repo.list({"id": uid1})[0]
-    #
-    # ntf1.feedback = True
-    # ntf2.feedback = True
-    #
-    # ntf_repo.update(ntf1)
-    # ntf_repo.update(ntf2)
+    try:
+        ntf = ntf_repo.get({"uid": uid1, "type": common.NTF_TYPES.feedback, "season": season.get()})
+        ntf.status = True
+        ntf_repo.update(ntf)
+    except NotificationNotFoundError as ex:
+        ntf_repo.add(Notification(uid=uid1, season=season.get(), type=common.NTF_TYPES.feedback, status=True))
 
 
 if __name__ == "__main__":

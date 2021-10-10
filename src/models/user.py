@@ -3,11 +3,11 @@
 from sqlalchemy import Column, String
 
 from db.database import Base
-from constants import tables
+from constants import common
 
 
 class User(Base):
-    __tablename__ = tables.USERS
+    __tablename__ = common.DB_TABLES.user
 
     id = Column(String(48), primary_key=True, nullable=False, unique=True)
     username = Column(String(92), nullable=False, unique=False)

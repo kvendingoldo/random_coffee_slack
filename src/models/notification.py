@@ -1,25 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Boolean, Integer, ForeignKey, String
+from sqlalchemy import Column, Boolean, Integer, ForeignKey, String, DateTime
+from sqlalchemy.sql import func
 
 from db.database import Base
-from constants import tables
+from constants import common
 
 
 class Notification(Base):
-    __tablename__ = tables.NOTIFICATIONS
+    __tablename__ = common.DB_TABLES.notification
 
-    id = Column(String(48), primary_key=True, nullable=False, unique=True)
-    info = Column(Boolean, unique=False, nullable=False, default=False)
-    reminder = Column(Boolean, unique=False, nullable=False, default=False)
-    feedback = Column(Boolean, unique=False, nullable=False, default=False)
-    next_week = Column(Boolean, unique=False, nullable=False, default=False)
-    meet_id = Column(Integer, ForeignKey(f"{tables.MEETS}.id", ondelete="CASCADE"), nullable=False)
+    id = Column(Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
+    uid = Column(String(48), ForeignKey(f"{common.DB_TABLES.user}.id", ondelete="CASCADE"), unique=False, nullable=False)
+    season = Column(String(24), unique=False, nullable=False)
+    type = Column(String(24), unique=False, nullable=False)
+    status = Column(Boolean, unique=False, nullable=False, default=False)
+
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
+    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return f'<Notification(id="{self.id}", ' \
-               f'info="{self.info}", ' \
-               f'reminder="{self.reminder}", ' \
-               f'feedback="{self.feedback}", ' \
-               f'next_week="{self.next_week}", ' \
-               f'meet_id="{self.meet_id}")>'
+               f'uid="{self.uid}", ' \
+               f'season="{self.season}", ' \
+               f'type="{self.type}", ' \
+               f'status="{self.status}")>'
