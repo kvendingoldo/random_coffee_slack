@@ -91,6 +91,8 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
 
         # NOTE: notify users
         for pair in pairs:
+
+            # NOTE: send info message
             if weekday <= 5:
                 try:
                     ntf = ntf_repo.list({"id": pair["id"]})
@@ -108,19 +110,26 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
 
                 meet_msg(client, ntf_repo, pair, "info", info_msg)
 
-                if weekday >= 3:
+            # NOTE: send reminder message
+            if weekday >= 3:
+                meet_msg(
+                    client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
+                )
+
+            # NOTE: send feedback & next_week messages
+            if weekday == 5:
+                hour = int(time.strftime("%H"))
+
+                if 10 <= hour <= 16:
+                    # TODO
                     meet_msg(
-                        client, ntf_repo, pair, "reminder", messages.MEET_REMINDER, elements.MEET_REMINDER, True
+                        client, ntf_repo, pair, "feedback", messages.MEET_FEEDBACK, elements.MEET_FEEDBACK,
+                        True
                     )
-            elif weekday == 6:
-                meet_msg(
-                    client, ntf_repo, pair, "feedback", messages.MEET_FEEDBACK, elements.MEET_FEEDBACK,
-                    True
-                )
-            elif weekday == 7:
-                meet_msg(
-                    client, ntf_repo, pair, "next_week", messages.MEET_NEXT, elements.MEET_NEXT, True
-                )
+                elif hour >= 17:
+                    meet_msg(
+                        client, ntf_repo, pair, "next_week", messages.MEET_NEXT, elements.MEET_NEXT, True
+                    )
 
         # NOTE: Change pause_in_weeks for all users
         if weekday == 7:

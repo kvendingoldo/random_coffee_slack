@@ -8,7 +8,7 @@
 - [ ] fix an issue caused by 2 slack clients
 - [x] migrate to SQLAlchemy
 - [ ] notification system for major updates
-- [ ] notify uid2 if uid1 made /rcb quit
+- [x] notify uid2 if uid1 made /rcb quit or /rcb stop
 - [ ] add setting for disabling notifications (it's needed for maintenance)
 - [ ] send help for random text that user sent to bot
 - [ ] two notifications about the next week if user had two meets

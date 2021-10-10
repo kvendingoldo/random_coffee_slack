@@ -10,4 +10,4 @@ database:
 
 daemons:
   week:
-    poolPeriod: 86400
+    poolPeriod: 21600 # 6h
