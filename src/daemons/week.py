@@ -50,9 +50,6 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
         season_id = season.get()
         weekday = date.today().weekday() + 1
 
-        # dev mode
-        weekday = 1
-
         users = user_repo.list(spec={"pause_in_weeks": "0"})
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
