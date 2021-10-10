@@ -123,7 +123,7 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                     dry_run=ntf_dry_run
                 )
             # NOTE: send reminder message
-            if weekday >= 3:
+            if 3 <= weekday <= 5:
                 msg_wrapper(
                     client=client, ntf_repo=ntf_repo, pair=pair,
                     msg_type=common.NTF_TYPES.reminder, msg_text=messages.MEET_REMINDER,
@@ -149,8 +149,9 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
         # NOTE: Change pause_in_weeks for all users
         if weekday == 7:
             for usr in user_repo.list():
-                if int(usr.pause_in_weeks) > 0:
-                    usr.pause_in_weeks = str(int(usr.pause_in_weeks) - 1)
-                    user_repo.update(usr)
+                if usr.pause_in_weeks != "inf":
+                    if int(usr.pause_in_weeks) > 0:
+                        usr.pause_in_weeks = str(int(usr.pause_in_weeks) - 1)
+                        user_repo.update(usr)
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])
