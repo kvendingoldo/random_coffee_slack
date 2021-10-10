@@ -10,14 +10,12 @@ from models.notification import Notification
 from db.exceptions import NotificationNotFoundError
 
 
-def send_msg(client, pair, msg_text, msg_blocks, inline_msg_block):
+def send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block):
     uid1 = pair["uid1"]
     uid2 = pair["uid2"]
 
-    # TODO: Add it to config file
-    dryRun = False
-    if dryRun:
-        pass
+    if dry_run:
+        logger.info("[DRY-RUN]:\n" + msg_text.format(uid2))
     else:
         if inline_msg_block:
             client.chat_postMessage(
@@ -49,13 +47,13 @@ def msg_wrapper(client, ntf_repo, pair, msg_type, msg_text, dry_run=True, msg_bl
         if ntf.status:
             logger.info(f"Users {uid1}, {uid2} has already notified about {msg_type}")
         else:
-            send_msg(client, pair, msg_text, msg_blocks, inline_msg_block)
+            send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
             ntf.status = True
             ntf_repo.update(ntf)
             logger.info(f"{msg_type} message sent for {uid1} (pair: {uid2})")
     except NotificationNotFoundError as ex:
         logger.error(ex)
-        send_msg(client, pair, msg_text, msg_blocks, inline_msg_block)
+        send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
         logger.info(f"{msg_type} message sent for {uid1} (pair: {uid2})")
         ntf_repo.add(Notification(uid=uid1, season=season.get(), type=msg_type, status=True))
     except Exception as ex:
