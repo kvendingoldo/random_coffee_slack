@@ -64,3 +64,6 @@ MEET_FEEDBACK = "The week is over! \n\n" \
 
 MEET_NEXT = "New week – new opportunities!\n\n" \
             "Are you taking part in Random Coffee meetings next week?"
+
+MEET_NEXT_AFTER_PAUSE = "Hey! Your pause is ending this week! :hourglass: \n\n" \
+                        "Are you taking part in Random Coffee meetings next week?"

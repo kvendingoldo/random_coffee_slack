@@ -218,6 +218,44 @@ MEET_NEXT = [
     }
 ]
 
+MEET_NEXT_AFTER_PAUSE = [
+    {
+        "type": "actions",
+        "elements": [
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Sure!"
+                },
+                "style": "primary",
+                "action_id": "flow_next_week_yes"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Additional week of rest"
+                },
+                "style": "danger",
+                "action_id": "flow_next_week_pause_1w"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Additional month of rest"
+                },
+                "style": "danger",
+                "action_id": "flow_next_week_pause_1m"
+            }
+        ]
+    }
+]
+
 MEET_HAD = [
     {
         "type": "actions",

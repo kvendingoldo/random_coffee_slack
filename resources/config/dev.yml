@@ -16,6 +16,6 @@ notifications:
   dryRun: false
 
 devMode:
-  enabled: false
+  enabled: true
   weekday: 5
   hour: 19

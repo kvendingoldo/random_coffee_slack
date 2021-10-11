@@ -4,60 +4,8 @@ import time
 
 from datetime import date
 from loguru import logger
-from utils import season, repo
+from utils import season, repo, msg
 from constants import messages, elements, common
-from models.notification import Notification
-from db.exceptions import NotificationNotFoundError
-
-
-def send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block):
-    uid1 = pair["uid1"]
-    uid2 = pair["uid2"]
-
-    if dry_run:
-        logger.info("[DRY-RUN]:\n" + msg_text.format(uid2))
-    else:
-        if inline_msg_block:
-            client.chat_postMessage(
-                channel=uid1,
-                blocks=[{
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": msg_text.format(uid2)
-                    },
-
-                }] + msg_blocks
-            )
-        else:
-            client.chat_postMessage(
-                channel=uid1, text=msg_text.format(uid2), blocks=msg_blocks
-            )
-
-
-def msg_wrapper(client, ntf_repo, pair, msg_type, msg_text, dry_run=True, msg_blocks=None, inline_msg_block=False):
-    if msg_blocks is None:
-        msg_blocks = []
-
-    uid1 = pair["uid1"]
-    uid2 = pair["uid2"]
-
-    try:
-        ntf = ntf_repo.get({"uid": uid1, "type": msg_type, "season": season.get()})
-        if ntf.status:
-            logger.info(f"Users {uid1}, {uid2} has already notified about {msg_type}")
-        else:
-            send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
-            ntf.status = True
-            ntf_repo.update(ntf)
-            logger.info(f"{msg_type} message sent for {uid1} (pair: {uid2})")
-    except NotificationNotFoundError as ex:
-        logger.error(ex)
-        send_msg(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
-        logger.info(f"{msg_type} message sent for {uid1} (pair: {uid2})")
-        ntf_repo.add(Notification(uid=uid1, season=season.get(), type=msg_type, status=True))
-    except Exception as ex:
-        logger.error(f"{msg_type} message didn't send for user #{uid1}, error: {ex}")
 
 
 def care(client, user_repo, meet_repo, ntf_repo, config):
@@ -117,14 +65,14 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                 else:
                     info_msg = messages.MEET_INFO_NOT_UNIQUE
 
-                msg_wrapper(
+                msg.wrapper_pair(
                     client=client, ntf_repo=ntf_repo, pair=pair,
                     msg_type=common.NTF_TYPES.info, msg_text=info_msg,
                     dry_run=ntf_dry_run
                 )
             # NOTE: send reminder message
             if 3 <= weekday <= 5:
-                msg_wrapper(
+                msg.wrapper_pair(
                     client=client, ntf_repo=ntf_repo, pair=pair,
                     msg_type=common.NTF_TYPES.reminder, msg_text=messages.MEET_REMINDER,
                     dry_run=ntf_dry_run,
@@ -133,25 +81,38 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
             # NOTE: send feedback & next_week messages
             if weekday == 5:
                 if 10 <= hour <= 16:
-                    msg_wrapper(
+                    msg.wrapper_pair(
                         client=client, ntf_repo=ntf_repo, pair=pair,
                         msg_type=common.NTF_TYPES.feedback, msg_text=messages.MEET_FEEDBACK,
                         dry_run=ntf_dry_run,
                         msg_blocks=elements.MEET_FEEDBACK, inline_msg_block=True
                     )
-                elif hour >= 17:
-                    msg_wrapper(
-                        client=client, ntf_repo=ntf_repo, pair=pair,
-                        msg_type=common.NTF_TYPES.next_week, msg_text=messages.MEET_NEXT,
-                        dry_run=ntf_dry_run,
-                        msg_blocks=elements.MEET_NEXT, inline_msg_block=True
-                    )
-        # NOTE: Change pause_in_weeks for all users
-        if weekday == 7:
+
+        # NOTE: Ask about the next week
+        if weekday == 5:
             for usr in user_repo.list():
                 if usr.pause_in_weeks != "inf":
-                    if int(usr.pause_in_weeks) > 0:
-                        usr.pause_in_weeks = str(int(usr.pause_in_weeks) - 1)
+                    pause = int(usr.pause_in_weeks)
+
+                    # Decrement pause for users who have pause > 1 week
+                    if pause > 1:
+                        usr.pause_in_weeks = str(pause - 1)
                         user_repo.update(usr)
+                    else:
+                        # Notify users who have pause = 0 | 1 week about the next week
+                        if hour >= 17:
+                            if pause == 1:
+                                msg_text = messages.MEET_NEXT_AFTER_PAUSE
+                                msg_blocks = elements.MEET_NEXT_AFTER_PAUSE
+                            elif pause == 0:
+                                msg_text = messages.MEET_NEXT
+                                msg_blocks = elements.MEET_NEXT
+
+                            msg.wrapper_user(
+                                client=client, ntf_repo=ntf_repo, uid=usr.id,
+                                msg_type=common.NTF_TYPES.next_week, msg_text=msg_text,
+                                dry_run=ntf_dry_run,
+                                msg_blocks=msg_blocks, inline_msg_block=True
+                            )
 
         time.sleep(config["daemons"]["week"]["poolPeriod"])
