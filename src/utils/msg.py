@@ -34,6 +34,7 @@ def send_msg_pair(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
         if inline_msg_block:
             client.chat_postMessage(
                 channel=uid1,
+                text="New notification available in chat",
                 blocks=[{
                     "type": "section",
                     "text": {
@@ -44,6 +45,7 @@ def send_msg_pair(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
                 }] + msg_blocks
             )
         else:
+            # TODO: probably it would be better to use inline for this case
             client.chat_postMessage(
                 channel=uid1, text=msg_text.format(uid2), blocks=msg_blocks
             )
@@ -56,6 +58,7 @@ def send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block):
         if inline_msg_block:
             client.chat_postMessage(
                 channel=uid,
+                text="New notification available in chat",
                 blocks=[{
                     "type": "section",
                     "text": {
@@ -66,6 +69,7 @@ def send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block):
                 }] + msg_blocks
             )
         else:
+            # TODO: probably it would be better to use inline for this case
             client.chat_postMessage(
                 channel=uid, text=msg_text, blocks=msg_blocks
             )

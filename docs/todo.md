@@ -7,6 +7,7 @@
 - [x] two notifications about the next week if user had two meets
 - [x] change bot timezone
 - [x] do not ask about meet if users marked that meet has been done
+- [x] fix issue with "This content can't be displayed" notifications 
 - [ ] add an ability to set meets based on language
 * flow: choice a language on which you wanna talk `<Does not matter|...>`?
 * flow: choice a location in which you wanna have meeting `<online|...>`?
