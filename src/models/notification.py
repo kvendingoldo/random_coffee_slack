@@ -16,8 +16,8 @@ class Notification(Base):
     type = Column(String(24), unique=False, nullable=False)
     status = Column(Boolean, unique=False, nullable=False, default=False)
 
-    time_created = Column(DateTime(timezone=True), server_default=func.now())
-    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
+    tmst_created = Column(DateTime(timezone=True), server_default=func.now())
+    tmst_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return f'<Notification(id="{self.id}", ' \

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Boolean, Integer, String, ForeignKey
+from sqlalchemy import Column, Boolean, Integer, String, ForeignKey, DateTime
+from sqlalchemy.sql import func
+
 from db.database import Base
 from constants import common
 
@@ -13,6 +15,9 @@ class Meet(Base):
     uid1 = Column(String(48), ForeignKey(f"{common.DB_TABLES.user}.id", ondelete="CASCADE"), unique=False, nullable=False)
     uid2 = Column(String(48), ForeignKey(f"{common.DB_TABLES.user}.id", ondelete="CASCADE"), unique=False, nullable=False)
     completed = Column(Boolean, unique=False, nullable=False, default=False)
+
+    tmst_created = Column(DateTime(timezone=True), server_default=func.now())
+    tmst_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return f'<Meet(id="{self.id}", ' \

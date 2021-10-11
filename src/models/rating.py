@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy.sql import func
 
 from db.database import Base
 from constants import common
@@ -13,6 +14,9 @@ class Rating(Base):
     uid1 = Column(String(48), ForeignKey(f"{common.DB_TABLES.user}.id", ondelete="CASCADE"), unique=False, nullable=False)
     uid2 = Column(String(48), ForeignKey(f"{common.DB_TABLES.user}.id", ondelete="CASCADE"), unique=False, nullable=False)
     value = Column(Float, unique=False, nullable=False, default=1.0)
+
+    tmst_created = Column(DateTime(timezone=True), server_default=func.now())
+    tmst_updated = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return f'<Rating(id="{self.id}", ' \
