@@ -73,6 +73,7 @@ class MeetRepository:
                     self.is_exist(season.get("delta", 14), {"uid1": cur_uid, "uid2": pair_uid}) or \
                     self.is_exist(season.get("delta", 14), {"uid1": pair_uid, "uid2": cur_uid}):
                     for_rand_distr.append(cur_uid)
+                    uids.remove(cur_uid)
                 else:
                     self.add(Meet(season=season_id, uid1=cur_uid, uid2=pair_uid))
                     uids.remove(pair_uid)
