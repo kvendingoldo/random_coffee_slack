@@ -34,7 +34,7 @@ def send_msg_pair(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
         if inline_msg_block:
             client.chat_postMessage(
                 channel=uid1,
-                text="New notification available in chat",
+                text="You have a new notification in the chat",
                 blocks=[{
                     "type": "section",
                     "text": {
@@ -58,7 +58,7 @@ def send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block):
         if inline_msg_block:
             client.chat_postMessage(
                 channel=uid,
-                text="New notification available in chat",
+                text="You have a new notification in the chat",
                 blocks=[{
                     "type": "section",
                     "text": {

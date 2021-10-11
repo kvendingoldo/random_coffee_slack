@@ -71,7 +71,7 @@ def action_help(ack, body, client):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[
             {
                 "type": "section",
@@ -88,7 +88,7 @@ def flow_stop(ack, body):
     ack()
     app.client.chat_postMessage(
         channel=body["user_id"],
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[{
             "type": "section",
             "text": {
@@ -142,7 +142,7 @@ def flow_participate_0(body, ack, say):
     ack()
     # TODO: replace to client
     say(
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[{
             "type": "section",
             "text": {
@@ -212,7 +212,7 @@ def flow_participate_1(ack, body, client):
         client.chat_update(
             channel=body['channel']['id'],
             ts=msg.get_ts(body),
-            text="New notification available in chat",
+            text="You have a new notification in the chat",
             blocks=blocks
         )
 
@@ -237,7 +237,7 @@ def flow_participate_2(ack, body, client):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=blocks
     )
 
@@ -283,7 +283,7 @@ def notify_uid2_about_uid_quit(uid1: str) -> None:
         # NOTE: Send message to uid2 that uid1 take a break
         app.client.chat_postMessage(
             channel=uid2,
-            text="New notification available in chat",
+            text="You have a new notification in the chat",
             blocks=[{
                 "type": "section",
                 "text": {
@@ -312,7 +312,7 @@ def stop_wrapper(ack, body, client, period, message):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[
             {
                 "type": "section",
@@ -369,7 +369,7 @@ def flow_meet_rate(ack, body, client, sign):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[
             {
                 "type": "section",
@@ -399,7 +399,7 @@ def flow_meet_had_not(ack, body, client):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=[
             {
                 "type": "section",
@@ -430,7 +430,7 @@ def flow_meet_had(ack, body, client):
     client.chat_update(
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
-        text="New notification available in chat",
+        text="You have a new notification in the chat",
         blocks=blocks
     )
 
