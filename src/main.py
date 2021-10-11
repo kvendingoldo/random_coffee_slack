@@ -322,12 +322,14 @@ def stop_wrapper(ack, body, client, period, message):
 
 @app.action("flow_next_week_pause_1w")
 def flow_next_week_pause_1w(ack, body, client):
-    stop_wrapper(ack, body, client, "1", messages.FLOW_WEEK_PAUSE_1W)
+    # NOTE: 2 but not 1 here because bot will do decrement on the nearest Sunday and in the next Sunday
+    stop_wrapper(ack, body, client, "2", messages.FLOW_WEEK_PAUSE_1W)
 
 
 @app.action("flow_next_week_pause_1m")
 def flow_next_week_pause_1m(ack, body, client):
-    stop_wrapper(ack, body, client, "4", messages.FLOW_WEEK_PAUSE_1M)
+    # NOTE: 5 but not 4 here because bot will do decrement on the nearest Sunday and in the next Sunday
+    stop_wrapper(ack, body, client, "5", messages.FLOW_WEEK_PAUSE_1M)
 
 
 @app.action("stop")
