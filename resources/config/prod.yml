@@ -1,6 +1,7 @@
 bot:
   additionalUsers:
-    - U4BSUSM5Z # Alex Sharov
+    - UKDHWCUAG # ytsvetkova
+    #- U4BSUSM5Z # asharov
 
 database:
   host: mysql

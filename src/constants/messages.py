@@ -19,8 +19,8 @@ FLOW_STOP = "Please, choose a period to stop participating"
 
 ACTION_STOP = "I’m looking forward to seeing you when you come back"
 
-FLOW_PARTNER_LEFT = "Looks like that your partner decided to take a break; " \
-                    "Do not worry, I'll find a new one, you get additional notification about it"
+FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
+                    "Don't worry, I'll find a new one and send you an additional notification when ready."
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \

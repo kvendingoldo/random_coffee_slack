@@ -58,6 +58,9 @@ def rcb_command(body, ack, say):
         else:
             ack()
             say(text=messages.COMMAND_NOT_FOUND)
+    else:
+        ack()
+        say(text=messages.COMMAND_NOT_FOUND)
 
 
 @app.action("help")
