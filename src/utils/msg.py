@@ -75,32 +75,6 @@ def send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block):
             )
 
 
-def wrapper_pair(client, ntf_repo, pair, msg_type, msg_text, dry_run=True, msg_blocks=None, inline_msg_block=False):
-    if msg_blocks is None:
-        msg_blocks = []
-
-    uid1 = pair["uid1"]
-    uid2 = pair["uid2"]
-
-    try:
-        ntf = ntf_repo.get({"uid": uid1, "type": msg_type, "season": season.get()})
-    except NotificationNotFoundError as ex:
-        logger.error(ex)
-        ntf = Notification(uid=uid1, season=season.get(), type=msg_type, status=False)
-        ntf_repo.add(ntf)
-    except Exception as ex:
-        logger.error(f"{msg_type} message didn't send for user #{uid1}, error: {ex}")
-        return
-
-    if ntf.status:
-        logger.info(f"Users {uid1}, {uid2} has already notified about {msg_type}")
-    else:
-        send_msg_pair(client, pair, dry_run, msg_text, msg_blocks, inline_msg_block)
-        ntf.status = True
-        ntf_repo.update(ntf)
-        logger.info(f"{msg_type} message sent for {uid1} (pair: {uid2})")
-
-
 def wrapper_user(client, ntf_repo, uid, msg_type, msg_text, dry_run=True, msg_blocks=None, inline_msg_block=False):
     if msg_blocks is None:
         msg_blocks = []

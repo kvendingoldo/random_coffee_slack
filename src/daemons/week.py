@@ -44,9 +44,12 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
             unique_u2 = True
 
             if len(meet_repo.list({"season": season_id, "or": {"uid1": meet.uid1, "uid2": meet.uid1}})) > 1:
-                unique_u1 = False
+                if len([pair for pair in pairs if pair.get('uid1') == meet.uid1]) > 0:
+                    unique_u1 = False
+
             if len(meet_repo.list({"season": season_id, "or": {"uid1": meet.uid2, "uid2": meet.uid2}})) > 1:
-                unique_u2 = False
+                if len([pair for pair in pairs if pair.get('uid2') == meet.uid2]) > 0:
+                    unique_u2 = False
 
             pairs.append({
                 "uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id, "unique": unique_u1
@@ -57,35 +60,44 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
 
         # NOTE: notify users
         for pair in pairs:
+            msg_type_suffix = "" if pair['unique'] else "_NU"
 
             # NOTE: send info message
             if weekday <= 5:
-                if pair['unique']:
-                    info_msg = messages.MEET_INFO
-                else:
-                    info_msg = messages.MEET_INFO_NOT_UNIQUE
+                info_msg = messages.MEET_INFO if pair['unique'] else messages.MEET_INFO_NOT_UNIQUE
 
-                msg.wrapper_pair(
-                    client=client, ntf_repo=ntf_repo, pair=pair,
-                    msg_type=common.NTF_TYPES.info, msg_text=info_msg,
+                msg.wrapper_user(
+                    client=client,
+                    ntf_repo=ntf_repo,
+                    uid=pair["uid1"],
+                    msg_type=common.NTF_TYPES.info + msg_type_suffix,
+                    msg_text=info_msg.format(pair["uid2"]),
                     dry_run=ntf_dry_run
                 )
             # NOTE: send reminder message
             if 3 <= weekday <= 5:
-                msg.wrapper_pair(
-                    client=client, ntf_repo=ntf_repo, pair=pair,
-                    msg_type=common.NTF_TYPES.reminder, msg_text=messages.MEET_REMINDER,
+                msg.wrapper_user(
+                    client=client,
+                    ntf_repo=ntf_repo,
+                    uid=pair["uid1"],
+                    msg_type=common.NTF_TYPES.reminder + msg_type_suffix,
+                    msg_text=(messages.MEET_REMINDER).format(pair["uid2"]),
                     dry_run=ntf_dry_run,
-                    msg_blocks=elements.MEET_REMINDER, inline_msg_block=True
+                    msg_blocks=elements.MEET_REMINDER,
+                    inline_msg_block=True
                 )
             # NOTE: send feedback & next_week messages
             if weekday == 5:
                 if 10 <= hour <= 16:
-                    msg.wrapper_pair(
-                        client=client, ntf_repo=ntf_repo, pair=pair,
-                        msg_type=common.NTF_TYPES.feedback, msg_text=messages.MEET_FEEDBACK,
+                    msg.wrapper_user(
+                        client=client,
+                        ntf_repo=ntf_repo,
+                        uid=pair["uid1"],
+                        msg_type=common.NTF_TYPES.feedback + msg_type_suffix,
+                        msg_text=(messages.MEET_FEEDBACK).format(pair["uid2"]),
                         dry_run=ntf_dry_run,
-                        msg_blocks=elements.MEET_FEEDBACK, inline_msg_block=True
+                        msg_blocks=elements.MEET_FEEDBACK,
+                        inline_msg_block=True
                     )
 
         # NOTE: Ask about the next week
