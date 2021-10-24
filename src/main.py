@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import threading
 import os
 
 from datetime import datetime
+from multiprocessing import Process
 
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -464,14 +464,16 @@ if __name__ == "__main__":
     rating_repo = RatingRepository(session_factory=db.session)
     meet_repo = MeetRepository(session_factory=db.session)
 
-    week = threading.Thread(
+    week = Process(
         target=week.care,
-        args=(app.client, user_repo, meet_repo, ntf_repo, config,)
+        args=(app.client, user_repo, meet_repo, ntf_repo, config,),
+        daemon=True
     )
     week.start()
 
-    bot = threading.Thread(target=SocketModeHandler(app, config["slack"]["appToken"]).start(), args=())
+    bot = Process(
+        target=SocketModeHandler(app, config["slack"]["appToken"]).start(),
+        args=()
+    )
     bot.start()
-
-    # week.join()
-    # bot.join()
+    bot.join()
