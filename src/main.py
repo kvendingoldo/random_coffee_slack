@@ -355,16 +355,15 @@ def flow_meet_rate(ack, body, client, sign):
     meet.completed = True
     meet_repo.update(meet)
 
+    rating_diff = 0.1 if sign == "+" else -0.1
+
     try:
         rating = rating_repo.get_by_ids(uid1, uid2)
+        rating.value += rating_diff
+        rating_repo.update(rating)
     except RatingNotFoundError:
-        rating = Rating(uid1=uid1, uid2=uid2, value=1.0)
-
-    if sign == "+":
-        rating.value += 0.1
-    else:
-        rating.value -= 0.1
-    rating_repo.update(rating)
+        rating = Rating(uid1=uid1, uid2=uid2, value=1.0 + rating_diff)
+        rating_repo.add(rating)
 
     client.chat_update(
         channel=body['channel']['id'],
