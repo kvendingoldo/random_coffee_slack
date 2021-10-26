@@ -140,7 +140,6 @@ def flow_participate_0(body, ack, say):
     logger.info(f"flow::participate::0 for user {body['user_id']}")
 
     ack()
-    # TODO: replace to client
     say(
         text="You have a new notification in the chat",
         blocks=[{
@@ -269,11 +268,9 @@ def flow_next_week_yes(ack, body, client):
 
 def notify_uid2_about_uid_quit(uid1: str) -> None:
     season_id = season.get()
-
-    # TODO: add error handling
     meets = meet_repo.list({"season": season_id, "or": {"uid1": uid1, "uid2": uid1}})
 
-    if len(meets) > 0:
+    if meets:
         meet = meets[0]
         if meet.uid1 == uid1:
             uid2 = meet.uid2
@@ -349,11 +346,11 @@ def flow_meet_rate(ack, body, client, sign):
     uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     season_id = season.get()
 
-    meet_list = meet_repo.list(spec={"season": season_id, "uid1": uid1, "uid2": uid2}) + \
-                meet_repo.list(spec={"season": season_id, "uid2": uid1, "uid1": uid2})
+    meets = meet_repo.list(spec={"season": season_id, "uid1": uid1, "uid2": uid2}) + \
+            meet_repo.list(spec={"season": season_id, "uid2": uid1, "uid1": uid2})
 
-    if meet_list:
-        meet = meet_list[0]
+    if meets:
+        meet = meets[0]
         meet.completed = True
         meet_repo.update(meet)
     else:
