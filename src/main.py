@@ -349,11 +349,15 @@ def flow_meet_rate(ack, body, client, sign):
     uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     season_id = season.get()
 
-    # TODO: add error handling
-    meet = (meet_repo.list(spec={"season": season_id, "uid1": uid1, "uid2": uid2}) + \
-            meet_repo.list(spec={"season": season_id, "uid2": uid1, "uid1": uid2}))[0]
-    meet.completed = True
-    meet_repo.update(meet)
+    meet_list = meet_repo.list(spec={"season": season_id, "uid1": uid1, "uid2": uid2}) + \
+                meet_repo.list(spec={"season": season_id, "uid2": uid1, "uid1": uid2})
+
+    if meet_list:
+        meet = meet_list[0]
+        meet.completed = True
+        meet_repo.update(meet)
+    else:
+        logger.error("Meet hasn't been found for %s", uid1)
 
     rating_diff = 0.1 if sign == "+" else -0.1
 

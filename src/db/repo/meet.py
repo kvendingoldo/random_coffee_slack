@@ -158,7 +158,7 @@ class MeetRepository:
 
             session.commit()
 
-    def list(self, spec: Mapping = None) -> Iterator[Meet]:
+    def list(self, spec: Mapping = None) -> list:
         with self.session_factory() as session:
             objs = session.query(Meet).all()
 
