@@ -15,7 +15,7 @@ class RatingRepository:
     def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
         self.session_factory = session_factory
 
-    def add(self, id: str) -> None:
+    def init(self, id: str) -> None:
         with self.session_factory() as session:
             users: User = session.query(User).filter(User.id != id)
 
@@ -29,6 +29,13 @@ class RatingRepository:
             session.commit()
 
             return None
+
+    def add(self, rating: Rating) -> Rating:
+        with self.session_factory() as session:
+            session.add(rating)
+            session.commit()
+            session.refresh(rating)
+            return rating
 
     def get_by_ids(self, uid1: str, uid2: str) -> Rating:
         with self.session_factory() as session:

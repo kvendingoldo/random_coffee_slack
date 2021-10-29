@@ -186,7 +186,7 @@ def flow_participate_1(ack, body, client):
         new_user = User(id=uid, username=body["user"]["username"], pause_in_weeks="0")
 
         user_repo.add(new_user)
-        rating_repo.add(new_user.id)
+        rating_repo.init(new_user.id)
 
         blocks = [
             {
@@ -363,7 +363,8 @@ def flow_meet_rate(ack, body, client, sign):
         rating.value += rating_diff
         rating_repo.update(rating)
     except RatingNotFoundError:
-        rating = Rating(uid1=uid1, uid2=uid2, value=1.0 + rating_diff)
+        rating_value = 1.0 + rating_diff
+        rating = Rating(uid1=uid1, uid2=uid2, value=rating_value)
         rating_repo.add(rating)
 
     client.chat_update(
