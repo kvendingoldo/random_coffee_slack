@@ -51,6 +51,10 @@ MEET_INFO = "Hey!👋 \n\n" \
             "Your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
             "Slack them now to set up a meeting."
 
+MEET_LOOKING = "Hey!👋 \n\n" \
+               "I'm still looking for a partner for you. \n\n" \
+               "You'll be notified immediately when a partner will be found."
+
 MEET_INFO_NOT_UNIQUE = "Hey!👋 \n\n" \
                        "You are lucky, this week you have one another partner, who is <@{0}>! \n\n" \
                        "Slack them now to set up a meeting."

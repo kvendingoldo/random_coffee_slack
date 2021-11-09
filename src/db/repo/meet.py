@@ -79,7 +79,7 @@ class MeetRepository:
                     uids.remove(pair_uid)
                     logger.info(f"Meet created for pair ({cur_uid}, {pair_uid})")
             else:
-                logger.info(f"Meet can't be create for {cur_uid}; No potential users found")
+                logger.info(f"Meet can't be created for {cur_uid}; No potential users found")
                 for_rand_distr.append(cur_uid)
                 uids.remove(cur_uid)
 

@@ -35,11 +35,15 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                     additional_uids=config["bot"]["additionalUsers"]
                 )
 
+        users_with_pair = set()
         meets = meet_repo.list(spec={"season": season_id})
         pairs = []
 
         # NOTE: Create pairs (it's the same as meets, but more convenient form)
         for meet in meets:
+            users_with_pair.add(meet.uid1)
+            users_with_pair.add(meet.uid2)
+
             unique_u1 = True
             unique_u2 = True
 
@@ -99,6 +103,15 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                         msg_blocks=elements.MEET_FEEDBACK,
                         inline_msg_block=True
                     )
+
+        # NOTE: notify users which do not have pair
+        for usr in users:
+            if usr.id not in users_with_pair:
+                msg.wrapper_user(
+                    client=client, ntf_repo=ntf_repo, uid=usr.id,
+                    msg_type=common.NTF_TYPES.looking, msg_text=messages.MEET_LOOKING,
+                    dry_run=ntf_dry_run
+                )
 
         # NOTE: Ask about the next week
         if weekday == 5:
