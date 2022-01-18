@@ -104,7 +104,7 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
                         inline_msg_block=True
                     )
 
-        # NOTE: notify users which do not have pair
+        # NOTE: notify users who do not have pair
         for usr in users:
             if usr.id not in users_with_pair:
                 msg.wrapper_user(

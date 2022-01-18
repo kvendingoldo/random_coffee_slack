@@ -8,9 +8,11 @@ FLOW_HELP = "Available commands:\n" \
             "/rcb status - get my current status\n" \
             "/rcb stop  - stop to participate in Random Coffee meets\n" \
             "/rcb quit  - quit from Random Coffee meets\n" \
+            "/rcb change_meet_location - allow to change meeting location; 'worldwide' by default\n" \
             "/rcb help  - help\n"
 
-FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1}"
+FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1} \n" \
+              "Your current meeting location is '{2}'"
 
 FLOW_QUIT = "Sorry to see this decision. Hope to see you soon again. " \
             "Just write /rcb start again in this case. Information about you was deleted."
@@ -46,6 +48,10 @@ FLOW_WEEK_PAUSE_1M = "I see. I will get back to you in a month!"
 FLOW_MEET_HAD = ":eyes: How it was with <@{0}>?"
 FLOW_MEET_HAD_NOT = ":clock1: Hurry up, week will be over soon"
 FLOW_MEET_RATE = "Thank you for response!"
+
+
+FLOW_CHANGE_MEET_LOCATION = "Choice a location in which you wanna have meeting"
+
 
 MEET_INFO = "Hey!👋 \n\n" \
             "Your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \

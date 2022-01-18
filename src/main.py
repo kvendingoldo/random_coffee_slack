@@ -55,6 +55,8 @@ def rcb_command(body, ack, say):
                 say(text=messages.USER_NOT_FOUND)
             else:
                 flow_stop(ack, body)
+        elif msg == "change_meet_location":
+            flow_change_meet_location(body, ack, say)
         else:
             ack()
             say(text=messages.COMMAND_NOT_FOUND)
@@ -108,12 +110,65 @@ def handle_message_events(body, say):
     #     say(text=messages.COMMAND_NOT_FOUND)
 
 
+@app.action("change_meet_location")
+def action_change_meet_location(ack, body, client):
+    logger.info("flow::help")
+    ack()
+
+    new_meet_loc = body["actions"][0]["selected_option"]["value"]
+    usr = user_repo.get_by_id(body["user"]["id"])
+    # TODO: Add verification
+    usr.meet_loc = new_meet_loc
+    user_repo.update(usr)
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        text="You have a new notification in the chat",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"Your meet location has been changed to {new_meet_loc}"
+                }
+            }
+        ]
+    )
+
+
+def flow_change_meet_location(body, ack, say):
+    uid = body['user_id']
+    logger.info(f"flow::change meet location for user {uid}")
+    ack()
+    blocks = [{
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": messages.FLOW_CHANGE_MEET_LOCATION
+        },
+        "accessory": {
+            "type": "static_select",
+            "placeholder": {
+                "type": "plain_text",
+                "text": "Select an item",
+                "emoji": True
+            },
+            "options": elements.LOCATIONS,
+            "action_id": "change_meet_location"
+        }
+    }]
+
+    say(text="You have a new notification in the chat", blocks=blocks)
+
+
 def flow_status(body, ack, say):
     uid = body['user_id']
-
     logger.info(f"flow::status for user {uid}")
 
-    pause_in_weeks = str(user_repo.get_by_id(uid).pause_in_weeks)
+    usr = user_repo.get_by_id(uid)
+
+    pause_in_weeks = str(usr.pause_in_weeks)
 
     if pause_in_weeks == "0":
         week_msg = "on this week"
@@ -121,7 +176,7 @@ def flow_status(body, ack, say):
         week_msg = f"in {pause_in_weeks} weeks"
 
     ack()
-    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg))
+    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_loc))
 
 
 def flow_quit(body, ack, say):
