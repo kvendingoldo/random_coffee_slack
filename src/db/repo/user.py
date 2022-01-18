@@ -34,7 +34,8 @@ class UserRepository:
             session.query(User).filter_by(id=user.id).update(dict(
                 username=user.username,
                 pause_in_weeks=user.pause_in_weeks,
-                loc=user.loc
+                loc=user.loc,
+                meet_loc=user.meet_loc
             ))
 
             session.commit()
