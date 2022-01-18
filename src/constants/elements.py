@@ -105,6 +105,46 @@ LOCATIONS = [
             "emoji": True
         },
         "value": "guadalajara"
+    },
+    {
+        "text": {
+            "type": "plain_text",
+            "text": "Kazan",
+            "emoji": True
+        },
+        "value": "kazan"
+    },
+    {
+        "text": {
+            "type": "plain_text",
+            "text": "Moscow",
+            "emoji": True
+        },
+        "value": "moscow"
+    },
+    {
+        "text": {
+            "type": "plain_text",
+            "text": "Wroclaw",
+            "emoji": True
+        },
+        "value": "wroclaw"
+    },
+    {
+        "text": {
+            "type": "plain_text",
+            "text": "Gdansk",
+            "emoji": True
+        },
+        "value": "gdansk"
+    },
+    {
+        "text": {
+            "type": "plain_text",
+            "text": "Ljubljana",
+            "emoji": True
+        },
+        "value": "ljubljana"
     }
 ]
 
