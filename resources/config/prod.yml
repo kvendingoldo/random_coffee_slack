@@ -1,7 +1,7 @@
 bot:
   additionalUsers:
-    - UKDHWCUAG # ytsvetkova
-    #- U4BSUSM5Z # asharov
+    common:
+      - UKDHWCUAG # ytsvetkova
 
 database:
   host: mysql

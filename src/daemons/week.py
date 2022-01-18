@@ -20,20 +20,29 @@ def care(client, user_repo, meet_repo, ntf_repo, config):
         season_id = season.get()
         ntf_dry_run = config["notifications"]["dryRun"]
         users = user_repo.list(spec={"pause_in_weeks": "0"})
+        meet_locations = repo.get_unique_locations(users)
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
 
         # NOTE: create meets
         if weekday < 5:
-            meet_repo.create(
-                uids=[user.id for user in users]
-            )
+            for m_location in meet_locations:
+                meet_repo.create(
+                    uids=[user.id for user in users if user.meet_loc == m_location]
+                )
         elif weekday == 5:
             if hour <= 13:
-                meet_repo.create(
-                    uids=[user.id for user in users],
-                    additional_uids=config["bot"]["additionalUsers"]
-                )
+                for m_location in meet_locations:
+                    additional_users = []
+                    if m_location in config["bot"]["additionalUsers"]:
+                        additional_users = config["bot"]["additionalUsers"][m_location]
+                    else:
+                        additional_users = config["bot"]["additionalUsers"]["common"]
+
+                    meet_repo.create(
+                        uids=[user.id for user in users if user.meet_loc == m_location],
+                        additional_uids=additional_users
+                    )
 
         users_with_pair = set()
         meets = meet_repo.list(spec={"season": season_id})

@@ -22,3 +22,10 @@ def filtration(spec, objs):
         return result
     else:
         return objs
+
+
+def get_unique_locations(users):
+    m_locations = set()
+    for user in users:
+        m_locations.add(user.meet_loc)
+    return list(m_locations)

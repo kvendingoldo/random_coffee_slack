@@ -1,6 +1,9 @@
 bot:
   additionalUsers:
-    - U01THB38EDV # kvendingoldo
+    common:
+      - U01THB38EDV # kvendingoldo
+    saratov:
+      - U01THB38EDV # kvendingoldo
 
 database:
   host: 127.0.0.1
