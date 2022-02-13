@@ -43,3 +43,5 @@ venv/
 .env
 rcb.tar
 src/*.log
+mysql_data
+sql

@@ -20,3 +20,6 @@ devMode:
   enabled: false
   weekday: 5
   hour: 19
+
+log:
+  rotation: "1 week"

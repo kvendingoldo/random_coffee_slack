@@ -500,9 +500,12 @@ def flow_meet_had(ack, body, client):
 
 if __name__ == "__main__":
     log_dir = os.getenv("RCB_LOG_DIR")
-
-    # TODO: temporary disabled
-    # logger.add(f"{log_dir}/{datetime.today().strftime('%Y-%m-%d-%H:%M')}.log", level="INFO")
+    logger.add(
+        f"{log_dir}/rcb_{{time}}.log",
+        level="INFO",
+        rotation=config["log"]["rotation"],
+        compression="zip"
+    )
 
     logger.info("Bot launching ...")
 
@@ -525,7 +528,7 @@ if __name__ == "__main__":
         args=(app.client, user_repo, meet_repo, ntf_repo, config,),
         daemon=True
     )
-    week.start()
+    # week.start()
 
     bot = Process(
         target=SocketModeHandler(app, config["slack"]["appToken"]).start(),
