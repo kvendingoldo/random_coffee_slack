@@ -21,7 +21,7 @@ FLOW_QUIT = "Sorry about your choice. Hope to see you again soon. " \
 
 FLOW_STOP = "Please, choose a period to stop participating"
 
-ACTION_STOP = "I’m looking forward to seeing you when you come back"
+ACTION_STOP = "I'm looking forward to seeing you when you come back"
 
 FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
                     "Don't worry, I'll find a new one and send you an additional notification when ready."
