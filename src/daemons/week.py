@@ -6,9 +6,12 @@ from datetime import date
 from loguru import logger
 from utils import season, repo, msg
 from constants import messages, elements, common
+from db import utils as db_utils
 
 
-def care(client, user_repo, meet_repo, ntf_repo, config):
+def care(client, config):
+    user_repo, ntf_repo, rating_repo, meet_repo = db_utils.get_repos(config)
+
     while True:
         if config["devMode"]["enabled"]:
             weekday = int(config["devMode"]["weekday"])

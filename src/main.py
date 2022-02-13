@@ -2,27 +2,17 @@
 
 import os
 
-from datetime import datetime
 from multiprocessing import Process
-
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
 from loguru import logger
+from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError
+from db import utils as db_utils
 
 from utils import config, season
-
 from daemons import week
-
 from constants import messages, elements, common
 from utils import msg
-
-from db import database
-from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError
-from db.repo.user import UserRepository
-from db.repo.notification import NotificationRepository
-from db.repo.rating import RatingRepository
-from db.repo.meet import MeetRepository
 
 from models.user import User
 from models.notification import Notification
@@ -509,26 +499,14 @@ if __name__ == "__main__":
 
     logger.info("Bot launching ...")
 
-    db_url = "mysql://{}:{}@{}:{}/{}".format(
-        config["database"]["username"], config["database"]["password"],
-        config["database"]["host"], config["database"]["port"],
-        config["database"]["db"]
-    )
-
-    db = database.Database(db_url)
-    db.create_database()
-
-    user_repo = UserRepository(session_factory=db.session)
-    ntf_repo = NotificationRepository(session_factory=db.session)
-    rating_repo = RatingRepository(session_factory=db.session)
-    meet_repo = MeetRepository(session_factory=db.session)
+    user_repo, ntf_repo, rating_repo, meet_repo = db_utils.get_repos(config)
 
     week = Process(
         target=week.care,
-        args=(app.client, user_repo, meet_repo, ntf_repo, config,),
+        args=(app.client, config,),
         daemon=True
     )
-    # week.start()
+    week.start()
 
     bot = Process(
         target=SocketModeHandler(app, config["slack"]["appToken"]).start(),

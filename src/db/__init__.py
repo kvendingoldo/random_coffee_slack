@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['repo', 'database', 'exceptions']
+__all__ = ['repo', 'database', 'exceptions', 'utils']
