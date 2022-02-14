@@ -54,17 +54,16 @@ FLOW_MEET_RATE = "Thank you for your response!"
 
 FLOW_CHANGE_MEET_LOCATION = "Choose a location where you want to have a meeting"
 
-MEET_INFO = "Hey!👋 \n\n" \
-            "Your Random Coffee partner is <@{0}>! Lucky you :) \n\n" \
-            "Slack them now to set up a meeting."
-
 MEET_LOOKING = "Hey!👋 \n\n" \
                "I'm still looking for a partner for you. \n\n" \
                "You'll be notified immediately when a partner is found."
 
+MEET_INFO = "Hey!👋 \n\n" \
+            "Your Random Coffee partner is <@{0}>! Lucky you :)"
 MEET_INFO_NOT_UNIQUE = "Hey!👋 \n\n" \
-                       "You are lucky, this week you have another partner, who is <@{0}>! \n\n" \
-                       "Slack them now to set up a meeting."
+                       "You are lucky, this week you have another partner, who is <@{0}>!"
+MEET_HOST = "*This week you are host*. Please, arrange a meeting."
+MEET_NOT_HOST = "This week your partner is a host, but if you don't want to wait write them now to set up a meeting."
 
 MEET_REMINDER = "✉️ How are things?\n\n" \
                 "Mid-week is the best day to set up a meeting with your coffee partner (<@{0}>)!\n\n" \

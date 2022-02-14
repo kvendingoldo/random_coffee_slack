@@ -20,7 +20,7 @@ notifications:
 
 devMode:
   enabled: true
-  weekday: 4
+  weekday: 2
   hour: 15
 
 log:

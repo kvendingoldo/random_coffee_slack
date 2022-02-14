@@ -68,10 +68,10 @@ def care(client, config):
                     unique_u2 = False
 
             pairs.append({
-                "uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id, "unique": unique_u1
+                "uid1": meet.uid1, "uid2": meet.uid2, "meet_id": meet.id, "unique": unique_u1, "is_host": True
             })
             pairs.append({
-                "uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id, "unique": unique_u2
+                "uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id, "unique": unique_u2, "is_host": False
             })
 
         # NOTE: notify users
@@ -81,6 +81,11 @@ def care(client, config):
             # NOTE: send info message
             if weekday <= 5:
                 info_msg = messages.MEET_INFO if pair['unique'] else messages.MEET_INFO_NOT_UNIQUE
+
+                if pair['is_host']:
+                    info_msg = f"{info_msg} \n {messages.MEET_HOST}"
+                else:
+                    info_msg = f"{info_msg} \n {messages.MEET_NOT_HOST}"
 
                 msg.wrapper_user(
                     client=client,
