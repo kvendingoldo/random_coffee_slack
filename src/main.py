@@ -438,7 +438,7 @@ def flow_meet_p2(ack, body, client):
 
 @app.action("flow_meet_p1")
 def flow_meet_p1(ack, body, client):
-    flow_meet_rate(ack, body, client, 0.05)
+    flow_meet_rate(ack, body, client, 0.00)
 
 
 @app.action("flow_meet_n1")
@@ -520,7 +520,7 @@ def flow_meet_was_not(ack, body, client):
         ]
     )
 
-    flow_meet_n1(ack, body, client)
+    flow_meet_p1(ack, body, client)
 
 
 if __name__ == "__main__":
