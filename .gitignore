@@ -44,4 +44,3 @@ venv/
 rcb.tar
 src/*.log
 mysql_data
-sql
