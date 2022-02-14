@@ -166,7 +166,7 @@ MEET_REMINDER = [
                     "text": "We've already had a meeting"
                 },
                 "style": "primary",
-                "action_id": "flow_meet_had"
+                "action_id": "flow_meet_was"
             },
             {
                 "type": "button",
@@ -176,7 +176,7 @@ MEET_REMINDER = [
                     "text": "Still waiting for a meeting"
                 },
                 "style": "primary",
-                "action_id": "flow_meet_had_not"
+                "action_id": "flow_meet_was_not_yet"
             }
         ]
     }
@@ -296,7 +296,7 @@ MEET_NEXT_AFTER_PAUSE = [
     }
 ]
 
-MEET_HAD = [
+MEET_WAS = [
     {
         "type": "actions",
         "elements": [
@@ -308,7 +308,25 @@ MEET_HAD = [
                     "text": "Awesome!"
                 },
                 "style": "primary",
-                "action_id": "flow_meet_was"
+                "action_id": "flow_meet_p3"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Good"
+                },
+                "action_id": "flow_meet_p2"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Normal"
+                },
+                "action_id": "flow_meet_p1"
             },
             {
                 "type": "button",
@@ -317,8 +335,17 @@ MEET_HAD = [
                     "emoji": True,
                     "text": "Could be better"
                 },
-                "style": "primary",
-                "action_id": "flow_meet_was_not"
+                "action_id": "flow_meet_n1"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "Unsatisfactory"
+                },
+                "style": "danger",
+                "action_id": "flow_meet_n2"
             }
         ]
     }

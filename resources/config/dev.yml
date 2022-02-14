@@ -20,8 +20,8 @@ notifications:
 
 devMode:
   enabled: true
-  weekday: 5
-  hour: 19
+  weekday: 4
+  hour: 15
 
 log:
   rotation: "1 week"

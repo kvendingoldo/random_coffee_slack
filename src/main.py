@@ -384,7 +384,7 @@ def action_stop(ack, body, client):
     stop_wrapper(ack, body, client, "inf", messages.ACTION_STOP)
 
 
-def flow_meet_rate(ack, body, client, sign):
+def flow_meet_rate(ack, body, client, rating_diff):
     ack()
 
     uid1 = body["user"]["id"]
@@ -400,8 +400,6 @@ def flow_meet_rate(ack, body, client, sign):
         meet_repo.update(meet)
     else:
         logger.error("Meet hasn't been found for %s", uid1)
-
-    rating_diff = 0.1 if sign == "+" else -0.1
 
     try:
         rating = rating_repo.get_by_ids(uid1, uid2)
@@ -428,38 +426,33 @@ def flow_meet_rate(ack, body, client, sign):
     )
 
 
+@app.action("flow_meet_p3")
+def flow_meet_p3(ack, body, client):
+    flow_meet_rate(ack, body, client, 0.15)
+
+
+@app.action("flow_meet_p2")
+def flow_meet_p2(ack, body, client):
+    flow_meet_rate(ack, body, client, 0.10)
+
+
+@app.action("flow_meet_p1")
+def flow_meet_p1(ack, body, client):
+    flow_meet_rate(ack, body, client, 0.05)
+
+
+@app.action("flow_meet_n1")
+def flow_meet_n1(ack, body, client):
+    flow_meet_rate(ack, body, client, -0.05)
+
+
+@app.action("flow_meet_n2")
+def flow_meet_n2(ack, body, client):
+    flow_meet_rate(ack, body, client, -0.1)
+
+
 @app.action("flow_meet_was")
 def flow_meet_was(ack, body, client):
-    flow_meet_rate(ack, body, client, "+")
-
-
-@app.action("flow_meet_was_not")
-def flow_meet_was_not(ack, body, client):
-    flow_meet_rate(ack, body, client, "-")
-
-
-@app.action("flow_meet_had_not")
-def flow_meet_had_not(ack, body, client):
-    ack()
-
-    client.chat_update(
-        channel=body['channel']['id'],
-        ts=msg.get_ts(body),
-        text="You have a new notification in the chat",
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_MEET_HAD_NOT
-                }
-            }
-        ]
-    )
-
-
-@app.action("flow_meet_had")
-def flow_meet_had(ack, body, client):
     uid1 = body["user"]["id"]
     uid2 = msg.get_uid(body['message']['blocks'][0]['text']['text'])
     ack()
@@ -468,10 +461,10 @@ def flow_meet_had(ack, body, client):
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": (messages.FLOW_MEET_HAD).format(uid2)
+            "text": (messages.FLOW_MEET_WAS).format(uid2)
         },
 
-    }] + elements.MEET_HAD
+    }] + elements.MEET_WAS
 
     client.chat_update(
         channel=body['channel']['id'],
@@ -486,6 +479,48 @@ def flow_meet_had(ack, body, client):
         ntf_repo.update(ntf)
     except NotificationNotFoundError as ex:
         ntf_repo.add(Notification(uid=uid1, season=season.get(), type=common.NTF_TYPES.feedback, status=True))
+
+
+@app.action("flow_meet_was_not_yet")
+def flow_meet_was_not_yet(ack, body, client):
+    ack()
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        text="You have a new notification in the chat",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_MEET_WAS_NOT_YET
+                }
+            }
+        ]
+    )
+
+
+@app.action("flow_meet_was_not")
+def flow_meet_was_not(ack, body, client):
+    ack()
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        text="You have a new notification in the chat",
+        blocks=[
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_MEET_RATE
+                }
+            }
+        ]
+    )
+
+    flow_meet_n1(ack, body, client)
 
 
 if __name__ == "__main__":

@@ -48,8 +48,8 @@ FLOW_WEEK_YES = "Great! Next Monday I’ll choose one more amazing coffee partne
 FLOW_WEEK_PAUSE_1W = "I see. Let's do this again next week!"
 FLOW_WEEK_PAUSE_1M = "I see. I will get back to you in a month!"
 
-FLOW_MEET_HAD = ":eyes: How did it go with <@{0}>?"
-FLOW_MEET_HAD_NOT = ":clock1: Hurry up, the week will be over soon"
+FLOW_MEET_WAS = ":eyes: How did it go with <@{0}>?"
+FLOW_MEET_WAS_NOT_YET = ":clock1: Hurry up, the week will be over soon"
 FLOW_MEET_RATE = "Thank you for your response!"
 
 FLOW_CHANGE_MEET_LOCATION = "Choose a location where you want to have a meeting"
