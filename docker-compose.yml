@@ -4,6 +4,8 @@ services:
     container_name: rcb-mysql
     image: mysql:8.0
     restart: always
+    cap_add:
+      - SYS_NICE
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: coffee
@@ -20,7 +22,7 @@ services:
     env_file:
       - ${BOT_HOME}/resources/.env
     environment:
-        RCB_LOG_DIR: ${BOT_HOME}/logs
+        RCB_LOG_DIR: /home/rcb/bot/logs
         TZ: Etc/GMT-2
     volumes:
       - ${BOT_HOME}/resources/config.yml:/home/rcb/bot/resources/config.yml
