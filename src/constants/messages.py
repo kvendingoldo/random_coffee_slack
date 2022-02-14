@@ -28,11 +28,11 @@ FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \
-                     "Weekly I'll randomly pick one exciting person for you to catch up with. " \
+                     "Weekly I'll randomly pick one exciting person for you to have a meeting with. " \
                      "You both will receive each other's names; " \
                      "slack them, agree on a date and choose a platform to meet: zoom, skype, meet, etc. \n\n" \
                      "So are you up for? \n\n" \
-                     "Enter Join to move forward."
+                     "Enter Join to continue."
 
 FLOW_PARTICIPATE_1 = "Tell me a little bit about yourself! \n\n" \
                      "What is your location?"
