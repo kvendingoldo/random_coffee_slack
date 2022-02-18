@@ -2,6 +2,8 @@ bot:
   additionalUsers:
     common:
       - UKDHWCUAG # ytsvetkova
+    eng_data_analytics:
+      - U02E7A02DDH # adedov
 
 database:
   host: mysql
