@@ -96,7 +96,7 @@ def care(client, config):
                     dry_run=ntf_dry_run
                 )
             # NOTE: send reminder message
-            if 3 <= weekday <= 5:
+            if 3 <= weekday <= 4:
                 msg.wrapper_user(
                     client=client,
                     ntf_repo=ntf_repo,
