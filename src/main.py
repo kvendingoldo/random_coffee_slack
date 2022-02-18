@@ -144,7 +144,7 @@ def flow_change_meet_location(body, ack, say):
                 "text": "Select an item",
                 "emoji": True
             },
-            "options": elements.LOCATIONS,
+            "options": elements.LOCATIONS + elements.EXTRA_GROUPS,
             "action_id": "change_meet_location"
         }
     }]
