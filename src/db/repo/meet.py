@@ -101,9 +101,13 @@ class MeetRepository:
             uid1 = for_rand_distr[0]
             if additional_users:
                 uid2 = random.choice(additional_users)
+                if uid1 != uid2:
+                    logger.info(f"Meet created for pair ({uid1}, {uid2}); Pair has taken from additionalUsers")
+                    self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
+                else:
+                    logger.debug(
+                        f"Meet wasn't created for pair ({uid1}, {uid2}) because uid1 = uid2; Pair has taken from additionalUsers.")
 
-                logger.info(f"Meet created for pair ({uid1}, {uid2}); Pair has taken from additionalUsers")
-                self.add(Meet(season=season_id, uid1=uid1, uid2=uid2))
             else:
                 logger.info(f"List of additional users is empty. Meet can not be created for user {uid1}")
 
