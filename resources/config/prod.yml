@@ -1,73 +1,88 @@
 bot:
-  additionalUsers:
-    common:
-      - UKDHWCUAG # ytsvetkova
-    eng_data_analytics:
-      - U02E7A02DDH # adedov
-
   locations:
-    - name: remote
+    remote:
       displayName: "Remote"
       enabledAsGroup: false
-    - name: us
+      additionalUsers: []
+    us:
       displayName: "US"
       enabledAsGroup: false
-    - name: saratov
+      additionalUsers: []
+    saratov:
       displayName: "Saratov"
       enabledAsGroup: true
-    - name: spb
+      additionalUsers:
+         - UKDHWCUAG # ytsvetkova
+    spb:
       displayName: "Saint Petersburg"
       enabledAsGroup: false
-    - name: moscow
+      additionalUsers: []
+    moscow:
       displayName: "Moscow"
       enabledAsGroup: false
-    - name: kazan
+      additionalUsers: []
+    kazan:
       displayName: "Kazan"
       enabledAsGroup: false
-    - name: kharkiv
+      additionalUsers: []
+    kharkiv:
       displayName: "Kharkiv"
       enabledAsGroup: false
-    - name: lviv
+      additionalUsers: []
+    lviv:
       displayName: "Lviv"
       enabledAsGroup: false
-    - name: kiev
+      additionalUsers: []
+    kiev:
       displayName: "Kyiv"
       enabledAsGroup: false
-    - name: dnipro
+      additionalUsers: []
+    dnipro:
       displayName: "Dnipro"
       enabledAsGroup: false
-    - name: gdansk
+      additionalUsers: []
+    gdansk:
       displayName: "Gdansk"
       enabledAsGroup: false
-    - name: ljubljana
+      additionalUsers: []
+    ljubljana:
       displayName: "Ljubljana"
       enabledAsGroup: false
-    - name: wroclaw
+      additionalUsers: []
+    wroclaw:
       displayName: "Wroclaw"
       enabledAsGroup: false
-    - name: krakow
+      additionalUsers: []
+    krakow:
       displayName: "Krakow"
       enabledAsGroup: false
-    - name: belgrade
+      additionalUsers: []
+    belgrade:
       displayName: "Belgrade"
       enabledAsGroup: false
-    - name: london
+      additionalUsers: []
+    london:
       displayName: "London"
       enabledAsGroup: false
-    - name: chisinau
+      additionalUsers: []
+    chisinau:
       displayName: "Chisinau"
       enabledAsGroup: false
-    - name: guadalajara
+      additionalUsers: []
+    guadalajara:
       displayName: "Guadalajara"
       enabledAsGroup: false
+      additionalUsers: []
 
   groups:
-    - name: worldwide
+    worldwide:
       displayName: "Worldwide"
       enabled: true
-    - name: eng_data_analytics
+      additionalUsers: []
+    eng_data_analytics:
       displayName: "ENG: Data Analytics"
       enabled: true
+      additionalUsers: []
 
 database:
   host: mysql

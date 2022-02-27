@@ -40,15 +40,9 @@ def care(client, config):
                 # TODO: should be renamed to groups
                 for m_location in meet_locations:
                     if groups.check_group_enabled(group=m_location, groups=meet_groups):
-                        additional_users = []
-                        if m_location in config["bot"]["additionalUsers"]:
-                            additional_users = config["bot"]["additionalUsers"][m_location]
-                        else:
-                            additional_users = config["bot"]["additionalUsers"]["common"]
-
                         meet_repo.create(
                             uids=[user.id for user in users if user.meet_loc == m_location],
-                            additional_uids=additional_users
+                            additional_uids=groups.get_group_additional_users(m_location, meet_groups)
                         )
 
         users_with_pair = set()
