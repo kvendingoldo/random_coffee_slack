@@ -5,6 +5,70 @@ bot:
     saratov:
       - U01THB38EDV # kvendingoldo
 
+  locations:
+    - name: remote
+      displayName: "Remote"
+      enabledAsGroup: false
+    - name: us
+      displayName: "US"
+      enabledAsGroup: false
+    - name: saratov
+      displayName: "Saratov"
+      enabledAsGroup: true
+    - name: spb
+      displayName: "Saint Petersburg"
+      enabledAsGroup: false
+    - name: moscow
+      displayName: "Moscow"
+      enabledAsGroup: false
+    - name: kazan
+      displayName: "Kazan"
+      enabledAsGroup: false
+    - name: kharkiv
+      displayName: "Kharkiv"
+      enabledAsGroup: false
+    - name: lviv
+      displayName: "Lviv"
+      enabledAsGroup: false
+    - name: kiev
+      displayName: "Kyiv"
+      enabledAsGroup: false
+    - name: dnipro
+      displayName: "Dnipro"
+      enabledAsGroup: false
+    - name: gdansk
+      displayName: "Gdansk"
+      enabledAsGroup: false
+    - name: ljubljana
+      displayName: "Ljubljana"
+      enabledAsGroup: false
+    - name: wroclaw
+      displayName: "Wroclaw"
+      enabledAsGroup: false
+    - name: krakow
+      displayName: "Krakow"
+      enabledAsGroup: false
+    - name: belgrade
+      displayName: "Belgrade"
+      enabledAsGroup: false
+    - name: london
+      displayName: "London"
+      enabledAsGroup: false
+    - name: chisinau
+      displayName: "Chisinau"
+      enabledAsGroup: false
+    - name: guadalajara
+      displayName: "Guadalajara"
+      enabledAsGroup: false
+
+  groups:
+    - name: worldwide
+      displayName: "Worldwide"
+      enabled: true
+    - name: eng_data_analytics
+      displayName: "ENG: Data Analytics"
+      enabled: true
+
 database:
   host: 127.0.0.1
   port: 3308
@@ -21,7 +85,7 @@ notifications:
 devMode:
   enabled: true
   weekday: 5
-  hour: 15
+  hour: 12
 
 log:
   rotation: "1 week"

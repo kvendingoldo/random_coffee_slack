@@ -25,9 +25,9 @@ ACTION_STOP = "I'm looking forward to seeing you when you come back"
 
 FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
                     "Don't worry, I'll find a new one and send you an additional notification when ready."
-
 FLOW_PARTNER_LEFT_EOW = "It looks like your partner decided to take a break; " \
                         "Sorry, this week is over for making a new pair. Hope that next week will be more successful."
+FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meet group '{0}' is currently disabled; Please check #nof_rcb for updates"
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \
@@ -61,8 +61,8 @@ MEET_LOOKING = "Hey!👋 \n\n" \
                "I'm still looking for a partner for you. \n\n" \
                "You'll be notified immediately when a partner is found."
 MEET_UNSUCCESSFUL_SEARCH = "Hey!👋 \n\n" \
-               "Sorry, but I didn't find a pair for you on this week. \n\n" \
-               "Hope that next week will be more successful."
+                           "Sorry, but I didn't find a pair for you on this week. \n\n" \
+                           "Hope that next week will be more successful."
 
 MEET_INFO = "Hey!👋 \n\n" \
             "Your Random Coffee partner is <@{0}>! Lucky you :)"

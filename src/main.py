@@ -11,10 +11,9 @@ from loguru import logger
 from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError, MetadataNotFoundError
 from db import utils as db_utils
 
-from utils import config, season
+from utils import config, season, msg, groups
 from daemons import week
 from constants import messages, elements, common
-from utils import msg
 
 from models.user import User
 from models.notification import Notification
@@ -147,7 +146,7 @@ def flow_change_meet_location(body, ack, say):
                 "text": "Select an item",
                 "emoji": True
             },
-            "options": elements.LOCATIONS + elements.EXTRA_GROUPS,
+            "options": groups.generate_groups(config["bot"]["locations"], config["bot"]["groups"]),
             "action_id": "change_meet_location"
         }
     }]
@@ -250,7 +249,7 @@ def flow_participate_1(ack, body, client):
                         "text": "Select an item",
                         "emoji": True
                     },
-                    "options": elements.LOCATIONS,
+                    "options": msg.generate_locations(config["bot"]["locations"]),
                     "action_id": "location"
                 }
             }

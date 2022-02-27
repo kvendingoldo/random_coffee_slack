@@ -96,3 +96,19 @@ def wrapper_user(client, ntf_repo, uid, msg_type, msg_text, dry_run=True, msg_bl
         ntf.status = True
         ntf_repo.update(ntf)
         logger.info(f"{msg_type} message sent for {uid}")
+
+
+def generate_locations(locations):
+    result = []
+    for location in locations:
+        result.append(
+            {
+                "text": {
+                    "type": "plain_text",
+                    "text": location["displayName"],
+                    "emoji": True
+                },
+                "value": location["name"]
+            }
+        )
+    return result

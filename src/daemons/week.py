@@ -4,7 +4,7 @@ import time
 
 from datetime import date
 from loguru import logger
-from utils import season, repo, msg
+from utils import season, repo, msg, groups
 from constants import messages, elements, common
 from db import utils as db_utils
 
@@ -13,6 +13,8 @@ def care(client, config):
     user_repo, ntf_repo, rating_repo, meet_repo, metadata_repo = db_utils.get_repos(config)
 
     while True:
+        meet_groups = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
+
         if config["devMode"]["enabled"]:
             weekday = int(config["devMode"]["weekday"])
             hour = int(config["devMode"]["hour"])
@@ -35,17 +37,19 @@ def care(client, config):
                 )
         elif weekday == 5:
             if hour <= 13:
+                # TODO: should be renamed to groups
                 for m_location in meet_locations:
-                    additional_users = []
-                    if m_location in config["bot"]["additionalUsers"]:
-                        additional_users = config["bot"]["additionalUsers"][m_location]
-                    else:
-                        additional_users = config["bot"]["additionalUsers"]["common"]
+                    if groups.check_group_enabled(group=m_location, groups=meet_groups):
+                        additional_users = []
+                        if m_location in config["bot"]["additionalUsers"]:
+                            additional_users = config["bot"]["additionalUsers"][m_location]
+                        else:
+                            additional_users = config["bot"]["additionalUsers"]["common"]
 
-                    meet_repo.create(
-                        uids=[user.id for user in users if user.meet_loc == m_location],
-                        additional_uids=additional_users
-                    )
+                        meet_repo.create(
+                            uids=[user.id for user in users if user.meet_loc == m_location],
+                            additional_uids=additional_users
+                        )
 
         users_with_pair = set()
         meets = meet_repo.list(spec={"season": season_id})
@@ -130,6 +134,9 @@ def care(client, config):
 
             for usr in users:
                 if usr.id not in users_with_pair:
+                    if not groups.check_group_enabled(group=usr.meet_loc, groups=meet_groups):
+                        message = messages.FLOW_PARTNER_GROUP_DISABLED.format(usr.meet_loc)
+
                     msg.wrapper_user(
                         client=client, ntf_repo=ntf_repo, uid=usr.id,
                         msg_type=common.NTF_TYPES.looking, msg_text=message,
