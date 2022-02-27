@@ -167,8 +167,14 @@ def flow_status(body, ack, say):
     else:
         week_msg = f"in {pause_in_weeks} weeks"
 
+    if not groups.check_group_enabled(group=usr.meet_loc,
+                                      groups=groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])):
+        group_status = "disabled"
+    else:
+        group_status = "enabled"
+
     ack()
-    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_loc))
+    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_loc, group_status))
 
 
 def flow_quit(body, ack, say):

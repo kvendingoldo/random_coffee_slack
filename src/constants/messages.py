@@ -14,7 +14,7 @@ FLOW_HELP = "Available commands:\n" \
             "/rcb help  - help\n"
 
 FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1} \n" \
-              "Your current meeting location is '{2}'"
+              "Your current meeting group is '{2}' (status: {3})"
 
 FLOW_QUIT = "Sorry about your choice. Hope to see you again soon. " \
             "Just write /rcb start again in this case. Information about your profile was deleted."
