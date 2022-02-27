@@ -7,11 +7,15 @@
 - [x] two notifications about the next week if user had two meets
 - [x] change bot timezone
 - [x] do not ask about meet if users marked that meet has been done
-- [x] fix issue with "This content can't be displayed" notifications 
+- [x] fix issue with "This content can't be displayed" notifications
+- [x] add an ability to set meets based on location
+- [ ] rename m_locations => groups
+- [ ] Add support of multiple user group via multiple user select
+- [ ] add info about enabled/disabled group to /rcb status
+- [ ] add choice of meet_location (meet_group) during initial flow
 - [ ] add an ability to set meets based on language
 * flow: choice a language on which you wanna talk `<Does not matter|...>`?
 * flow: choice a location in which you wanna have meeting `<online|...>`?
-- [ ] add an ability to set meets based on location
 - [ ] fix an issue caused by 2 slack clients
 - [ ] notification system for major updates
 - [ ] send help for random text that user sent to bot
