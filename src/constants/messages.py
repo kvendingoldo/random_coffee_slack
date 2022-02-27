@@ -60,6 +60,9 @@ FLOW_CHANGE_MEET_LOCATION = "Choose a location where you want to have a meeting"
 MEET_LOOKING = "Hey!👋 \n\n" \
                "I'm still looking for a partner for you. \n\n" \
                "You'll be notified immediately when a partner is found."
+MEET_UNSUCCESSFUL_SEARCH = "Hey!👋 \n\n" \
+               "Sorry, but I didn't find a pair for you on this week. \n\n" \
+               "Hope that next week will be more successful."
 
 MEET_INFO = "Hey!👋 \n\n" \
             "Your Random Coffee partner is <@{0}>! Lucky you :)"

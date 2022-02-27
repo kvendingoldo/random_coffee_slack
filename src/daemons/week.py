@@ -123,11 +123,16 @@ def care(client, config):
 
         # NOTE: notify users who do not have a pair
         if 1 <= weekday <= 5:
+            if hour <= 13:
+                message = messages.MEET_LOOKING
+            else:
+                message = messages.MEET_UNSUCCESSFUL_SEARCH
+
             for usr in users:
                 if usr.id not in users_with_pair:
                     msg.wrapper_user(
                         client=client, ntf_repo=ntf_repo, uid=usr.id,
-                        msg_type=common.NTF_TYPES.looking, msg_text=messages.MEET_LOOKING,
+                        msg_type=common.NTF_TYPES.looking, msg_text=message,
                         dry_run=ntf_dry_run
                     )
 
