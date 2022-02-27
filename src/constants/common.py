@@ -16,6 +16,7 @@ class NotificationTypes:
 class DBTables:
     user: str = 'user'
     meet: str = 'meet'
+    meta: str = 'meta'
     rating: str = 'rating'
     notification: str = 'notification'
 

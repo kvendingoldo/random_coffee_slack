@@ -5,6 +5,7 @@ from db.repo.user import UserRepository
 from db.repo.notification import NotificationRepository
 from db.repo.rating import RatingRepository
 from db.repo.meet import MeetRepository
+from db.repo.metadata import MetadataRepository
 
 
 def get_repos(config):
@@ -21,5 +22,6 @@ def get_repos(config):
     ntf_repo = NotificationRepository(session_factory=db.session)
     rating_repo = RatingRepository(session_factory=db.session)
     meet_repo = MeetRepository(session_factory=db.session)
+    metadata_repo = MetadataRepository(session_factory=db.session)
 
-    return user_repo, ntf_repo, rating_repo, meet_repo
+    return user_repo, ntf_repo, rating_repo, meet_repo, metadata_repo

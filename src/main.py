@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 
+from datetime import date
 from multiprocessing import Process
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from loguru import logger
-from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError
+from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError, MetadataNotFoundError
 from db import utils as db_utils
 
 from utils import config, season
@@ -16,6 +18,7 @@ from utils import msg
 
 from models.user import User
 from models.notification import Notification
+from models.metadata import Metadata
 from models.rating import Rating
 
 config = config.load("../resources/config.yml")
@@ -316,27 +319,53 @@ def notify_uid2_about_uid_quit(uid1: str) -> None:
     meets = meet_repo.list({"season": season_id, "or": {"uid1": uid1, "uid2": uid1}})
 
     if meets:
+        weekday = date.today().weekday() + 1
+        hour = int(time.strftime("%H"))
+
         meet = meets[0]
         if meet.uid1 == uid1:
             uid2 = meet.uid2
         else:
             uid2 = meet.uid1
 
+        logger.info(
+            f"User {uid1} decided to take a break and also had scheduled meeting  with {uid2}. Bot will try to find a new partner for {uid2}")
+
         # NOTE: Send message to uid2 that uid1 take a break
-        app.client.chat_postMessage(
-            channel=uid2,
-            text="You have a new notification in the chat",
-            blocks=[{
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_PARTNER_LEFT
-                },
-            }]
-        )
+        # It's actual to send only until Friday 1PM.
+        if 1 <= weekday <= 5:
+            if 0 <= hour <= 13:
+                message = messages.FLOW_PARTNER_LEFT
+            else:
+                message = messages.FLOW_PARTNER_LEFT_EOW
+
+            app.client.chat_postMessage(
+                channel=uid2,
+                text="You have a new notification in the chat",
+                blocks=[{
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": message
+                    },
+                }]
+            )
 
         # Delete meet and all notifications about it
         meet_repo.delete(meet)
+
+        try:
+            metadata = metadata_repo.get({"name": "DELETED_MEETS"})
+            metadata.value = str(int(metadata.value) + 1)
+            metadata_repo.update(metadata)
+        except MetadataNotFoundError as ex:
+            metadata_repo.add(
+                Metadata(
+                    name="DELETED_MEETS",
+                    value="1"
+                )
+            )
+
     else:
         logger.info(f"User {uid1} didn't have a scheduled meet with anyone else")
 
@@ -348,6 +377,7 @@ def stop_wrapper(ack, body, client, period, message):
     usr.pause_in_weeks = period
     user_repo.update(usr)
 
+    logger.info(f"User {usr.id} decided to take a break for {period}")
     notify_uid2_about_uid_quit(usr.id)
 
     # NOTE: Message for uid1 about successful pause
@@ -534,7 +564,7 @@ if __name__ == "__main__":
 
     logger.info("Bot launching ...")
 
-    user_repo, ntf_repo, rating_repo, meet_repo = db_utils.get_repos(config)
+    user_repo, ntf_repo, rating_repo, meet_repo, metadata_repo = db_utils.get_repos(config)
 
     week = Process(
         target=week.care,

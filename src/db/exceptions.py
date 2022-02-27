@@ -11,6 +11,10 @@ class MeetNotFoundError(NotFoundError):
     entity_name: str = 'Meet'
 
 
+class MetadataNotFoundError(NotFoundError):
+    entity_name: str = 'Meta'
+
+
 class NotificationNotFoundError(NotFoundError):
     entity_name: str = 'Notification'
 

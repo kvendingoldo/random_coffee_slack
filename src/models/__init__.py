@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ["meet", "notification", "rating", "user"]
+__all__ = ["meet", "metadata", "notification", "rating", "user"]
