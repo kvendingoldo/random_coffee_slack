@@ -59,7 +59,7 @@ bot:
       additionalUsers: []
     belgrade:
       displayName: "Belgrade"
-      enabledAsGroup: false
+      enabledAsGroup: true
       additionalUsers: []
     london:
       displayName: "London"
