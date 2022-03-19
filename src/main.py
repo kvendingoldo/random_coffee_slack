@@ -47,8 +47,8 @@ def rcb_command(body, ack, say):
                 say(text=messages.USER_NOT_FOUND)
             else:
                 flow_stop(ack, body)
-        elif msg == "change_meet_location":
-            flow_change_meet_location(body, ack, say)
+        elif msg == "change_meet_group":
+            flow_change_meet_group(body, ack, say)
         else:
             ack()
             say(text=messages.COMMAND_NOT_FOUND)
@@ -102,15 +102,15 @@ def handle_message_events(body, say):
     #     say(text=messages.COMMAND_NOT_FOUND)
 
 
-@app.action("change_meet_location")
-def action_change_meet_location(ack, body, client):
+@app.action("change_meet_group")
+def action_change_meet_group(ack, body, client):
     logger.info("flow::help")
     ack()
 
-    new_meet_loc = body["actions"][0]["selected_option"]["value"]
+    new_meet_group = body["actions"][0]["selected_option"]["value"]
     usr = user_repo.get_by_id(body["user"]["id"])
     # TODO: Add verification
-    usr.meet_loc = new_meet_loc
+    usr.meet_group = new_meet_group
     user_repo.update(usr)
 
     client.chat_update(
@@ -122,14 +122,14 @@ def action_change_meet_location(ack, body, client):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Your meet location has been changed to {new_meet_loc}"
+                    "text": f"Your meeting group has been changed to {new_meet_group}"
                 }
             }
         ]
     )
 
 
-def flow_change_meet_location(body, ack, say):
+def flow_change_meet_group(body, ack, say):
     uid = body['user_id']
     logger.info(f"flow::change meet location for user {uid}")
     ack()
@@ -137,7 +137,7 @@ def flow_change_meet_location(body, ack, say):
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": messages.FLOW_CHANGE_MEET_LOCATION
+            "text": messages.FLOW_CHANGE_MEET_GROUP
         },
         "accessory": {
             "type": "static_select",
@@ -147,7 +147,7 @@ def flow_change_meet_location(body, ack, say):
                 "emoji": True
             },
             "options": groups.generate_groups(config["bot"]["locations"], config["bot"]["groups"]),
-            "action_id": "change_meet_location"
+            "action_id": "change_meet_group"
         }
     }]
 
@@ -167,14 +167,14 @@ def flow_status(body, ack, say):
     else:
         week_msg = f"in {pause_in_weeks} weeks"
 
-    if not groups.check_group_enabled(group=usr.meet_loc,
+    if not groups.check_group_enabled(group=usr.meet_group,
                                       groups=groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])):
         group_status = "disabled"
     else:
         group_status = "enabled"
 
     ack()
-    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_loc, group_status))
+    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_group, group_status))
 
 
 def flow_quit(body, ack, say):

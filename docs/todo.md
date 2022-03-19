@@ -10,7 +10,7 @@
 - [x] fix issue with "This content can't be displayed" notifications
 - [x] add an ability to set meets based on location
 - [x] add info about enabled/disabled group to /rcb status
-- [ ] rename m_locations => groups
+- [x] rename m_locations => groups
 - [ ] add support of multiple user group via multiple user select
 - [ ] add choice of meet_location (meet_group) during initial flow
 - [ ] add an ability to set meets based on language

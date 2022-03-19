@@ -13,7 +13,7 @@ def care(client, config):
     user_repo, ntf_repo, rating_repo, meet_repo, metadata_repo = db_utils.get_repos(config)
 
     while True:
-        meet_groups = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
+        config_meet_groups = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
 
         if config["devMode"]["enabled"]:
             weekday = int(config["devMode"]["weekday"])
@@ -25,25 +25,22 @@ def care(client, config):
         season_id = season.get()
         ntf_dry_run = config["notifications"]["dryRun"]
         users = user_repo.list(spec={"pause_in_weeks": "0"})
-        meet_locations = repo.get_unique_locations(users)
 
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
 
         # NOTE: create meets
-        if weekday < 5:
-            for m_location in meet_locations:
-                meet_repo.create(
-                    uids=[user.id for user in users if user.meet_loc == m_location]
-                )
-        elif weekday == 5:
-            if hour <= 13:
-                # TODO: should be renamed to groups
-                for m_location in meet_locations:
-                    if groups.check_group_enabled(group=m_location, groups=meet_groups):
-                        meet_repo.create(
-                            uids=[user.id for user in users if user.meet_loc == m_location],
-                            additional_uids=groups.get_group_additional_users(m_location, meet_groups)
-                        )
+        if weekday <= 5:
+            for m_group in repo.get_unique_meet_groups(users):
+                if hour <= 13 and weekday == 5:
+                    additional_uids = groups.get_group_additional_users(m_group, config_meet_groups)
+                else:
+                    additional_uids = []
+
+                if groups.check_group_enabled(group=m_group, groups=config_meet_groups):
+                    meet_repo.create(
+                        uids=[user.id for user in users if user.meet_group == m_group],
+                        additional_uids=[]
+                    )
 
         users_with_pair = set()
         meets = meet_repo.list(spec={"season": season_id})
@@ -124,12 +121,13 @@ def care(client, config):
             if hour <= 13:
                 message = messages.MEET_LOOKING
             else:
-                message = messages.MEET_UNSUCCESSFUL_SEARCH
+                if weekday == 5:
+                    message = messages.MEET_UNSUCCESSFUL_SEARCH
 
             for usr in users:
                 if usr.id not in users_with_pair:
-                    if not groups.check_group_enabled(group=usr.meet_loc, groups=meet_groups):
-                        message = messages.FLOW_PARTNER_GROUP_DISABLED.format(usr.meet_loc)
+                    if not groups.check_group_enabled(group=usr.meet_group, groups=config_meet_groups):
+                        message = messages.FLOW_PARTNER_GROUP_DISABLED.format(usr.meet_group)
 
                     msg.wrapper_user(
                         client=client, ntf_repo=ntf_repo, uid=usr.id,

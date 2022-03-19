@@ -24,8 +24,8 @@ def filtration(spec, objs):
         return objs
 
 
-def get_unique_locations(users):
-    m_locations = set()
+def get_unique_meet_groups(users):
+    groups = set()
     for user in users:
-        m_locations.add(user.meet_loc)
-    return list(m_locations)
+        groups.add(user.meet_group)
+    return list(groups)

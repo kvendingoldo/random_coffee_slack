@@ -10,7 +10,7 @@ FLOW_HELP = "Available commands:\n" \
             "/rcb status - get my current status\n" \
             "/rcb stop  - stop participating in Random Coffee\n" \
             "/rcb quit  - quit Random Coffee meets\n" \
-            "/rcb change_meet_location - allows to change meeting location; 'worldwide' by default\n" \
+            "/rcb change_meet_group - allows to change meeting group; 'worldwide' by default\n" \
             "/rcb help  - help\n"
 
 FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1} \n" \
@@ -27,7 +27,7 @@ FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
                     "Don't worry, I'll find a new one and send you an additional notification when ready."
 FLOW_PARTNER_LEFT_EOW = "It looks like your partner decided to take a break; " \
                         "Sorry, this week is over for making a new pair. Hope that next week will be more successful."
-FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meet group '{0}' is currently disabled; Please check #nof_rcb for updates"
+FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meeting group '{0}' is currently disabled; Please check #nof_rcb for updates"
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \
@@ -55,7 +55,7 @@ FLOW_MEET_WAS = ":eyes: How did it go with <@{0}>?"
 FLOW_MEET_WAS_NOT_YET = ":clock1: Hurry up, the week will be over soon"
 FLOW_MEET_RATE = "Thank you for your response!"
 
-FLOW_CHANGE_MEET_LOCATION = "Choose a location where you want to have a meeting"
+FLOW_CHANGE_MEET_GROUP = "Choose a group in which you want to have a meeting"
 
 MEET_LOOKING = "Hey!👋 \n\n" \
                "I'm still looking for a partner for you. \n\n" \

@@ -6,7 +6,7 @@ bot:
       additionalUsers: []
     us:
       displayName: "US"
-      enabledAsGroup: false
+      enabledAsGroup: true
       additionalUsers: []
     saratov:
       displayName: "Saratov"
@@ -96,11 +96,11 @@ daemons:
     poolPeriod: 10800 # 3h
 
 notifications:
-  dryRun: false
+  dryRun: true
 
 devMode:
   enabled: true
-  weekday: 5
+  weekday: 3
   hour: 12
 
 log:

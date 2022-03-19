@@ -35,7 +35,7 @@ class UserRepository:
                 username=user.username,
                 pause_in_weeks=user.pause_in_weeks,
                 loc=user.loc,
-                meet_loc=user.meet_loc
+                meet_group=user.meet_group
             ))
 
             session.commit()
