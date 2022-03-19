@@ -105,10 +105,26 @@ def generate_locations(locations):
             {
                 "text": {
                     "type": "plain_text",
-                    "text": location["displayName"],
+                    "text": locations[location]["displayName"],
                     "emoji": True
                 },
-                "value": location["name"]
+                "value": location
+            }
+        )
+    return result
+
+
+def generate_groups(groups):
+    result = []
+    for group in groups:
+        result.append(
+            {
+                "text": {
+                    "type": "plain_text",
+                    "text": group["displayName"],
+                    "emoji": True
+                },
+                "value": group["name"]
             }
         )
     return result

@@ -5,7 +5,7 @@ USER_NOT_FOUND = "Your ID is not found in the RCB system. " \
 
 COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command to get help"
 
-FLOW_HELP = "Available commands:\n" \
+FLOW_HELP = "*Available commands:*\n" \
             "/rcb start - participate in Random Coffee meets\n" \
             "/rcb status - get my current status\n" \
             "/rcb stop  - stop participating in Random Coffee\n" \
@@ -13,8 +13,8 @@ FLOW_HELP = "Available commands:\n" \
             "/rcb change_meet_group - allows to change meeting group; 'worldwide' by default\n" \
             "/rcb help  - help\n"
 
-FLOW_STATUS = "Your current status: {0} weeks of pause; It means that you'll get your pair {1} \n" \
-              "Your current meeting group is '{2}' (status: {3})"
+FLOW_STATUS = "Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
+              "Your current meeting group is *{2}* (status: *{3}*)"
 
 FLOW_QUIT = "Sorry about your choice. Hope to see you again soon. " \
             "Just write /rcb start again in this case. Information about your profile was deleted."
@@ -40,7 +40,10 @@ FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
 FLOW_PARTICIPATE_1 = "Tell me a little bit about yourself! \n\n" \
                      "What is your location?"
 
-FLOW_PARTICIPATE_2 = "Wow! Now you’re a Random coffee participant! \n\n" \
+FLOW_PARTICIPATE_2 = "Please, choose a group in which you want to have a meeting \n\n" \
+                     "(`worldwide` will be the best option if you do not know meeting group yet)"
+
+FLOW_PARTICIPATE_3 = "Wow! Now you’re a Random coffee participant! \n\n" \
                      "What’s next? \n\n" \
                      "1. Every Monday you’ll receive the name of your next coffee partner \n" \
                      "2. Slack them, agree on a date and choose a platform to meet: " \

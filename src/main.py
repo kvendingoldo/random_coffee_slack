@@ -2,6 +2,7 @@
 
 import os
 import time
+import sys
 
 from datetime import date
 from multiprocessing import Process
@@ -206,23 +207,11 @@ def flow_participate_0(body, ack, say):
     )
 
 
-@app.action("location")
-def location(ack, body, client):
-    logger.info(f"flow::location for user {body['user']['id']}")
-
-    ack()
-
-    usr = user_repo.get_by_id(body["user"]["id"])
-
-    if usr.loc == "none":
-        usr.loc = body["actions"][0]["selected_option"]["value"]
-        user_repo.update(usr)
-
-    flow_participate_2(ack, body, client)
-
-
 @app.action("flow_participate_1")
 def flow_participate_1(ack, body, client):
+    # NOTE: We do not want to see traceback for this flow
+    sys.tracebacklimit = 0
+
     uid = body["user"]["id"]
 
     logger.info(f"flow::participate::1 for user {uid}")
@@ -268,11 +257,30 @@ def flow_participate_1(ack, body, client):
             blocks=blocks
         )
 
+    # NOTE: Default value
+    sys.tracebacklimit = 1000
+
+
+@app.action("location")
+def location(ack, body, client):
+    logger.info(f"flow::location for user {body['user']['id']}")
+
+    ack()
+
+    usr = user_repo.get_by_id(body["user"]["id"])
+
+    if usr.loc == "none":
+        usr.loc = body["actions"][0]["selected_option"]["value"]
+        user_repo.update(usr)
+
+    flow_participate_2(ack, body, client)
+
 
 @app.action("flow_participate_2")
 def flow_participate_2(ack, body, client):
-    logger.info(f"flow::participate::2 for user {body['user']['id']}")
+    uid = body["user"]["id"]
 
+    logger.info(f"flow::participate::2 for user {uid}")
     ack()
 
     blocks = [
@@ -281,6 +289,55 @@ def flow_participate_2(ack, body, client):
             "text": {
                 "type": "mrkdwn",
                 "text": messages.FLOW_PARTICIPATE_2
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select an item",
+                    "emoji": True
+                },
+                "options": msg.generate_groups(
+                    groups=groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
+                ),
+                "action_id": "m_group"
+            }
+        }
+    ]
+
+    client.chat_update(
+        channel=body['channel']['id'],
+        ts=msg.get_ts(body),
+        text="You have a new notification in the chat",
+        blocks=blocks
+    )
+
+
+@app.action("m_group")
+def m_group(ack, body, client):
+    logger.info(f"flow::m_group for user {body['user']['id']}")
+
+    ack()
+
+    usr = user_repo.get_by_id(body["user"]["id"])
+    usr.meet_group = body["actions"][0]["selected_option"]["value"]
+    user_repo.update(usr)
+
+    flow_participate_3(ack, body, client)
+
+
+@app.action("flow_participate_3")
+def flow_participate_3(ack, body, client):
+    logger.info(f"flow::participate::3 for user {body['user']['id']}")
+
+    ack()
+
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_PARTICIPATE_3
             },
             "accessory": elements.DONUT
         }

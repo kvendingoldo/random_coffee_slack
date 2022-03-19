@@ -11,8 +11,8 @@
 - [x] add an ability to set meets based on location
 - [x] add info about enabled/disabled group to /rcb status
 - [x] rename m_locations => groups
+- [x] add choice of meet_location (meet_group) during initial flow
 - [ ] add support of multiple user group via multiple user select
-- [ ] add choice of meet_location (meet_group) during initial flow
 - [ ] add an ability to set meets based on language
 * flow: choice a language on which you wanna talk `<Does not matter|...>`?
 * flow: choice a location in which you wanna have meeting `<online|...>`?
