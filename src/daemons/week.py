@@ -2,9 +2,10 @@
 
 import time
 
-from datetime import date
+
 from loguru import logger
 from utils import season, repo, msg, groups
+from utils import config as cfg_utils
 from constants import messages, elements, common
 from db import utils as db_utils
 
@@ -14,13 +15,7 @@ def care(client, config):
 
     while True:
         config_meet_groups = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
-
-        if config["devMode"]["enabled"]:
-            weekday = int(config["devMode"]["weekday"])
-            hour = int(config["devMode"]["hour"])
-        else:
-            weekday = date.today().weekday() + 1
-            hour = int(time.strftime("%H"))
+        weekday, hour = cfg_utils.get_week_info(config)
 
         season_id = season.get()
         ntf_dry_run = config["notifications"]["dryRun"]
@@ -39,7 +34,7 @@ def care(client, config):
                 if groups.check_group_enabled(group=m_group, groups=config_meet_groups):
                     meet_repo.create(
                         uids=[user.id for user in users if user.meet_group == m_group],
-                        additional_uids=[]
+                        additional_uids=additional_uids
                     )
 
         users_with_pair = set()

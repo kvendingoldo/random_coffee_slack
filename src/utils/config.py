@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 import yaml
+
+from datetime import date
 
 
 def load(yaml_path):
@@ -21,3 +24,14 @@ def load(yaml_path):
     config["database"]["password"] = db_password
 
     return config
+
+
+def get_week_info(config):
+    if config["devMode"]["enabled"]:
+        weekday = int(config["devMode"]["weekday"])
+        hour = int(config["devMode"]["hour"])
+    else:
+        weekday = date.today().weekday() + 1
+        hour = int(time.strftime("%H"))
+
+    return weekday, hour

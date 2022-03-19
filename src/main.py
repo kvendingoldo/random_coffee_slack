@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-import time
 import sys
 
-from datetime import date
 from multiprocessing import Process
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -12,7 +10,8 @@ from loguru import logger
 from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError, MetadataNotFoundError
 from db import utils as db_utils
 
-from utils import config, season, msg, groups
+from utils import season, msg, groups
+from utils import config as cfg_utils
 from daemons import week
 from constants import messages, elements, common
 
@@ -21,7 +20,7 @@ from models.notification import Notification
 from models.metadata import Metadata
 from models.rating import Rating
 
-config = config.load("../resources/config.yml")
+config = cfg_utils.load("../resources/config.yml")
 app = App(
     token=config["slack"]["botToken"]
 )
@@ -163,8 +162,13 @@ def flow_status(body, ack, say):
 
     pause_in_weeks = str(usr.pause_in_weeks)
 
+    weekday, hour = cfg_utils.get_week_info(config)
+
     if pause_in_weeks == "0":
-        week_msg = "on this week"
+        if weekday == 6 or weekday == 7:
+            week_msg = "on the next week"
+        else:
+            week_msg = "on this week"
     else:
         week_msg = f"in {pause_in_weeks} weeks"
 
@@ -381,8 +385,7 @@ def notify_uid2_about_uid_quit(uid1: str) -> None:
     meets = meet_repo.list({"season": season_id, "or": {"uid1": uid1, "uid2": uid1}})
 
     if meets:
-        weekday = date.today().weekday() + 1
-        hour = int(time.strftime("%H"))
+        weekday, hour = cfg_utils.get_week_info(config)
 
         meet = meets[0]
         if meet.uid1 == uid1:
