@@ -19,3 +19,4 @@
 - [ ] fix an issue caused by 2 slack clients
 - [ ] notification system for major updates
 - [ ] send help for random text that user sent to bot
+- [ ] add info about current season to meta table

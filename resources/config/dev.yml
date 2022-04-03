@@ -73,6 +73,10 @@ bot:
       displayName: "Guadalajara"
       enabledAsGroup: false
       additionalUsers: []
+    yerevan:
+      displayName: "Yerevan"
+      enabledAsGroup: true
+      additionalUsers: []
 
   groups:
     worldwide:
@@ -100,8 +104,8 @@ notifications:
 
 devMode:
   enabled: true
-  weekday: 3
-  hour: 12
+  weekday: 5
+  hour: 20
 
 log:
   rotation: "1 week"

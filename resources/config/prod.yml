@@ -11,8 +11,7 @@ bot:
     saratov:
       displayName: "Saratov"
       enabledAsGroup: true
-      additionalUsers:
-         - UKDHWCUAG # ytsvetkova
+      additionalUsers: []
     spb:
       displayName: "Saint Petersburg"
       enabledAsGroup: false
@@ -72,6 +71,10 @@ bot:
     guadalajara:
       displayName: "Guadalajara"
       enabledAsGroup: false
+      additionalUsers: []
+    yerevan:
+      displayName: "Yerevan"
+      enabledAsGroup: true
       additionalUsers: []
 
   groups:
