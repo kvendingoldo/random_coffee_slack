@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 
+from constants import elements
+
+from tabulate import tabulate
+
 USER_NOT_FOUND = "Your ID is not found in the RCB system. " \
                  "Looks like you didn't register via /rcb start command OR executed /rcb quit command"
 
 COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command to get help"
 
-FLOW_HELP = "*Available commands:*\n" \
-            "/rcb start - participate in Random Coffee meets\n" \
-            "/rcb status - get my current status\n" \
-            "/rcb stop  - stop participating in Random Coffee\n" \
-            "/rcb quit  - quit Random Coffee meets\n" \
-            "/rcb change_meet_group - allows to change meeting group; 'worldwide' by default\n" \
-            "/rcb get_group_statistic <group_name> - allow you to check group statistic if you are admin\n" \
-            "/rcb help  - help\n"
+FLOW_HELP_BLOCK = [{
+    "type": "section",
+    "text": {
+        "type": "mrkdwn",
+        "text": "*Available commands* \n\n {0}".format(
+            "\n".join(
+                [("`" + element[0].ljust(40, " ") + " " + element[1] + "`") for element in elements.LIST_OF_COMMANDS])
+        )
+    }
+}]
 
 FLOW_STATUS = "Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
               "Your current meeting group is *{2}* (status: *{3}*)"

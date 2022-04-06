@@ -7,6 +7,16 @@ DONUT = {
     "alt_text": "cute donut"
 }
 
+LIST_OF_COMMANDS = [
+    ["/rcb start", "participate in Random Coffee meets"],
+    ["/rcb status", "get my current status"],
+    ["/rcb stop", "stop participating in Random Coffee"],
+    ["/rcb quit", "quit Random Coffee meets"],
+    ["/rcb change_meet_group ", "allows to change meeting group; 'worldwide' by default"],
+    ["/rcb get_group_statistic <group_name>", "allows admin to check group statistic"],
+    ["/rcb help", "help"]
+]
+
 MEET_REMINDER = [
     {
         "type": "actions",

@@ -36,7 +36,7 @@ def rcb_command(body, ack, say):
             flow_participate_0(body, ack, say)
         elif msg == "help":
             ack()
-            say(text=messages.FLOW_HELP)
+            say(text="You have a new notification in the chat", blocks=messages.FLOW_HELP_BLOCK)
         elif msg == "quit":
             flow_quit(body, ack, say)
         elif msg == "status":
@@ -73,15 +73,7 @@ def action_help(ack, body, client):
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
         text="You have a new notification in the chat",
-        blocks=[
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": messages.FLOW_HELP
-                }
-            }
-        ]
+        blocks=messages.FLOW_HELP_BLOCK
     )
 
 
@@ -111,7 +103,7 @@ def handle_message_events(body, say):
 
 @app.action("change_meet_group")
 def action_change_meet_group(ack, body, client):
-    logger.info("flow::help")
+    logger.info("flow::change_meet_group")
     ack()
 
     new_meet_group = body["actions"][0]["selected_option"]["value"]
