@@ -11,6 +11,7 @@ FLOW_HELP = "*Available commands:*\n" \
             "/rcb stop  - stop participating in Random Coffee\n" \
             "/rcb quit  - quit Random Coffee meets\n" \
             "/rcb change_meet_group - allows to change meeting group; 'worldwide' by default\n" \
+            "/rcb get_group_statistic <group_name> - allow you to check group statistic if you are admin\n" \
             "/rcb help  - help\n"
 
 FLOW_STATUS = "Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
@@ -57,6 +58,11 @@ FLOW_WEEK_PAUSE_1M = "I see. I will get back to you in a month!"
 FLOW_MEET_WAS = ":eyes: How did it go with <@{0}>?"
 FLOW_MEET_WAS_NOT_YET = ":clock1: Hurry up, the week will be over soon"
 FLOW_MEET_RATE = "Thank you for your response!"
+
+FLOW_GET_STATISTIC = "*Statistic for group* `{0}` \n\n *List of users* \n\n {1} \n\n *List of meets*\n\n {2}"
+FLOW_GET_STATISTIC_ERROR_GROUP_DNOT_EXIST = "Sorry, `{0}` group does not exist"
+FLOW_GET_STATISTIC_ERROR_NOT_ADMIN = "Sorry, this is prohibited for you, because you are not admin of `{0}` group"
+FLOW_GET_STATISTIC_ERROR_FORGET_GROUP = "Looks like that you forget to specify group name; Use `/rcb get_group_statistic <group_name>` command"
 
 FLOW_CHANGE_MEET_GROUP = "Choose a group in which you want to have a meeting"
 

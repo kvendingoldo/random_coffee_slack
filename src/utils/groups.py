@@ -9,7 +9,8 @@ def get_groups(locations, groups):
                 "name": location,
                 "displayName": locations[location]["displayName"],
                 "enabled": locations[location]["enabledAsGroup"],
-                "additionalUsers": locations[location]["additionalUsers"]
+                "additionalUsers": locations[location]["additionalUsers"],
+                "admins": locations[location]["admins"]
             }
         )
 
@@ -19,7 +20,8 @@ def get_groups(locations, groups):
                 "name": group,
                 "displayName": groups[group]["displayName"],
                 "enabled": groups[group]["enabled"],
-                "additionalUsers": groups[group]["additionalUsers"]
+                "additionalUsers": groups[group]["additionalUsers"],
+                "admins": groups[group]["admins"]
             }
         )
 
@@ -52,8 +54,25 @@ def check_group_enabled(group, groups):
     return False
 
 
+def check_group_exist(groups, group):
+    for g in groups:
+        if group == g["name"]:
+            return True
+    return False
+
+
 def get_group_additional_users(group, groups):
     for g in groups:
         if group == g["name"]:
             return g["additionalUsers"]
     return []
+
+
+def is_uid_admin_for_group(groups, group, uid):
+    for g in groups:
+        if g["name"] == group:
+            for admin in g["admins"]:
+                if admin == uid:
+                    return True
+
+    return False

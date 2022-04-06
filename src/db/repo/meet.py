@@ -5,13 +5,15 @@ import random
 from contextlib import AbstractContextManager
 from typing import Callable, Iterator, Mapping
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
+
 from sqlalchemy import or_
 from loguru import logger
 
 from utils import repo, season
 
 from models.meet import Meet
+from models.user import User
 from db.exceptions import MeetNotFoundError
 
 
@@ -165,5 +167,20 @@ class MeetRepository:
     def list(self, spec: Mapping = None) -> list:
         with self.session_factory() as session:
             objs = session.query(Meet).all()
+
+        return repo.filtration(spec, objs)
+
+    def list_humanreadable(self, spec: Mapping = None) -> list:
+        with self.session_factory() as session:
+            u1 = aliased(User)
+            u2 = aliased(User)
+
+            objs = session.query(
+                u1.username, u2.username, u2.meet_group, Meet.season, Meet.completed,
+            ).join(
+                u1, u1.id == Meet.uid1
+            ).join(
+                u2, u2.id == Meet.uid2
+            ).all()
 
         return repo.filtration(spec, objs)

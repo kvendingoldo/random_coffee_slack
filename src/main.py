@@ -2,7 +2,9 @@
 
 import os
 import sys
+import re
 
+from tabulate import tabulate
 from multiprocessing import Process
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -49,6 +51,11 @@ def rcb_command(body, ack, say):
                 flow_stop(ack, body)
         elif msg == "change_meet_group":
             flow_change_meet_group(body, ack, say)
+        elif re.match(r"get_group_statistic +", msg):
+            flow_get_group_statistic(body, ack, say)
+        elif re.match(r"get_group_statistic[^\S\n\t]?", msg):
+            ack()
+            say(text=messages.FLOW_GET_STATISTIC_ERROR_FORGET_GROUP)
         else:
             ack()
             say(text=messages.COMMAND_NOT_FOUND)
@@ -129,6 +136,56 @@ def action_change_meet_group(ack, body, client):
     )
 
 
+def flow_get_group_statistic(body, ack, say):
+    uid = body['user_id']
+    logger.info(f"flow::get group statistic for user {uid}")
+    ack()
+
+    required_group = body["text"].replace("get_group_statistic", "").strip()
+
+    if groups.check_group_exist(config["generated"]["groups"], required_group):
+        if groups.is_uid_admin_for_group(config["generated"]["groups"], required_group, uid):
+            season_id = season.get()
+
+            list_of_meets = []
+            for meet in meet_repo.list_humanreadable({"season": season_id, "meet_group": required_group}):
+                list_of_meets.append([meet[0], meet[1], meet[4]])
+
+            list_of_users = []
+            for user in user_repo.list(spec={"meet_group": required_group}):
+                list_of_users.append([user.username, user.pause_in_weeks])
+
+            blocks = [{
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_GET_STATISTIC.format(
+                        required_group,
+                        "```" + tabulate(list_of_users, headers=["Name", "Pause in weeks"], tablefmt="presto") + "```",
+                        "```" + tabulate(list_of_meets, headers=["U1", "U2", "Completed"], tablefmt="presto") + "```"
+                    )
+                }
+            }]
+        else:
+            blocks = [{
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": messages.FLOW_GET_STATISTIC_ERROR_NOT_ADMIN.format(required_group)
+                }
+            }]
+    else:
+        blocks = [{
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": messages.FLOW_GET_STATISTIC_ERROR_GROUP_DNOT_EXIST.format(required_group)
+            }
+        }]
+
+    say(text="You have a new notification in the chat", blocks=blocks)
+
+
 def flow_change_meet_group(body, ack, say):
     uid = body['user_id']
     logger.info(f"flow::change meet location for user {uid}")
@@ -173,7 +230,7 @@ def flow_status(body, ack, say):
         week_msg = f"in {pause_in_weeks} weeks"
 
     if not groups.check_group_enabled(group=usr.meet_group,
-                                      groups=groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])):
+                                      groups=config["generated"]["groups"]):
         group_status = "disabled"
     else:
         group_status = "enabled"
@@ -302,7 +359,7 @@ def flow_participate_2(ack, body, client):
                     "emoji": True
                 },
                 "options": msg.generate_groups(
-                    groups=groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
+                    groups=config["generated"]["groups"]
                 ),
                 "action_id": "m_group"
             }

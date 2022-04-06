@@ -5,6 +5,7 @@ import time
 import yaml
 
 from datetime import date
+from utils import groups
 
 
 def load(yaml_path):
@@ -22,6 +23,9 @@ def load(yaml_path):
     }
 
     config["database"]["password"] = db_password
+
+    config["generated"] = {}
+    config["generated"]["groups"] = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
 
     return config
 

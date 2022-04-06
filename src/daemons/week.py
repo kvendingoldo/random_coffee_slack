@@ -14,7 +14,7 @@ def care(client, config):
     user_repo, ntf_repo, rating_repo, meet_repo, metadata_repo = db_utils.get_repos(config)
 
     while True:
-        config_meet_groups = groups.get_groups(config["bot"]["locations"], config["bot"]["groups"])
+        config_meet_groups = config["generated"]["groups"]
         weekday, hour = cfg_utils.get_week_info(config)
 
         season_id = season.get()
