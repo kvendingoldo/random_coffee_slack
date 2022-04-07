@@ -140,8 +140,9 @@ def flow_get_group_statistic(body, ack, say):
             season_id = season.get()
 
             list_of_meets = []
-            for meet in meet_repo.list_humanreadable({"season": season_id, "meet_group": required_group}):
-                list_of_meets.append([meet[0], meet[1], meet[4]])
+            for meet in meet_repo.list_humanreadable():
+                if (meet[2] == required_group or meet[3] == required_group) and meet[4] == season_id:
+                    list_of_meets.append([meet[0], meet[1], meet[4]])
 
             list_of_users = []
             for user in user_repo.list(spec={"meet_group": required_group}):

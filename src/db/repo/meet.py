@@ -170,17 +170,17 @@ class MeetRepository:
 
         return repo.filtration(spec, objs)
 
-    def list_humanreadable(self, spec: Mapping = None) -> list:
+    def list_humanreadable(self) -> list:
         with self.session_factory() as session:
             u1 = aliased(User)
             u2 = aliased(User)
 
             objs = session.query(
-                u1.username, u2.username, u2.meet_group, Meet.season, Meet.completed,
+                u1.username, u2.username, u1.meet_group, u2.meet_group, Meet.season, Meet.completed
             ).join(
                 u1, u1.id == Meet.uid1
             ).join(
                 u2, u2.id == Meet.uid2
             ).all()
 
-        return repo.filtration(spec, objs)
+        return objs
