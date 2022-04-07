@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from utils import msg
 
 DONUT = {
     "type": "image",
@@ -12,10 +13,12 @@ LIST_OF_COMMANDS = [
     ["/rcb status", "get my current status"],
     ["/rcb stop", "stop participating in Random Coffee"],
     ["/rcb quit", "quit Random Coffee meets"],
-    ["/rcb change_meet_group ", "allows to change meeting group; 'worldwide' by default"],
-    ["/rcb get_group_statistic <group_name>", "allows admin to check group statistic"],
-    ["/rcb help", "help"]
+    ["/rcb change_meet_group ", 'allows to change meeting group; "worldwide" by default'],
+    ["/rcb get_group_statistic <group_name>", "allows check group statistic for admins"],
+    ["/rcb help", "shows this help"]
 ]
+
+FLOW_HELP_BLOCK = msg.generate_help_msg_block(LIST_OF_COMMANDS)
 
 MEET_REMINDER = [
     {

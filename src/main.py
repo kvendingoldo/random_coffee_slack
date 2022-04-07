@@ -36,7 +36,7 @@ def rcb_command(body, ack, say):
             flow_participate_0(body, ack, say)
         elif msg == "help":
             ack()
-            say(text="You have a new notification in the chat", blocks=messages.FLOW_HELP_BLOCK)
+            say(text="You have a new notification in the chat", blocks=elements.FLOW_HELP_BLOCK)
         elif msg == "quit":
             flow_quit(body, ack, say)
         elif msg == "status":
@@ -73,7 +73,7 @@ def action_help(ack, body, client):
         channel=body['channel']['id'],
         ts=msg.get_ts(body),
         text="You have a new notification in the chat",
-        blocks=messages.FLOW_HELP_BLOCK
+        blocks=elements.FLOW_HELP_BLOCK
     )
 
 
@@ -356,7 +356,17 @@ def flow_participate_2(ack, body, client):
                 ),
                 "action_id": "m_group"
             }
-        }
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "plain_text",
+                    "emoji": True,
+                    "text": "\"worldwide\" will be the best option if you do not know meeting group yet"
+                }
+            ]
+        },
     ]
 
     client.chat_update(

@@ -1,34 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from constants import elements
+USER_NOT_FOUND = "Your ID is not found in the :rcb: system. " \
+                 "Looks like you didn't register via `/rcb start` command OR executed /rcb quit command"
 
-from tabulate import tabulate
+COMMAND_NOT_FOUND = ":rcb: Command not found. Use `/rcb help` command to get help"
 
-USER_NOT_FOUND = "Your ID is not found in the RCB system. " \
-                 "Looks like you didn't register via /rcb start command OR executed /rcb quit command"
-
-COMMAND_NOT_FOUND = "Command not found. Use '/rcb help' command to get help"
-
-FLOW_HELP_BLOCK = [{
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Available commands* \n\n {0}".format(
-            "\n".join(
-                [("`" + element[0].ljust(40, " ") + " " + element[1] + "`") for element in elements.LIST_OF_COMMANDS])
-        )
-    }
-}]
-
-FLOW_STATUS = "Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
+FLOW_STATUS = ":rcb: Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
               "Your current meeting group is *{2}* (status: *{3}*)"
 
-FLOW_QUIT = "Sorry about your choice. Hope to see you again soon. " \
-            "Just write /rcb start again in this case. Information about your profile was deleted."
+FLOW_QUIT = ":pensive: Sorry about your choice. Hope to see you again soon. Just write `/rcb start` again in this case. \n " \
+            "Information about your profile was deleted."
 
 FLOW_STOP = "Please, choose a period to stop participating"
 
-ACTION_STOP = "I'm looking forward to seeing you when you come back"
+ACTION_STOP = ":pensive: I'm looking forward to seeing you when you come back"
 
 FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
                     "Don't worry, I'll find a new one and send you an additional notification when ready."
@@ -47,15 +32,14 @@ FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
 FLOW_PARTICIPATE_1 = "Tell me a little bit about yourself! \n\n" \
                      "What is your location?"
 
-FLOW_PARTICIPATE_2 = "Please, choose a group in which you want to have a meeting \n\n" \
-                     "(`worldwide` will be the best option if you do not know meeting group yet)"
+FLOW_PARTICIPATE_2 = "Please, choose a group in which you want to have a meeting"
 
-FLOW_PARTICIPATE_3 = "Wow! Now you’re a Random coffee participant! \n\n" \
+FLOW_PARTICIPATE_3 = ":rcb: Wow! Now you’re a Random coffee participant! :muscle: :rocket:  \n\n" \
                      "What’s next? \n\n" \
-                     "1. Every Monday you’ll receive the name of your next coffee partner \n" \
-                     "2. Slack them, agree on a date and choose a platform to meet: " \
+                     ":one: Every Monday you’ll receive the name of your next coffee partner \n" \
+                     ":two: Slack them, agree on a date and choose a platform to meet: " \
                      "zoom, skype, meet or even office in your location? \n" \
-                     "3. Be interested and punctual. No one wants their coffee break to be ruined."
+                     ":three: Be interested and punctual. No one wants their :coffee: to be ruined."
 
 FLOW_WEEK_YES = "Great! Next Monday I’ll choose one more amazing coffee partner for you!"
 FLOW_WEEK_PAUSE_1W = "I see. Let's do this again next week!"
@@ -70,7 +54,7 @@ FLOW_GET_STATISTIC_ERROR_GROUP_DNOT_EXIST = "Sorry, `{0}` group does not exist"
 FLOW_GET_STATISTIC_ERROR_NOT_ADMIN = "Sorry, this is prohibited for you, because you are not admin of `{0}` group"
 FLOW_GET_STATISTIC_ERROR_FORGET_GROUP = "Looks like that you forget to specify group name; Use `/rcb get_group_statistic <group_name>` command"
 
-FLOW_CHANGE_MEET_GROUP = "Choose a group in which you want to have a meeting"
+FLOW_CHANGE_MEET_GROUP = "👋 Choose a group in which you want to have a meeting"
 
 MEET_LOOKING = "Hey!👋 \n\n" \
                "I'm still looking for a partner for you. \n\n" \

@@ -128,3 +128,35 @@ def generate_groups(groups):
             }
         )
     return result
+
+
+def generate_help_msg_block(commands):
+    res = [{"type": "section", "text": {"type": "mrkdwn", "text": ":rcb: *List of Random Coffee Bot commands*"}}]
+
+    for command in commands:
+        res.append(
+            {"type": "section", "text": {"type": "mrkdwn", "text": f"{command[0]}"}}
+        )
+        res.append(
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "image",
+                        "image_url": "https://api.slack.com/img/blocks/bkb_template_images/tripAgentLocationMarker.png",
+                        "alt_text": "Command description"
+                    },
+                    {
+                        "type": "plain_text",
+                        "emoji": True,
+                        "text": command[1]
+                    }
+                ]
+            }
+        )
+        res.append({"type": "divider"})
+
+    res.append({"type": "context",
+                "elements": [{"type": "mrkdwn", "text": "❓If you have any questions contact @asharov or @ytsvetkova"}]})
+
+    return res
