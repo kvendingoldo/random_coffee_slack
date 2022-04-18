@@ -119,7 +119,7 @@ database:
 
 daemons:
   week:
-    poolPeriod: 10800 # 3h
+    poolPeriod: 3600 # 1h
 
 notifications:
   dryRun: true
