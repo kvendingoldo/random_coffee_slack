@@ -32,16 +32,17 @@ def generate_groups(locations, groups):
     result = []
 
     for group in get_groups(locations, groups):
-        result.append(
-            {
-                "text": {
-                    "type": "plain_text",
-                    "text": group["displayName"],
-                    "emoji": True
-                },
-                "value": group["name"]
-            }
-        )
+        if group["enabled"]:
+            result.append(
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": group["displayName"],
+                        "emoji": True
+                    },
+                    "value": group["name"]
+                }
+            )
 
     return result
 

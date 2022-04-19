@@ -228,8 +228,17 @@ def flow_status(body, ack, say):
     else:
         group_status = "enabled"
 
+    amount_active_ppl_in_user_group = 0
+    for user in user_repo.list(spec={"meet_group": usr.meet_group}):
+        if user.pause_in_weeks == "0":
+            amount_active_ppl_in_user_group += 1
+
     ack()
-    say(text=messages.FLOW_STATUS.format(pause_in_weeks, week_msg, usr.meet_group, group_status))
+    say(text=messages.FLOW_STATUS.format(pause_in_weeks,
+                                         week_msg,
+                                         usr.meet_group,
+                                         group_status,
+                                         amount_active_ppl_in_user_group))
 
 
 def flow_quit(body, ack, say):

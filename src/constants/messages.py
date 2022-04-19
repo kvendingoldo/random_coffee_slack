@@ -5,8 +5,9 @@ USER_NOT_FOUND = "Your ID is not found in the :rcb: system. " \
 
 COMMAND_NOT_FOUND = ":rcb: Command not found. Use `/rcb help` command to get help"
 
-FLOW_STATUS = ":rcb: Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
-              "Your current meeting group is *{2}* (status: *{3}*)"
+FLOW_STATUS = "Your current status: *{0}* weeks of pause; It means that you'll get your pair *{1}* \n" \
+              "Your current meeting group is *{2}* (status: *{3}*) \n" \
+              "For now the group has *{4}* active users at all."
 
 FLOW_QUIT = ":pensive: Sorry about your choice. Hope to see you again soon. Just write `/rcb start` again in this case. \n " \
             "Information about your profile was deleted."

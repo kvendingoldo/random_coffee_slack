@@ -11,96 +11,102 @@ bot:
       additionalUsers: []
       admins: []
     saratov:
-      displayName: "Saratov"
+      displayName: "RU: Saratov"
       enabledAsGroup: true
       additionalUsers: []
       admins:
-        - U4BSUSM5Z
-        - UKDHWCUAG
+        - U4BSUSM5Z # asharov
+        - UKDHWCUAG # ytsvetkova
     spb:
-      displayName: "Saint Petersburg"
+      displayName: "RU: Saint Petersburg"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     moscow:
-      displayName: "Moscow"
+      displayName: "RU: Moscow"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     kazan:
-      displayName: "Kazan"
+      displayName: "RU: Kazan"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     kharkiv:
-      displayName: "Kharkiv"
+      displayName: "UA: Kharkiv"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     lviv:
-      displayName: "Lviv"
+      displayName: "UA: Lviv"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     kiev:
-      displayName: "Kyiv"
+      displayName: "UA: Kyiv"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     dnipro:
-      displayName: "Dnipro"
-      enabledAsGroup: false
-      additionalUsers: []
-      admins: []
-    gdansk:
-      displayName: "Gdansk"
+      displayName: "UA: Dnipro"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     ljubljana:
-      displayName: "Ljubljana"
+      displayName: "SI: Ljubljana"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     wroclaw:
-      displayName: "Wroclaw"
-      enabledAsGroup: false
-      additionalUsers: []
-      admins: []
-    krakow:
-      displayName: "Krakow"
-      enabledAsGroup: false
-      additionalUsers: []
-      admins: []
-    belgrade:
-      displayName: "Belgrade"
+      displayName: "PL: Wroclaw"
       enabledAsGroup: true
       additionalUsers: []
       admins:
-        - U4BSUSM5Z
-        - UKDHWCUAG
+        - U4BSUSM5Z   # asharov
+        - U028UJ77Z5X # kkriukova
+    krakow:
+      displayName: "PL: Krakow"
+      enabledAsGroup: true
+      additionalUsers: []
+      admins:
+        - U4BSUSM5Z   # asharov
+        - U028UJ77Z5X # kkriukova
+    gdansk:
+      displayName: "PL: Gdansk"
+      enabledAsGroup: true
+      additionalUsers: []
+      admins:
+        - U4BSUSM5Z   # asharov
+        - U028UJ77Z5X # kkriukova
+    belgrade:
+      displayName: "RS: Belgrade"
+      enabledAsGroup: true
+      additionalUsers: []
+      admins:
+        - U4BSUSM5Z # asharov
+        - UKDHWCUAG # ytsvetkova
     london:
-      displayName: "London"
+      displayName: "GB: London"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     chisinau:
-      displayName: "Chisinau"
+      displayName: "MD: Chisinau"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     guadalajara:
-      displayName: "Guadalajara"
+      displayName: "MX: Guadalajara"
       enabledAsGroup: false
       additionalUsers: []
       admins: []
     yerevan:
-      displayName: "Yerevan"
+      displayName: "AM: Yerevan"
       enabledAsGroup: true
       additionalUsers: []
       admins:
-        - U4BSUSM5Z
-        - UKDHWCUAG
+        - U4BSUSM5Z # asharov
+        - UKDHWCUAG # ytsvetkova
 
   groups:
     worldwide:
@@ -108,15 +114,22 @@ bot:
       enabled: true
       additionalUsers: []
       admins:
-        - U4BSUSM5Z
-        - UKDHWCUAG
+        - U4BSUSM5Z # asharov
+        - UKDHWCUAG # ytsvetkova
     eng_data_analytics:
       displayName: "ENG: Data Analytics"
       enabled: true
       additionalUsers: []
       admins:
-        - U4BSUSM5Z
-        - U02E7A02DDH
+        - U4BSUSM5Z   # asharov
+        - U02E7A02DDH # adedov
+    a_calibrate:
+      displayName: "ACC: Calibrate"
+      enabled: true
+      additionalUsers: []
+      admins:
+        - U4BSUSM5Z   # asharov
+        - U02E7A02DDH # adedov
 
 database:
   host: mysql
