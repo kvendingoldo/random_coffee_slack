@@ -13,6 +13,8 @@
 - [x] rename m_locations => groups
 - [x] add choice of meet_location (meet_group) during initial flow
 - [ ] add support of multiple user group via multiple user select
+- [ ] add an ability to create and maintain groups w/o manual config change
+- [ ] allow admin to kick and ban users in group
 - [ ] add an ability to set meets based on language
 * flow: choice a language on which you wanna talk `<Does not matter|...>`?
 * flow: choice a location in which you wanna have meeting `<online|...>`?

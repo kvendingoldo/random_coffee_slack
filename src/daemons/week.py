@@ -24,9 +24,9 @@ def care(client, config):
         logger.info(f"Care about the current week. Today is {weekday} day of week ...")
 
         # NOTE: create meets
-        if weekday <= 5:
+        if weekday <= 3:
             for m_group in repo.get_unique_meet_groups(users):
-                if hour <= 13 and weekday == 5:
+                if weekday == 3:
                     additional_uids = groups.get_group_additional_users(m_group, config_meet_groups)
                 else:
                     additional_uids = []
