@@ -5,6 +5,7 @@ import re
 from loguru import logger
 
 from utils import season
+from utils import time as utils_time
 from models.notification import Notification
 from db.exceptions import NotificationNotFoundError
 
@@ -75,9 +76,13 @@ def send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block):
             )
 
 
-def wrapper_user(client, ntf_repo, uid, msg_type, msg_text, dry_run=True, msg_blocks=None, inline_msg_block=False):
+def wrapper_user(client, ntf_repo, usr_info, msg_type, msg_text, dry_run=True, msg_blocks=None, inline_msg_block=False):
     if msg_blocks is None:
         msg_blocks = []
+
+    uid = usr_info["user"]["id"]
+    user_name = usr_info["user"]["name"]
+    user_time = utils_time.get_current_time(usr_info["user"]["tz_offset"])
 
     try:
         ntf = ntf_repo.get({"uid": uid, "type": msg_type, "season": season.get()})
@@ -86,16 +91,17 @@ def wrapper_user(client, ntf_repo, uid, msg_type, msg_text, dry_run=True, msg_bl
         ntf = Notification(uid=uid, season=season.get(), type=msg_type, status=False)
         ntf_repo.add(ntf)
     except Exception as ex:
-        logger.error(f"{msg_type} message didn't send for user #{uid}, error: {ex}")
+        logger.error(
+            f"{msg_type} message didn't send for user {user_name} ({uid}). User time is {user_time}. Error: {ex}")
         return
 
     if ntf.status:
-        logger.info(f"User {uid} has already notified about {msg_type}")
+        logger.info(f"User {user_name} ({uid}) has already notified about {msg_type}. User time is {user_time}.")
     else:
         send_msg_user(client, uid, dry_run, msg_text, msg_blocks, inline_msg_block)
         ntf.status = True
         ntf_repo.update(ntf)
-        logger.info(f"{msg_type} message sent for {uid}")
+        logger.info(f"{msg_type} message sent for {user_name} ({uid}); User time is {user_time}.")
 
 
 def generate_locations(locations):

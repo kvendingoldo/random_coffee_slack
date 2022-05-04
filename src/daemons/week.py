@@ -2,10 +2,10 @@
 
 import time
 
-
 from loguru import logger
 from utils import season, repo, msg, groups
 from utils import config as cfg_utils
+from utils import time as utils_time
 from constants import messages, elements, common
 from db import utils as db_utils
 
@@ -15,7 +15,7 @@ def care(client, config):
 
     while True:
         config_meet_groups = config["generated"]["groups"]
-        weekday, hour = cfg_utils.get_week_info(config)
+        weekday, _ = cfg_utils.get_week_info(config)
 
         season_id = season.get()
         ntf_dry_run = config["notifications"]["dryRun"]
@@ -64,11 +64,18 @@ def care(client, config):
                 "uid1": meet.uid2, "uid2": meet.uid1, "meet_id": meet.id, "unique": unique_u2, "is_host": False
             })
 
-        # NOTE: notify users
+        #
+        # FLOW: Notify users about week events
+        #
         for pair in pairs:
             msg_type_suffix = "" if pair['unique'] else "_NU"
 
-            # NOTE: send info message
+            usr_info = client.users_info(user=pair["uid1"])
+            hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+            #
+            # FLOW: send info message
+            #
             if weekday <= 5:
                 info_msg = messages.MEET_INFO if pair['unique'] else messages.MEET_INFO_NOT_UNIQUE
 
@@ -80,30 +87,36 @@ def care(client, config):
                 msg.wrapper_user(
                     client=client,
                     ntf_repo=ntf_repo,
-                    uid=pair["uid1"],
+                    usr_info=usr_info,
                     msg_type=common.NTF_TYPES.info + msg_type_suffix,
                     msg_text=info_msg.format(pair["uid2"]),
                     dry_run=ntf_dry_run
                 )
-            # NOTE: send reminder message
+
+            #
+            # FLOW: send reminder message
+            #
             if 3 <= weekday <= 4:
                 msg.wrapper_user(
                     client=client,
                     ntf_repo=ntf_repo,
-                    uid=pair["uid1"],
+                    usr_info=usr_info,
                     msg_type=common.NTF_TYPES.reminder + msg_type_suffix,
                     msg_text=(messages.MEET_REMINDER).format(pair["uid2"]),
                     dry_run=ntf_dry_run,
                     msg_blocks=elements.MEET_REMINDER,
                     inline_msg_block=True
                 )
-            # NOTE: send feedback & next_week messages
+
+            #
+            # FLOW: ask user feedback
+            #
             if weekday == 5:
-                if 10 <= hour <= 16:
+                if 16 <= hour <= 20:
                     msg.wrapper_user(
                         client=client,
                         ntf_repo=ntf_repo,
-                        uid=pair["uid1"],
+                        usr_info=usr_info,
                         msg_type=common.NTF_TYPES.feedback + msg_type_suffix,
                         msg_text=(messages.MEET_FEEDBACK).format(pair["uid2"]),
                         dry_run=ntf_dry_run,
@@ -111,26 +124,40 @@ def care(client, config):
                         inline_msg_block=True
                     )
 
-        # NOTE: notify users who do not have a pair
+        #
+        # FLOW: notify users who do not have a pair
+        #       we're trying to send notification about next week from Mon to Fri before 1AM
+        #       after Fri 1AM unsuccessful search message will be sent
+        #
         if 1 <= weekday <= 5:
-            if hour <= 13:
-                message = messages.MEET_LOOKING
-            else:
-                if weekday == 5:
-                    message = messages.MEET_UNSUCCESSFUL_SEARCH
-
             for usr in users:
+                usr_info = client.users_info(user=usr.id)
+                hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+                if hour <= 13:
+                    message = messages.MEET_LOOKING
+                else:
+                    if weekday == 5:
+                        message = messages.MEET_UNSUCCESSFUL_SEARCH
+                    else:
+                        continue
+
                 if usr.id not in users_with_pair:
                     if not groups.check_group_enabled(group=usr.meet_group, groups=config_meet_groups):
                         message = messages.FLOW_PARTNER_GROUP_DISABLED.format(usr.meet_group)
 
                     msg.wrapper_user(
-                        client=client, ntf_repo=ntf_repo, uid=usr.id,
-                        msg_type=common.NTF_TYPES.looking, msg_text=message,
+                        client=client,
+                        ntf_repo=ntf_repo,
+                        usr_info=usr_info,
+                        msg_type=common.NTF_TYPES.looking,
+                        msg_text=message,
                         dry_run=ntf_dry_run
                     )
 
-        # NOTE: Ask about the next week
+        #
+        # FLOW: Ask users about the next week
+        #
         if weekday == 5:
             for usr in user_repo.list():
                 if usr.pause_in_weeks != "inf":
@@ -141,8 +168,11 @@ def care(client, config):
                         usr.pause_in_weeks = str(pause - 1)
                         user_repo.update(usr)
                     else:
-                        # Notify users who have pause = 0 | 1 week about the next week
-                        if hour >= 17:
+                        usr_info = client.users_info(user=usr.id)
+                        hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+                        # Notify users who have "pause" = 0 or 1 week about the next week
+                        if hour >= 16:
                             if pause == 1:
                                 msg_text = messages.MEET_NEXT_AFTER_PAUSE
                                 msg_blocks = elements.MEET_NEXT_AFTER_PAUSE
@@ -151,7 +181,9 @@ def care(client, config):
                                 msg_blocks = elements.MEET_NEXT
 
                             msg.wrapper_user(
-                                client=client, ntf_repo=ntf_repo, uid=usr.id,
+                                client=client,
+                                ntf_repo=ntf_repo,
+                                usr_info=usr_info,
                                 msg_type=common.NTF_TYPES.next_week, msg_text=msg_text,
                                 dry_run=ntf_dry_run,
                                 msg_blocks=msg_blocks, inline_msg_block=True

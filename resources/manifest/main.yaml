@@ -1,6 +1,3 @@
-_metadata:
-  major_version: 1
-  minor_version: 1
 display_information:
   name: Random Coffee Bot
   description: If you have any questions - contact @asharov or @ytsvetkova
@@ -9,6 +6,11 @@ features:
   bot_user:
     display_name: Random Coffee Bot
     always_online: true
+  shortcuts:
+    - name: /rcb help
+      type: global
+      callback_id: help
+      description: help
   slash_commands:
     - command: /rcb
       description: Use random coffee bot
@@ -17,11 +19,13 @@ oauth_config:
   scopes:
     user:
       - im:read
+      - users:read
     bot:
       - commands
       - im:history
       - incoming-webhook
       - chat:write
+      - users:read
 settings:
   event_subscriptions:
     bot_events:
