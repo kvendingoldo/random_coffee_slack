@@ -23,7 +23,7 @@ jobs:
       -
         name: Set application version
         id: set_version
-        uses: kvendingoldo/semver-action@v1.9
+        uses: kvendingoldo/semver-action@v1.10
       -
         name: Print image version
         run: echo ${{ steps.set_version.outputs.safe_version }}
