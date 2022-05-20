@@ -71,6 +71,7 @@ def care(client, config):
             msg_type_suffix = "" if pair['unique'] else "_NU"
 
             usr_info = client.users_info(user=pair["uid1"])
+            # TODO: add try catch
             hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
 
             #
@@ -132,6 +133,7 @@ def care(client, config):
         if 1 <= weekday <= 5:
             for usr in users:
                 usr_info = client.users_info(user=usr.id)
+                # TODO: add try catch
                 hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
 
                 if hour <= 13:
@@ -169,6 +171,7 @@ def care(client, config):
                         user_repo.update(usr)
                     else:
                         usr_info = client.users_info(user=usr.id)
+                        # TODO: add try catch
                         hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
 
                         # Notify users who have "pause" = 0 or 1 week about the next week

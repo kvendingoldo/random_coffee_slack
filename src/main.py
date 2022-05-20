@@ -8,6 +8,7 @@ from tabulate import tabulate
 from multiprocessing import Process
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_bolt.workflows.step import WorkflowStep
 from loguru import logger
 from db.exceptions import UserNotFoundError, RatingNotFoundError, NotificationNotFoundError, MetadataNotFoundError
 from db import utils as db_utils
@@ -563,7 +564,7 @@ def flow_meet_rate(ack, body, client, rating_diff):
         meet.completed = True
         meet_repo.update(meet)
     else:
-        logger.error("Meet hasn't been found for %s", uid1)
+        logger.error(f"Meet hasn't been found for {uid1}")
 
     try:
         rating = rating_repo.get_by_ids(uid1, uid2)
@@ -687,6 +688,32 @@ def flow_meet_was_not(ack, body, client):
     flow_meet_p1(ack, body, client)
 
 
+#
+# workflows
+#
+def wf_start_edit(ack, step, configure):
+    ack()
+    configure()
+
+
+def wf_start_save(ack, view, update):
+    ack()
+    update()
+
+
+def wf_start_execute(step, complete, fail):
+    inputs = step["inputs"]
+    outputs = {
+    }
+    complete(outputs=outputs)
+
+    print("abc")
+
+    # if something went wrong
+    error = {"message": "Just testing step failure!"}
+    fail(error=error)
+
+
 if __name__ == "__main__":
     log_dir = os.getenv("RCB_LOG_DIR")
     logger.add(
@@ -706,6 +733,15 @@ if __name__ == "__main__":
         daemon=True
     )
     week.start()
+
+    wf_start = WorkflowStep(
+        callback_id="start",
+        edit=wf_start_edit,
+        save=wf_start_save,
+        execute=wf_start_execute,
+    )
+
+    app.step(wf_start)
 
     bot = Process(
         target=SocketModeHandler(app, config["slack"]["appToken"]).start(),
