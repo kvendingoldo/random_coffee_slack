@@ -15,7 +15,7 @@ def care(client, config):
 
     while True:
         config_meet_groups = config["generated"]["groups"]
-        weekday, _ = cfg_utils.get_week_info(config)
+        weekday, internal_bot_hour = cfg_utils.get_week_info(config)
 
         season_id = season.get()
         ntf_dry_run = config["notifications"]["dryRun"]
@@ -71,8 +71,12 @@ def care(client, config):
             msg_type_suffix = "" if pair['unique'] else "_NU"
 
             usr_info = client.users_info(user=pair["uid1"])
-            # TODO: add try catch
-            hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+            try:
+                hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+            except KeyError:
+                logger.error(f"Failed to take tz_offset for {pair['uid1']}")
+                hour = internal_bot_hour
 
             #
             # FLOW: send info message
@@ -133,8 +137,12 @@ def care(client, config):
         if 1 <= weekday <= 5:
             for usr in users:
                 usr_info = client.users_info(user=usr.id)
-                # TODO: add try catch
-                hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+                try:
+                    hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+                except KeyError:
+                    logger.error(f"Failed to take tz_offset for {usr.id}")
+                    hour = internal_bot_hour
 
                 if hour <= 13:
                     message = messages.MEET_LOOKING
@@ -171,8 +179,12 @@ def care(client, config):
                         user_repo.update(usr)
                     else:
                         usr_info = client.users_info(user=usr.id)
-                        # TODO: add try catch
-                        hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+
+                        try:
+                            hour = utils_time.get_current_hour(usr_info["user"]["tz_offset"])
+                        except KeyError:
+                            logger.error(f"Failed to take tz_offset for {usr.id}")
+                            hour = internal_bot_hour
 
                         # Notify users who have "pause" = 0 or 1 week about the next week
                         if hour >= 16:
