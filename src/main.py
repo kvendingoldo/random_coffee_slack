@@ -42,6 +42,8 @@ def rcb_command(body, ack, say):
             flow_quit(body, ack, say)
         elif msg == "status":
             flow_status(body, ack, say)
+        elif msg == "continue":
+            flow_continue(body, ack, say)
         elif msg == "stop":
             try:
                 _ = user_repo.get_by_id(body["user_id"])
@@ -76,6 +78,20 @@ def action_help(ack, body, client):
         text="You have a new notification in the chat",
         blocks=elements.FLOW_HELP_BLOCK
     )
+
+
+def flow_continue(ack, body, say):
+    print(body)
+    uid = body['user_id']
+
+    logger.info(f"flow::continue for user {uid}")
+
+    ack()
+    say(text=messages.FLOW_CONTINUE)
+
+    usr = user_repo.get_by_id(body["user"]["id"])
+    usr.pause_in_weeks = "0"
+    user_repo.update(usr)
 
 
 def flow_stop(ack, body):

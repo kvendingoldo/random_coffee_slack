@@ -146,11 +146,11 @@ def care(client, config):
 
                 if hour <= 13:
                     message = messages.MEET_LOOKING
-                else:
+                elif 16 > hour >= 13:
                     if weekday == 5:
                         message = messages.MEET_UNSUCCESSFUL_SEARCH
-                    else:
-                        continue
+                else:
+                    continue
 
                 if usr.id not in users_with_pair:
                     if not groups.check_group_enabled(group=usr.meet_group, groups=config_meet_groups):
@@ -187,7 +187,7 @@ def care(client, config):
                             hour = internal_bot_hour
 
                         # Notify users who have "pause" = 0 or 1 week about the next week
-                        if hour >= 16:
+                        if hour > 16:
                             if pause == 1:
                                 msg_text = messages.MEET_NEXT_AFTER_PAUSE
                                 msg_blocks = elements.MEET_NEXT_AFTER_PAUSE
