@@ -13,7 +13,7 @@ FLOW_QUIT = ":pensive: Sorry about your choice. Hope to see you again soon. Just
             "Information about your profile was deleted."
 
 FLOW_STOP = "Please, choose a period to stop participating"
-FLOW_CONTINUE = ""
+FLOW_CONTINUE = "Welcome back! I will try to find a pair for you soon"
 
 ACTION_STOP = ":pensive: I'm looking forward to seeing you when you come back"
 

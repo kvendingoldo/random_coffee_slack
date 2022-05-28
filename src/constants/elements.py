@@ -12,6 +12,7 @@ LIST_OF_COMMANDS = [
     ["/rcb start", "participate in Random Coffee meets"],
     ["/rcb status", "get my current status"],
     ["/rcb stop", "stop participating in Random Coffee"],
+    ["/rcb continue", "continue to participate in meetings after pause"],
     ["/rcb quit", "quit Random Coffee meets"],
     ["/rcb change_meet_group ", 'allows to change meeting group; "worldwide" by default'],
     ["/rcb get_group_statistic <group_name>", "allows check group statistic for admins"],
