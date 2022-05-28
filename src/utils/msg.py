@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import re
+import pytz
+import datetime
 
 from loguru import logger
 
@@ -82,7 +84,17 @@ def wrapper_user(client, ntf_repo, usr_info, msg_type, msg_text, dry_run=True, m
 
     uid = usr_info["user"]["id"]
     user_name = usr_info["user"]["name"]
-    user_time = utils_time.get_current_time(usr_info["user"]["tz_offset"])
+
+    try:
+        offset = usr_info["user"]["tz_offset"]
+    except KeyError:
+        tz = pytz.timezone('Asia/Calcutta')
+        dt = datetime.datetime.utcnow()
+        offset = tz.utcoffset(dt).seconds
+
+        logger.error(f"Failed to take tz_offset for {uid}; Standard {offset} will use used")
+
+    user_time = utils_time.get_current_time(offset)
 
     try:
         ntf = ntf_repo.get({"uid": uid, "type": msg_type, "season": season.get()})
