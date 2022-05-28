@@ -1,0 +1,418 @@
+
+
+name: Pacific/Kiritimati              , cc: KI        , offset: 50400 (14 hours)         , comments: Line Islands
+name: Pacific/Chatham                 , cc: NZ        , offset: 49500 (13.75 hours)      , comments: Chatham Islands
+name: Pacific/Fakaofo                 , cc: TK        , offset: 46800 (13 hours)         , comments:
+name: Antarctica/South_Pole           , cc: AQ        , offset: 46800 (13 hours)         , comments: Amundsen-Scott Station, South Pole
+name: Antarctica/McMurdo              , cc: AQ        , offset: 46800 (13 hours)         , comments: McMurdo Station, Ross Island
+name: Pacific/Tongatapu               , cc: TO        , offset: 46800 (13 hours)         , comments:
+name: Pacific/Enderbury               , cc: KI        , offset: 46800 (13 hours)         , comments: Phoenix Islands
+name: Pacific/Apia                    , cc: WS        , offset: 46800 (13 hours)         , comments:
+name: Pacific/Auckland                , cc: NZ        , offset: 46800 (13 hours)         , comments: most locations
+name: Asia/Magadan                    , cc: RU        , offset: 43200 (12 hours)         , comments: Moscow+08 - Magadan
+name: Pacific/Tarawa                  , cc: KI        , offset: 43200 (12 hours)         , comments: Gilbert Islands
+name: Asia/Anadyr                     , cc: RU        , offset: 43200 (12 hours)         , comments: Moscow+08 - Bering Sea
+name: Pacific/Wake                    , cc: UM        , offset: 43200 (12 hours)         , comments: Wake Island
+name: Pacific/Wallis                  , cc: WF        , offset: 43200 (12 hours)         , comments:
+name: Pacific/Funafuti                , cc: TV        , offset: 43200 (12 hours)         , comments:
+name: Asia/Kamchatka                  , cc: RU        , offset: 43200 (12 hours)         , comments: Moscow+08 - Kamchatka
+name: Pacific/Nauru                   , cc: NR        , offset: 43200 (12 hours)         , comments:
+name: Pacific/Kwajalein               , cc: MH        , offset: 43200 (12 hours)         , comments: Kwajalein
+name: Pacific/Fiji                    , cc: FJ        , offset: 43200 (12 hours)         , comments:
+name: Pacific/Majuro                  , cc: MH        , offset: 43200 (12 hours)         , comments: most locations
+name: Pacific/Norfolk                 , cc: NF        , offset: 41400 (11.5 hours)       , comments:
+name: Antarctica/Macquarie            , cc: AQ        , offset: 39600 (11 hours)         , comments: Macquarie Island Station, Macquarie Island
+name: Pacific/Kosrae                  , cc: FM        , offset: 39600 (11 hours)         , comments: Kosrae
+name: Australia/Currie                , cc: AU        , offset: 39600 (11 hours)         , comments: Tasmania - King Island
+name: Australia/Hobart                , cc: AU        , offset: 39600 (11 hours)         , comments: Tasmania - most locations
+name: Pacific/Guadalcanal             , cc: SB        , offset: 39600 (11 hours)         , comments:
+name: Australia/Sydney                , cc: AU        , offset: 39600 (11 hours)         , comments: New South Wales - most locations
+name: Asia/Sakhalin                   , cc: RU        , offset: 39600 (11 hours)         , comments: Moscow+07 - Sakhalin Island
+name: Australia/Lord_Howe             , cc: AU        , offset: 39600 (11 hours)         , comments: Lord Howe Island
+name: Pacific/Pohnpei                 , cc: FM        , offset: 39600 (11 hours)         , comments: Pohnpei (Ponape)
+name: Australia/Melbourne             , cc: AU        , offset: 39600 (11 hours)         , comments: Victoria
+name: Pacific/Efate                   , cc: VU        , offset: 39600 (11 hours)         , comments:
+name: Asia/Vladivostok                , cc: RU        , offset: 39600 (11 hours)         , comments: Moscow+07 - Amur River
+name: Pacific/Noumea                  , cc: NC        , offset: 39600 (11 hours)         , comments:
+name: Australia/Broken_Hill           , cc: AU        , offset: 37800 (10.5 hours)       , comments: New South Wales - Yancowinna
+name: Australia/Adelaide              , cc: AU        , offset: 37800 (10.5 hours)       , comments: South Australia
+name: Pacific/Port_Moresby            , cc: PG        , offset: 36000 (10 hours)         , comments:
+name: Asia/Yakutsk                    , cc: RU        , offset: 36000 (10 hours)         , comments: Moscow+06 - Lena River
+name: Australia/Brisbane              , cc: AU        , offset: 36000 (10 hours)         , comments: Queensland - most locations
+name: Pacific/Chuuk                   , cc: FM        , offset: 36000 (10 hours)         , comments: Chuuk (Truk) and Yap
+name: Antarctica/DumontDUrville       , cc: AQ        , offset: 36000 (10 hours)         , comments: Dumont-d'Urville Station, Terre Adelie
+name: Pacific/Saipan                  , cc: MP        , offset: 36000 (10 hours)         , comments:
+name: Pacific/Guam                    , cc: GU        , offset: 36000 (10 hours)         , comments:
+name: Australia/Lindeman              , cc: AU        , offset: 36000 (10 hours)         , comments: Queensland - Holiday Islands
+name: Australia/Darwin                , cc: AU        , offset: 34200 (9.5 hours)        , comments: Northern Territory
+name: Asia/Jayapura                   , cc: ID        , offset: 32400 (9 hours)          , comments: west New Guinea (Irian Jaya) & Malukus (Moluccas)
+name: Asia/Dili                       , cc: TL        , offset: 32400 (9 hours)          , comments:
+name: Asia/Irkutsk                    , cc: RU        , offset: 32400 (9 hours)          , comments: Moscow+05 - Lake Baikal
+name: Asia/Seoul                      , cc: KR        , offset: 32400 (9 hours)          , comments:
+name: Asia/Tokyo                      , cc: JP        , offset: 32400 (9 hours)          , comments:
+name: Asia/Pyongyang                  , cc: KP        , offset: 32400 (9 hours)          , comments:
+name: Pacific/Palau                   , cc: PW        , offset: 32400 (9 hours)          , comments:
+name: Australia/Eucla                 , cc: AU        , offset: 31500 (8.75 hours)       , comments: Western Australia - Eucla area
+name: Asia/Choibalsan                 , cc: MN        , offset: 28800 (8 hours)          , comments: Dornod, Sukhbaatar
+name: Asia/Urumqi                     , cc: CN        , offset: 28800 (8 hours)          , comments: most of Tibet & Xinjiang
+name: Asia/Hong_Kong                  , cc: HK        , offset: 28800 (8 hours)          , comments:
+name: Australia/Perth                 , cc: AU        , offset: 28800 (8 hours)          , comments: Western Australia - most locations
+name: Asia/Taipei                     , cc: TW        , offset: 28800 (8 hours)          , comments:
+name: Antarctica/Casey                , cc: AQ        , offset: 28800 (8 hours)          , comments: Casey Station, Bailey Peninsula
+name: Asia/Brunei                     , cc: BN        , offset: 28800 (8 hours)          , comments:
+name: Asia/Singapore                  , cc: SG        , offset: 28800 (8 hours)          , comments:
+name: Asia/Shanghai                   , cc: CN        , offset: 28800 (8 hours)          , comments: east China - Beijing, Guangdong, Shanghai, etc.
+name: Asia/Ulaanbaatar                , cc: MN        , offset: 28800 (8 hours)          , comments: most locations
+name: Asia/Krasnoyarsk                , cc: RU        , offset: 28800 (8 hours)          , comments: Moscow+04 - Yenisei River
+name: Asia/Harbin                     , cc: CN        , offset: 28800 (8 hours)          , comments: Heilongjiang (except Mohe), Jilin
+name: Asia/Chongqing                  , cc: CN        , offset: 28800 (8 hours)          , comments: central China - Sichuan, Yunnan, Guangxi, Shaanxi, Guizhou, etc.
+name: Asia/Kuala_Lumpur               , cc: MY        , offset: 28800 (8 hours)          , comments: peninsular Malaysia
+name: Asia/Kashgar                    , cc: CN        , offset: 28800 (8 hours)          , comments: west Tibet & Xinjiang
+name: Asia/Kuching                    , cc: MY        , offset: 28800 (8 hours)          , comments: Sabah & Sarawak
+name: Asia/Makassar                   , cc: ID        , offset: 28800 (8 hours)          , comments: east & south Borneo, Sulawesi (Celebes), Bali, Nusa Tengarra, west Timor
+name: Asia/Macau                      , cc: MO        , offset: 28800 (8 hours)          , comments:
+name: Asia/Manila                     , cc: PH        , offset: 28800 (8 hours)          , comments:
+name: Asia/Novokuznetsk               , cc: RU        , offset: 25200 (7 hours)          , comments: Moscow+03 - Novokuznetsk
+name: Asia/Phnom_Penh                 , cc: KH        , offset: 25200 (7 hours)          , comments:
+name: Asia/Pontianak                  , cc: ID        , offset: 25200 (7 hours)          , comments: west & central Borneo
+name: Asia/Novosibirsk                , cc: RU        , offset: 25200 (7 hours)          , comments: Moscow+03 - Novosibirsk
+name: Asia/Omsk                       , cc: RU        , offset: 25200 (7 hours)          , comments: Moscow+03 - west Siberia
+name: Asia/Vientiane                  , cc: LA        , offset: 25200 (7 hours)          , comments:
+name: Asia/Jakarta                    , cc: ID        , offset: 25200 (7 hours)          , comments: Java & Sumatra
+name: Indian/Christmas                , cc: CX        , offset: 25200 (7 hours)          , comments:
+name: Asia/Hovd                       , cc: MN        , offset: 25200 (7 hours)          , comments: Bayan-Olgiy, Govi-Altai, Hovd, Uvs, Zavkhan
+name: Asia/Ho_Chi_Minh                , cc: VN        , offset: 25200 (7 hours)          , comments:
+name: Asia/Bangkok                    , cc: TH        , offset: 25200 (7 hours)          , comments:
+name: Antarctica/Davis                , cc: AQ        , offset: 25200 (7 hours)          , comments: Davis Station, Vestfold Hills
+name: Indian/Cocos                    , cc: CC        , offset: 23400 (6.5 hours)        , comments:
+name: Asia/Rangoon                    , cc: MM        , offset: 23400 (6.5 hours)        , comments:
+name: Asia/Thimphu                    , cc: BT        , offset: 21600 (6 hours)          , comments:
+name: Asia/Qyzylorda                  , cc: KZ        , offset: 21600 (6 hours)          , comments: Qyzylorda (Kyzylorda, Kzyl-Orda)
+name: Indian/Chagos                   , cc: IO        , offset: 21600 (6 hours)          , comments:
+name: Asia/Yekaterinburg              , cc: RU        , offset: 21600 (6 hours)          , comments: Moscow+02 - Urals
+name: Asia/Dhaka                      , cc: BD        , offset: 21600 (6 hours)          , comments:
+name: Antarctica/Vostok               , cc: AQ        , offset: 21600 (6 hours)          , comments: Vostok Station, Lake Vostok
+name: Asia/Almaty                     , cc: KZ        , offset: 21600 (6 hours)          , comments: most locations
+name: Asia/Bishkek                    , cc: KG        , offset: 21600 (6 hours)          , comments:
+name: Asia/Kathmandu                  , cc: NP        , offset: 20700 (5.75 hours)       , comments:
+name: Asia/Colombo                    , cc: LK        , offset: 19800 (5.5 hours)        , comments:
+name: Asia/Kolkata                    , cc: IN        , offset: 19800 (5.5 hours)        , comments:
+name: Asia/Karachi                    , cc: PK        , offset: 18000 (5 hours)          , comments:
+name: Asia/Oral                       , cc: KZ        , offset: 18000 (5 hours)          , comments: West Kazakhstan
+name: Asia/Ashgabat                   , cc: TM        , offset: 18000 (5 hours)          , comments:
+name: Asia/Aqtau                      , cc: KZ        , offset: 18000 (5 hours)          , comments: Atyrau (Atirau, Gur'yev), Mangghystau (Mankistau)
+name: Indian/Kerguelen                , cc: TF        , offset: 18000 (5 hours)          , comments:
+name: Antarctica/Mawson               , cc: AQ        , offset: 18000 (5 hours)          , comments: Mawson Station, Holme Bay
+name: Indian/Maldives                 , cc: MV        , offset: 18000 (5 hours)          , comments:
+name: Asia/Aqtobe                     , cc: KZ        , offset: 18000 (5 hours)          , comments: Aqtobe (Aktobe)
+name: Asia/Samarkand                  , cc: UZ        , offset: 18000 (5 hours)          , comments: west Uzbekistan
+name: Asia/Dushanbe                   , cc: TJ        , offset: 18000 (5 hours)          , comments:
+name: Asia/Tashkent                   , cc: UZ        , offset: 18000 (5 hours)          , comments: east Uzbekistan
+name: Asia/Kabul                      , cc: AF        , offset: 16200 (4.5 hours)        , comments:
+name: Indian/Reunion                  , cc: RE        , offset: 14400 (4 hours)          , comments:
+name: Asia/Baku                       , cc: AZ        , offset: 14400 (4 hours)          , comments:
+name: Indian/Mahe                     , cc: SC        , offset: 14400 (4 hours)          , comments:
+name: Europe/Samara                   , cc: RU        , offset: 14400 (4 hours)          , comments: Moscow+00 - Samara, Udmurtia
+name: Europe/Volgograd                , cc: RU        , offset: 14400 (4 hours)          , comments: Moscow+00 - Caspian Sea
+name: Asia/Yerevan                    , cc: AM        , offset: 14400 (4 hours)          , comments:
+name: Asia/Tbilisi                    , cc: GE        , offset: 14400 (4 hours)          , comments:
+name: Indian/Mauritius                , cc: MU        , offset: 14400 (4 hours)          , comments:
+name: Asia/Dubai                      , cc: AE        , offset: 14400 (4 hours)          , comments:
+name: Europe/Moscow                   , cc: RU        , offset: 14400 (4 hours)          , comments: Moscow+00 - west Russia
+name: Asia/Muscat                     , cc: OM        , offset: 14400 (4 hours)          , comments:
+name: Asia/Tehran                     , cc: IR        , offset: 12600 (3.5 hours)        , comments:
+name: Asia/Qatar                      , cc: QA        , offset: 10800 (3 hours)          , comments:
+name: Antarctica/Syowa                , cc: AQ        , offset: 10800 (3 hours)          , comments: Syowa Station, E Ongul I
+name: Asia/Bahrain                    , cc: BH        , offset: 10800 (3 hours)          , comments:
+name: Indian/Comoro                   , cc: KM        , offset: 10800 (3 hours)          , comments:
+name: Asia/Aden                       , cc: YE        , offset: 10800 (3 hours)          , comments:
+name: Asia/Baghdad                    , cc: IQ        , offset: 10800 (3 hours)          , comments:
+name: Indian/Antananarivo             , cc: MG        , offset: 10800 (3 hours)          , comments:
+name: Asia/Riyadh                     , cc: SA        , offset: 10800 (3 hours)          , comments:
+name: Indian/Mayotte                  , cc: YT        , offset: 10800 (3 hours)          , comments:
+name: Africa/Addis_Ababa              , cc: ET        , offset: 10800 (3 hours)          , comments:
+name: Africa/Asmara                   , cc: ER        , offset: 10800 (3 hours)          , comments:
+name: Africa/Juba                     , cc: SS        , offset: 10800 (3 hours)          , comments:
+name: Africa/Nairobi                  , cc: KE        , offset: 10800 (3 hours)          , comments:
+name: Africa/Dar_es_Salaam            , cc: TZ        , offset: 10800 (3 hours)          , comments:
+name: Europe/Minsk                    , cc: BY        , offset: 10800 (3 hours)          , comments:
+name: Africa/Kampala                  , cc: UG        , offset: 10800 (3 hours)          , comments:
+name: Africa/Mogadishu                , cc: SO        , offset: 10800 (3 hours)          , comments:
+name: Africa/Djibouti                 , cc: DJ        , offset: 10800 (3 hours)          , comments:
+name: Africa/Khartoum                 , cc: SD        , offset: 10800 (3 hours)          , comments:
+name: Europe/Kaliningrad              , cc: RU        , offset: 10800 (3 hours)          , comments: Moscow-01 - Kaliningrad
+name: Asia/Kuwait                     , cc: KW        , offset: 10800 (3 hours)          , comments:
+name: Europe/Vilnius                  , cc: LT        , offset: 7200 (2 hours)           , comments:
+name: Europe/Uzhgorod                 , cc: UA        , offset: 7200 (2 hours)           , comments: Ruthenia
+name: Europe/Tallinn                  , cc: EE        , offset: 7200 (2 hours)           , comments:
+name: Europe/Simferopol               , cc: UA        , offset: 7200 (2 hours)           , comments: central Crimea
+name: Asia/Jerusalem                  , cc: IL        , offset: 7200 (2 hours)           , comments:
+name: Europe/Mariehamn                , cc: AX        , offset: 7200 (2 hours)           , comments:
+name: Africa/Windhoek                 , cc: NA        , offset: 7200 (2 hours)           , comments:
+name: Africa/Lubumbashi               , cc: CD        , offset: 7200 (2 hours)           , comments: east Dem. Rep. of Congo
+name: Europe/Kiev                     , cc: UA        , offset: 7200 (2 hours)           , comments: most locations
+name: Africa/Mbabane                  , cc: SZ        , offset: 7200 (2 hours)           , comments:
+name: Africa/Maputo                   , cc: MZ        , offset: 7200 (2 hours)           , comments:
+name: Europe/Istanbul                 , cc: TR        , offset: 7200 (2 hours)           , comments:
+name: Europe/Zaporozhye               , cc: UA        , offset: 7200 (2 hours)           , comments: Zaporozh'ye, E Lugansk / Zaporizhia, E Luhansk
+name: Asia/Nicosia                    , cc: CY        , offset: 7200 (2 hours)           , comments:
+name: Europe/Helsinki                 , cc: FI        , offset: 7200 (2 hours)           , comments:
+name: Europe/Riga                     , cc: LV        , offset: 7200 (2 hours)           , comments:
+name: Africa/Tripoli                  , cc: LY        , offset: 7200 (2 hours)           , comments:
+name: Africa/Lusaka                   , cc: ZM        , offset: 7200 (2 hours)           , comments:
+name: Europe/Sofia                    , cc: BG        , offset: 7200 (2 hours)           , comments:
+name: Europe/Chisinau                 , cc: MD        , offset: 7200 (2 hours)           , comments:
+name: Africa/Maseru                   , cc: LS        , offset: 7200 (2 hours)           , comments:
+name: Europe/Bucharest                , cc: RO        , offset: 7200 (2 hours)           , comments:
+name: Asia/Damascus                   , cc: SY        , offset: 7200 (2 hours)           , comments:
+name: Africa/Gaborone                 , cc: BW        , offset: 7200 (2 hours)           , comments:
+name: Africa/Harare                   , cc: ZW        , offset: 7200 (2 hours)           , comments:
+name: Asia/Beirut                     , cc: LB        , offset: 7200 (2 hours)           , comments:
+name: Asia/Hebron                     , cc: PS        , offset: 7200 (2 hours)           , comments: West Bank
+name: Europe/Athens                   , cc: GR        , offset: 7200 (2 hours)           , comments:
+name: Africa/Johannesburg             , cc: ZA        , offset: 7200 (2 hours)           , comments:
+name: Africa/Blantyre                 , cc: MW        , offset: 7200 (2 hours)           , comments:
+name: Africa/Bujumbura                , cc: BI        , offset: 7200 (2 hours)           , comments:
+name: Africa/Cairo                    , cc: EG        , offset: 7200 (2 hours)           , comments:
+name: Africa/Kigali                   , cc: RW        , offset: 7200 (2 hours)           , comments:
+name: Asia/Gaza                       , cc: PS        , offset: 7200 (2 hours)           , comments: Gaza Strip
+name: Asia/Amman                      , cc: JO        , offset: 7200 (2 hours)           , comments:
+name: Africa/Libreville               , cc: GA        , offset: 3600 (1 hours)           , comments:
+name: Africa/Ndjamena                 , cc: TD        , offset: 3600 (1 hours)           , comments:
+name: Africa/Kinshasa                 , cc: CD        , offset: 3600 (1 hours)           , comments: west Dem. Rep. of Congo
+name: Africa/Lagos                    , cc: NG        , offset: 3600 (1 hours)           , comments:
+name: Europe/Copenhagen               , cc: DK        , offset: 3600 (1 hours)           , comments:
+name: Europe/Brussels                 , cc: BE        , offset: 3600 (1 hours)           , comments:
+name: Europe/Gibraltar                , cc: GI        , offset: 3600 (1 hours)           , comments:
+name: Europe/Rome                     , cc: IT        , offset: 3600 (1 hours)           , comments:
+name: Europe/Vaduz                    , cc: LI        , offset: 3600 (1 hours)           , comments:
+name: Europe/Amsterdam                , cc: NL        , offset: 3600 (1 hours)           , comments:
+name: Europe/Zurich                   , cc: CH        , offset: 3600 (1 hours)           , comments:
+name: Europe/Vatican                  , cc: VA        , offset: 3600 (1 hours)           , comments:
+name: Africa/Malabo                   , cc: GQ        , offset: 3600 (1 hours)           , comments:
+name: Europe/Ljubljana                , cc: SI        , offset: 3600 (1 hours)           , comments:
+name: Africa/Porto-Novo               , cc: BJ        , offset: 3600 (1 hours)           , comments:
+name: Europe/Luxembourg               , cc: LU        , offset: 3600 (1 hours)           , comments:
+name: Europe/Podgorica                , cc: ME        , offset: 3600 (1 hours)           , comments:
+name: Europe/Sarajevo                 , cc: BA        , offset: 3600 (1 hours)           , comments:
+name: Europe/Prague                   , cc: CZ        , offset: 3600 (1 hours)           , comments:
+name: Africa/Luanda                   , cc: AO        , offset: 3600 (1 hours)           , comments:
+name: Europe/San_Marino               , cc: SM        , offset: 3600 (1 hours)           , comments:
+name: Europe/Andorra                  , cc: AD        , offset: 3600 (1 hours)           , comments:
+name: Africa/Ceuta                    , cc: ES        , offset: 3600 (1 hours)           , comments: Ceuta & Melilla
+name: Europe/Berlin                   , cc: DE        , offset: 3600 (1 hours)           , comments:
+name: Europe/Belgrade                 , cc: RS        , offset: 3600 (1 hours)           , comments:
+name: Africa/Brazzaville              , cc: CG        , offset: 3600 (1 hours)           , comments:
+name: Europe/Skopje                   , cc: MK        , offset: 3600 (1 hours)           , comments:
+name: Europe/Bratislava               , cc: SK        , offset: 3600 (1 hours)           , comments:
+name: Africa/Bangui                   , cc: CF        , offset: 3600 (1 hours)           , comments:
+name: Africa/Algiers                  , cc: DZ        , offset: 3600 (1 hours)           , comments:
+name: Europe/Stockholm                , cc: SE        , offset: 3600 (1 hours)           , comments:
+name: Europe/Madrid                   , cc: ES        , offset: 3600 (1 hours)           , comments: mainland
+name: Europe/Tirane                   , cc: AL        , offset: 3600 (1 hours)           , comments:
+name: Africa/Douala                   , cc: CM        , offset: 3600 (1 hours)           , comments:
+name: Arctic/Longyearbyen             , cc: SJ        , offset: 3600 (1 hours)           , comments:
+name: Europe/Warsaw                   , cc: PL        , offset: 3600 (1 hours)           , comments:
+name: Europe/Vienna                   , cc: AT        , offset: 3600 (1 hours)           , comments:
+name: Europe/Monaco                   , cc: MC        , offset: 3600 (1 hours)           , comments:
+name: Europe/Oslo                     , cc: NO        , offset: 3600 (1 hours)           , comments:
+name: Europe/Zagreb                   , cc: HR        , offset: 3600 (1 hours)           , comments:
+name: Europe/Budapest                 , cc: HU        , offset: 3600 (1 hours)           , comments:
+name: Africa/Niamey                   , cc: NE        , offset: 3600 (1 hours)           , comments:
+name: Europe/Paris                    , cc: FR        , offset: 3600 (1 hours)           , comments:
+name: Africa/Tunis                    , cc: TN        , offset: 3600 (1 hours)           , comments:
+name: Europe/Malta                    , cc: MT        , offset: 3600 (1 hours)           , comments:
+name: Africa/Accra                    , cc: GH        , offset: 0 (0 hours)              , comments:
+name: Africa/Bamako                   , cc: ML        , offset: 0 (0 hours)              , comments:
+name: Atlantic/Canary                 , cc: ES        , offset: 0 (0 hours)              , comments: Canary Islands
+name: Africa/Abidjan                  , cc: CI        , offset: 0 (0 hours)              , comments:
+name: Atlantic/Reykjavik              , cc: IS        , offset: 0 (0 hours)              , comments:
+name: Atlantic/Faroe                  , cc: FO        , offset: 0 (0 hours)              , comments:
+name: Atlantic/St_Helena              , cc: SH        , offset: 0 (0 hours)              , comments:
+name: Atlantic/Madeira                , cc: PT        , offset: 0 (0 hours)              , comments: Madeira Islands
+name: Africa/Bissau                   , cc: GW        , offset: 0 (0 hours)              , comments:
+name: Europe/Dublin                   , cc: IE        , offset: 0 (0 hours)              , comments:
+name: Africa/Banjul                   , cc: GM        , offset: 0 (0 hours)              , comments:
+name: Africa/El_Aaiun                 , cc: EH        , offset: 0 (0 hours)              , comments:
+name: Africa/Casablanca               , cc: MA        , offset: 0 (0 hours)              , comments:
+name: Africa/Lome                     , cc: TG        , offset: 0 (0 hours)              , comments:
+name: Africa/Conakry                  , cc: GN        , offset: 0 (0 hours)              , comments:
+name: Africa/Freetown                 , cc: SL        , offset: 0 (0 hours)              , comments:
+name: Africa/Dakar                    , cc: SN        , offset: 0 (0 hours)              , comments:
+name: Europe/Guernsey                 , cc: GG        , offset: 0 (0 hours)              , comments:
+name: Europe/Isle_of_Man              , cc: IM        , offset: 0 (0 hours)              , comments:
+name: Africa/Monrovia                 , cc: LR        , offset: 0 (0 hours)              , comments:
+name: Europe/Jersey                   , cc: JE        , offset: 0 (0 hours)              , comments:
+name: Europe/Lisbon                   , cc: PT        , offset: 0 (0 hours)              , comments: mainland
+name: Europe/London                   , cc: GB        , offset: 0 (0 hours)              , comments:
+name: Africa/Nouakchott               , cc: MR        , offset: 0 (0 hours)              , comments:
+name: Africa/Ouagadougou              , cc: BF        , offset: 0 (0 hours)              , comments:
+name: Africa/Sao_Tome                 , cc: ST        , offset: 0 (0 hours)              , comments:
+name: UTC                             , cc: ??        , offset: 0 (0 hours)              , comments:
+name: America/Danmarkshavn            , cc: GL        , offset: 0 (0 hours)              , comments: east coast, north of Scoresbysund
+name: America/Scoresbysund            , cc: GL        , offset: -3600 (-1 hours)         , comments: Scoresbysund / Ittoqqortoormiit
+name: Atlantic/Azores                 , cc: PT        , offset: -3600 (-1 hours)         , comments: Azores
+name: Atlantic/Cape_Verde             , cc: CV        , offset: -3600 (-1 hours)         , comments:
+name: Atlantic/South_Georgia          , cc: GS        , offset: -7200 (-2 hours)         , comments:
+name: America/Bahia                   , cc: BR        , offset: -7200 (-2 hours)         , comments: Bahia
+name: America/Sao_Paulo               , cc: BR        , offset: -7200 (-2 hours)         , comments: S & SE Brazil (GO, DF, MG, ES, RJ, SP, PR, SC, RS)
+name: America/Noronha                 , cc: BR        , offset: -7200 (-2 hours)         , comments: Atlantic islands
+name: America/Montevideo              , cc: UY        , offset: -7200 (-2 hours)         , comments:
+name: America/Fortaleza               , cc: BR        , offset: -10800 (-3 hours)        , comments: NE Brazil (MA, PI, CE, RN, PB)
+name: America/Argentina/Ushuaia       , cc: AR        , offset: -10800 (-3 hours)        , comments: Tierra del Fuego (TF)
+name: America/Asuncion                , cc: PY        , offset: -10800 (-3 hours)        , comments:
+name: America/Maceio                  , cc: BR        , offset: -10800 (-3 hours)        , comments: Alagoas, Sergipe
+name: America/Cuiaba                  , cc: BR        , offset: -10800 (-3 hours)        , comments: Mato Grosso
+name: America/Argentina/Buenos_Aires  , cc: AR        , offset: -10800 (-3 hours)        , comments: Buenos Aires (BA, CF)
+name: America/Santarem                , cc: BR        , offset: -10800 (-3 hours)        , comments: W Para
+name: America/Argentina/Tucuman       , cc: AR        , offset: -10800 (-3 hours)        , comments: Tucuman (TM)
+name: America/Argentina/San_Luis      , cc: AR        , offset: -10800 (-3 hours)        , comments: San Luis (SL)
+name: America/Argentina/Catamarca     , cc: AR        , offset: -10800 (-3 hours)        , comments: Catamarca (CT), Chubut (CH)
+name: America/Argentina/San_Juan      , cc: AR        , offset: -10800 (-3 hours)        , comments: San Juan (SJ)
+name: America/Araguaina               , cc: BR        , offset: -10800 (-3 hours)        , comments: Tocantins
+name: America/Argentina/Salta         , cc: AR        , offset: -10800 (-3 hours)        , comments: (SA, LP, NQ, RN)
+name: America/Godthab                 , cc: GL        , offset: -10800 (-3 hours)        , comments: most locations
+name: America/Argentina/Rio_Gallegos  , cc: AR        , offset: -10800 (-3 hours)        , comments: Santa Cruz (SC)
+name: America/Miquelon                , cc: PM        , offset: -10800 (-3 hours)        , comments:
+name: America/Paramaribo              , cc: SR        , offset: -10800 (-3 hours)        , comments:
+name: America/Argentina/Mendoza       , cc: AR        , offset: -10800 (-3 hours)        , comments: Mendoza (MZ)
+name: America/Argentina/La_Rioja      , cc: AR        , offset: -10800 (-3 hours)        , comments: La Rioja (LR)
+name: America/Recife                  , cc: BR        , offset: -10800 (-3 hours)        , comments: Pernambuco
+name: America/Argentina/Jujuy         , cc: AR        , offset: -10800 (-3 hours)        , comments: Jujuy (JY)
+name: America/Santiago                , cc: CL        , offset: -10800 (-3 hours)        , comments: most locations
+name: Antarctica/Palmer               , cc: AQ        , offset: -10800 (-3 hours)        , comments: Palmer Station, Anvers Island
+name: America/Argentina/Cordoba       , cc: AR        , offset: -10800 (-3 hours)        , comments: most locations (CB, CC, CN, ER, FM, MN, SE, SF)
+name: America/Belem                   , cc: BR        , offset: -10800 (-3 hours)        , comments: Amapa, E Para
+name: America/Cayenne                 , cc: GF        , offset: -10800 (-3 hours)        , comments:
+name: America/Campo_Grande            , cc: BR        , offset: -10800 (-3 hours)        , comments: Mato Grosso do Sul
+name: Antarctica/Rothera              , cc: AQ        , offset: -10800 (-3 hours)        , comments: Rothera Station, Adelaide Island
+name: Atlantic/Stanley                , cc: FK        , offset: -10800 (-3 hours)        , comments:
+name: America/St_Johns                , cc: CA        , offset: -12600 (-3.5 hours)      , comments: Newfoundland Time, including SE Labrador
+name: America/Barbados                , cc: BB        , offset: -14400 (-4 hours)        , comments:
+name: America/Anguilla                , cc: AI        , offset: -14400 (-4 hours)        , comments:
+name: America/Antigua                 , cc: AG        , offset: -14400 (-4 hours)        , comments:
+name: America/Aruba                   , cc: AW        , offset: -14400 (-4 hours)        , comments:
+name: America/Tortola                 , cc: VG        , offset: -14400 (-4 hours)        , comments:
+name: America/Thule                   , cc: GL        , offset: -14400 (-4 hours)        , comments: Thule / Pituffik
+name: America/Blanc-Sablon            , cc: CA        , offset: -14400 (-4 hours)        , comments: Atlantic Standard Time - Quebec - Lower North Shore
+name: Atlantic/Bermuda                , cc: BM        , offset: -14400 (-4 hours)        , comments:
+name: America/Eirunepe                , cc: BR        , offset: -14400 (-4 hours)        , comments: W Amazonas
+name: America/Puerto_Rico             , cc: PR        , offset: -14400 (-4 hours)        , comments:
+name: America/Boa_Vista               , cc: BR        , offset: -14400 (-4 hours)        , comments: Roraima
+name: America/St_Thomas               , cc: VI        , offset: -14400 (-4 hours)        , comments:
+name: America/St_Kitts                , cc: KN        , offset: -14400 (-4 hours)        , comments:
+name: America/St_Vincent              , cc: VC        , offset: -14400 (-4 hours)        , comments:
+name: America/St_Lucia                , cc: LC        , offset: -14400 (-4 hours)        , comments:
+name: America/Porto_Velho             , cc: BR        , offset: -14400 (-4 hours)        , comments: Rondonia
+name: America/Rio_Branco              , cc: BR        , offset: -14400 (-4 hours)        , comments: Acre
+name: America/Guadeloupe              , cc: GP        , offset: -14400 (-4 hours)        , comments:
+name: America/St_Barthelemy           , cc: BL        , offset: -14400 (-4 hours)        , comments:
+name: America/Goose_Bay               , cc: CA        , offset: -14400 (-4 hours)        , comments: Atlantic Time - Labrador - most locations
+name: America/Curacao                 , cc: CW        , offset: -14400 (-4 hours)        , comments:
+name: America/Martinique              , cc: MQ        , offset: -14400 (-4 hours)        , comments:
+name: America/Dominica                , cc: DM        , offset: -14400 (-4 hours)        , comments:
+name: America/Glace_Bay               , cc: CA        , offset: -14400 (-4 hours)        , comments: Atlantic Time - Nova Scotia - places that did not observe DST 1966-1971
+name: America/Santo_Domingo           , cc: DO        , offset: -14400 (-4 hours)        , comments:
+name: America/Grenada                 , cc: GD        , offset: -14400 (-4 hours)        , comments:
+name: America/Port_of_Spain           , cc: TT        , offset: -14400 (-4 hours)        , comments:
+name: America/Kralendijk              , cc: BQ        , offset: -14400 (-4 hours)        , comments:
+name: America/Guyana                  , cc: GY        , offset: -14400 (-4 hours)        , comments:
+name: America/Marigot                 , cc: MF        , offset: -14400 (-4 hours)        , comments:
+name: America/Moncton                 , cc: CA        , offset: -14400 (-4 hours)        , comments: Atlantic Time - New Brunswick
+name: America/Halifax                 , cc: CA        , offset: -14400 (-4 hours)        , comments: Atlantic Time - Nova Scotia (most places), PEI
+name: America/La_Paz                  , cc: BO        , offset: -14400 (-4 hours)        , comments:
+name: America/Montserrat              , cc: MS        , offset: -14400 (-4 hours)        , comments:
+name: America/Lower_Princes           , cc: SX        , offset: -14400 (-4 hours)        , comments:
+name: America/Manaus                  , cc: BR        , offset: -14400 (-4 hours)        , comments: E Amazonas
+name: America/Caracas                 , cc: VE        , offset: -16200 (-4.5 hours)      , comments:
+name: America/New_York                , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time
+name: America/Pangnirtung             , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - Pangnirtung, Nunavut
+name: America/Panama                  , cc: PA        , offset: -18000 (-5 hours)        , comments:
+name: America/Nipigon                 , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - Ontario & Quebec - places that did not observe DST 1967-1973
+name: America/Nassau                  , cc: BS        , offset: -18000 (-5 hours)        , comments:
+name: America/Thunder_Bay             , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - Thunder Bay, Ontario
+name: America/Montreal                , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - Quebec - most locations
+name: America/Toronto                 , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - Ontario - most locations
+name: America/Port-au-Prince          , cc: HT        , offset: -18000 (-5 hours)        , comments:
+name: America/Kentucky/Louisville     , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Kentucky - Louisville area
+name: America/Indiana/Indianapolis    , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - most locations
+name: Pacific/Easter                  , cc: CL        , offset: -18000 (-5 hours)        , comments: Easter Island & Sala y Gomez
+name: America/Bogota                  , cc: CO        , offset: -18000 (-5 hours)        , comments:
+name: America/Atikokan                , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Standard Time - Atikokan, Ontario and Southampton I, Nunavut
+name: America/Jamaica                 , cc: JM        , offset: -18000 (-5 hours)        , comments:
+name: America/Guayaquil               , cc: EC        , offset: -18000 (-5 hours)        , comments: mainland
+name: America/Havana                  , cc: CU        , offset: -18000 (-5 hours)        , comments:
+name: America/Cayman                  , cc: KY        , offset: -18000 (-5 hours)        , comments:
+name: America/Indiana/Marengo         , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - Crawford County
+name: America/Indiana/Petersburg      , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - Pike County
+name: America/Lima                    , cc: PE        , offset: -18000 (-5 hours)        , comments:
+name: America/Indiana/Vevay           , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - Switzerland County
+name: America/Indiana/Winamac         , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - Pulaski County
+name: America/Kentucky/Monticello     , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Kentucky - Wayne County
+name: America/Detroit                 , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Michigan - most locations
+name: America/Indiana/Vincennes       , cc: US        , offset: -18000 (-5 hours)        , comments: Eastern Time - Indiana - Daviess, Dubois, Knox & Martin Counties
+name: America/Grand_Turk              , cc: TC        , offset: -18000 (-5 hours)        , comments:
+name: America/Iqaluit                 , cc: CA        , offset: -18000 (-5 hours)        , comments: Eastern Time - east Nunavut - most locations
+name: America/North_Dakota/New_Salem  , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - North Dakota - Morton County (except Mandan area)
+name: America/Cancun                  , cc: MX        , offset: -21600 (-6 hours)        , comments: Central Time - Quintana Roo
+name: America/North_Dakota/Center     , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - North Dakota - Oliver County
+name: America/North_Dakota/Beulah     , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - North Dakota - Mercer County
+name: America/Managua                 , cc: NI        , offset: -21600 (-6 hours)        , comments:
+name: America/Indiana/Tell_City       , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - Indiana - Perry County
+name: America/Winnipeg                , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Time - Manitoba & west Ontario
+name: America/Monterrey               , cc: MX        , offset: -21600 (-6 hours)        , comments: Mexican Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas away from US border
+name: America/Indiana/Knox            , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - Indiana - Starke County
+name: America/Menominee               , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time - Michigan - Dickinson, Gogebic, Iron & Menominee Counties
+name: America/Merida                  , cc: MX        , offset: -21600 (-6 hours)        , comments: Central Time - Campeche, Yucatan
+name: America/Mexico_City             , cc: MX        , offset: -21600 (-6 hours)        , comments: Central Time - most locations
+name: America/Matamoros               , cc: MX        , offset: -21600 (-6 hours)        , comments: US Central Time - Coahuila, Durango, Nuevo Leon, Tamaulipas near US border
+name: America/Tegucigalpa             , cc: HN        , offset: -21600 (-6 hours)        , comments:
+name: America/Rankin_Inlet            , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Time - central Nunavut
+name: America/Guatemala               , cc: GT        , offset: -21600 (-6 hours)        , comments:
+name: America/Rainy_River             , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Time - Rainy River & Fort Frances, Ontario
+name: America/Chicago                 , cc: US        , offset: -21600 (-6 hours)        , comments: Central Time
+name: America/Resolute                , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Standard Time - Resolute, Nunavut
+name: America/Swift_Current           , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Standard Time - Saskatchewan - midwest
+name: America/Regina                  , cc: CA        , offset: -21600 (-6 hours)        , comments: Central Standard Time - Saskatchewan - most locations
+name: America/El_Salvador             , cc: SV        , offset: -21600 (-6 hours)        , comments:
+name: America/Belize                  , cc: BZ        , offset: -21600 (-6 hours)        , comments:
+name: America/Costa_Rica              , cc: CR        , offset: -21600 (-6 hours)        , comments:
+name: Pacific/Galapagos               , cc: EC        , offset: -21600 (-6 hours)        , comments: Galapagos Islands
+name: America/Bahia_Banderas          , cc: MX        , offset: -21600 (-6 hours)        , comments: Mexican Central Time - Bahia de Banderas
+name: America/Yellowknife             , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Time - central Northwest Territories
+name: America/Edmonton                , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Time - Alberta, east British Columbia & west Saskatchewan
+name: America/Boise                   , cc: US        , offset: -25200 (-7 hours)        , comments: Mountain Time - south Idaho & east Oregon
+name: America/Mazatlan                , cc: MX        , offset: -25200 (-7 hours)        , comments: Mountain Time - S Baja, Nayarit, Sinaloa
+name: America/Dawson_Creek            , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Standard Time - Dawson Creek & Fort Saint John, British Columbia
+name: America/Creston                 , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Standard Time - Creston, British Columbia
+name: America/Phoenix                 , cc: US        , offset: -25200 (-7 hours)        , comments: Mountain Standard Time - Arizona
+name: America/Chihuahua               , cc: MX        , offset: -25200 (-7 hours)        , comments: Mexican Mountain Time - Chihuahua away from US border
+name: America/Denver                  , cc: US        , offset: -25200 (-7 hours)        , comments: Mountain Time
+name: America/Shiprock                , cc: US        , offset: -25200 (-7 hours)        , comments: Mountain Time - Navajo
+name: America/Inuvik                  , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Time - west Northwest Territories
+name: America/Hermosillo              , cc: MX        , offset: -25200 (-7 hours)        , comments: Mountain Standard Time - Sonora
+name: America/Ojinaga                 , cc: MX        , offset: -25200 (-7 hours)        , comments: US Mountain Time - Chihuahua near US border
+name: America/Cambridge_Bay           , cc: CA        , offset: -25200 (-7 hours)        , comments: Mountain Time - west Nunavut
+name: America/Dawson                  , cc: CA        , offset: -28800 (-8 hours)        , comments: Pacific Time - north Yukon
+name: America/Los_Angeles             , cc: US        , offset: -28800 (-8 hours)        , comments: Pacific Time
+name: America/Metlakatla              , cc: US        , offset: -28800 (-8 hours)        , comments: Metlakatla Time - Annette Island
+name: America/Santa_Isabel            , cc: MX        , offset: -28800 (-8 hours)        , comments: Mexican Pacific Time - Baja California away from US border
+name: America/Vancouver               , cc: CA        , offset: -28800 (-8 hours)        , comments: Pacific Time - west British Columbia
+name: America/Tijuana                 , cc: MX        , offset: -28800 (-8 hours)        , comments: US Pacific Time - Baja California near US border
+name: Pacific/Pitcairn                , cc: PN        , offset: -28800 (-8 hours)        , comments:
+name: America/Whitehorse              , cc: CA        , offset: -28800 (-8 hours)        , comments: Pacific Time - south Yukon
+name: America/Yakutat                 , cc: US        , offset: -32400 (-9 hours)        , comments: Alaska Time - Alaska panhandle neck
+name: America/Anchorage               , cc: US        , offset: -32400 (-9 hours)        , comments: Alaska Time
+name: America/Nome                    , cc: US        , offset: -32400 (-9 hours)        , comments: Alaska Time - west Alaska
+name: Pacific/Gambier                 , cc: PF        , offset: -32400 (-9 hours)        , comments: Gambier Islands
+name: America/Sitka                   , cc: US        , offset: -32400 (-9 hours)        , comments: Alaska Time - southeast Alaska panhandle
+name: America/Juneau                  , cc: US        , offset: -32400 (-9 hours)        , comments: Alaska Time - Alaska panhandle
+name: Pacific/Marquesas               , cc: PF        , offset: -34200 (-9.5 hours)      , comments: Marquesas Islands
+name: Pacific/Rarotonga               , cc: CK        , offset: -36000 (-10 hours)       , comments:
+name: Pacific/Tahiti                  , cc: PF        , offset: -36000 (-10 hours)       , comments: Society Islands
+name: America/Adak                    , cc: US        , offset: -36000 (-10 hours)       , comments: Aleutian Islands
+name: Pacific/Honolulu                , cc: US        , offset: -36000 (-10 hours)       , comments: Hawaii
+name: Pacific/Johnston                , cc: UM        , offset: -36000 (-10 hours)       , comments: Johnston Atoll
+name: Pacific/Midway                  , cc: UM        , offset: -39600 (-11 hours)       , comments: Midway Islands
+name: Pacific/Niue                    , cc: NU        , offset: -39600 (-11 hours)       , comments:
+name: Pacific/Pago_Pago               , cc: AS        , offset: -39600 (-11 hours)       , comments:
