@@ -57,6 +57,11 @@ bot:
       enabledAsGroup: false
       additionalUsers: []
       admins: []
+    poland:
+      displayName: "PL: All"
+      enabledAsGroup: true
+      additionalUsers: [ ]
+      admins: []
     wroclaw:
       displayName: "PL: Wroclaw"
       enabledAsGroup: true
