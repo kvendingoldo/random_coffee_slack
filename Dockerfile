@@ -25,7 +25,6 @@ RUN apk update \
 
 USER rcb
 COPY ./src ${HOME}/bot/src
-COPY ./resources ${HOME}/bot/resources
 
 WORKDIR ${HOME}/bot/src
 ENTRYPOINT ["python3", "main.py"]

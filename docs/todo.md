@@ -12,13 +12,14 @@
 - [x] add info about enabled/disabled group to /rcb status
 - [x] rename m_locations => groups
 - [x] add choice of meet_location (meet_group) during initial flow
+- [x] fix an issue caused by 2 slack clients
 - [ ] add support of multiple user group via multiple user select
 - [ ] add an ability to create and maintain groups w/o manual config change
 - [ ] allow admin to kick and ban users in group
 - [ ] add an ability to set meets based on language
 * flow: choice a language on which you wanna talk `<Does not matter|...>`?
 * flow: choice a location in which you wanna have meeting `<online|...>`?
-- [ ] fix an issue caused by 2 slack clients
 - [ ] notification system for major updates
 - [ ] send help for random text that user sent to bot
 - [ ] add info about current season to meta table
+- [ ] add slack workflow support

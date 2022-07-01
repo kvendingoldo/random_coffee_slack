@@ -5,12 +5,6 @@
 export $(cat .env | egrep -v "(^#.*|^$)" | xargs)
 ```
 
-### show & delete mysql trigger
-```sql
-DROP TRIGGER notification;
-SHOW TRIGGERS in coffee;
-```
-
 ### show meets on this week in human-readable format
 
 ```sql

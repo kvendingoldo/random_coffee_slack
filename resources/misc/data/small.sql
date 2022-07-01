@@ -1,7 +1,7 @@
 -- users
-INSERT INTO user (id, username , loc, pause_in_weeks) VALUES ('USR0', 'user0', 'saratov', 0);
-INSERT INTO user (id, username , loc, pause_in_weeks) VALUES ('USR1', 'user1', 'us', 0);
-INSERT INTO user (id, username , loc, pause_in_weeks) VALUES ('USR2', 'user2', 'spb', 0);
+INSERT INTO user (id, username , pause_in_weeks, loc, meet_group) VALUES ('USR0', 'user0', 0, 'saratov', 'saratov');
+INSERT INTO user (id, username , pause_in_weeks, loc, meet_group) VALUES ('USR1', 'user1', 0, 'us', 'us');
+INSERT INTO user (id, username , pause_in_weeks, loc, meet_group) VALUES ('USR2', 'user2', 0, 'spb', 'us');
 
 -- rating
 INSERT INTO rating (uid1, uid2, value) VALUES ('USR0', 'USR1', 1.1);
