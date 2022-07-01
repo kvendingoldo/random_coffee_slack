@@ -7,7 +7,7 @@ on:
       - 'release/**'
 
 env:
-  image_name: bot
+  image_name: rcb
 
 jobs:
   build:
@@ -41,8 +41,8 @@ jobs:
           context: .
           push: true
           tags: |
-            rcb/${{ env.image_name }}:latest
-            rcb/${{ env.image_name }}:${{ steps.set_version.outputs.safe_version }}
+            kvendingoldo/${{ env.image_name }}:latest
+            kvendingoldo/${{ env.image_name }}:${{ steps.set_version.outputs.safe_version }}
       -
         name: Print image version
         run: echo ${{ steps.set_version.outputs.safe_version }}
