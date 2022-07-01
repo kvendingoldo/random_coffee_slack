@@ -57,13 +57,6 @@ bot:
       enabledAsGroup: false
       additionalUsers: []
       admins: []
-    poland:
-      displayName: "PL: All"
-      enabledAsGroup: true
-      additionalUsers: []
-      admins:
-        - U4BSUSM5Z   # asharov
-        - U028UJ77Z5X # kkriukova
     wroclaw:
       displayName: "PL: Wroclaw"
       enabledAsGroup: true
@@ -116,6 +109,13 @@ bot:
         - UKDHWCUAG # ytsvetkova
 
   groups:
+    poland:
+      displayName: "PL: All"
+      enabled: true
+      additionalUsers: []
+      admins:
+        - U4BSUSM5Z   # asharov
+        - U028UJ77Z5X # kkriukova
     worldwide:
       displayName: "Worldwide"
       enabled: true
