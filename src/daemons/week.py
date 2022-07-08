@@ -8,6 +8,8 @@ from utils import config as cfg_utils
 from utils import time as utils_time
 from constants import messages, elements, common
 from db import utils as db_utils
+from db.exceptions import NotificationNotFoundError
+from models.notification import Notification
 
 
 def care(client, config):
@@ -175,8 +177,23 @@ def care(client, config):
 
                     # Decrement pause for users who have pause > 1 week
                     if pause > 1:
-                        usr.pause_in_weeks = str(pause - 1)
-                        user_repo.update(usr)
+                        msg_type = common.NTF_TYPES.next_week
+                        try:
+                            ntf = ntf_repo.get({"uid": usr.id, "type": msg_type, "season": season.get()})
+                            logger.info(
+                                f"User {usr.username} ({usr.id}) has already notified about {msg_type}; pause_in_weeks has already decremented to {usr.pause_in_weeks}")
+                        except NotificationNotFoundError:
+                            logger.error(
+                                f"Notification about {msg_type} hasn't found for {usr.username} ({usr.id}). Will be added now as well as pause_in_weeks will be decremented."
+                            )
+                            ntf = Notification(uid=usr.id, season=season.get(), type=msg_type, status=False)
+                            ntf_repo.add(ntf)
+
+                            usr.pause_in_weeks = str(pause - 1)
+                            user_repo.update(usr)
+                        except Exception as ex:
+                            logger.error(
+                                f"{msg_type} message didn't send for user {usr.username} ({usr.id}). Error: {ex}")
                     else:
                         usr_info = client.users_info(user=usr.id)
 
