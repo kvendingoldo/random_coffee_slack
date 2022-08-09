@@ -22,6 +22,7 @@ build: ## Build service docker image.
 upload: ## Build service docker image into production.
 	docker save rcb:$(TS) > $(TARBALL_PATH)
 	ssh -i $(SSH_KEY_PATH) $(RCB_USER)@$(RCB_HOST) 'mkdir -p $(BOT_HOME)/sql/ $(BOT_HOME)/resources/ $(BOT_HOME)/mysql_data/  $(BOT_HOME)/logs/'
+	rsync -av -e 'ssh -i $(SSH_KEY_PATH)' admin-tools $(RCB_USER)@$(RCB_HOST):$(BOT_HOME)/
 	scp -i $(SSH_KEY_PATH) resources/config/prod.yml $(RCB_USER)@$(RCB_HOST):$(BOT_HOME)/resources/config.yml
 	scp -i $(SSH_KEY_PATH) $(TARBALL_PATH) $(RCB_USER)@$(RCB_HOST):/tmp
 	ssh -i $(SSH_KEY_PATH) $(RCB_USER)@$(RCB_HOST) 'docker load < /tmp/rcb.tar'
