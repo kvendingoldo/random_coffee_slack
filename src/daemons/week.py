@@ -148,9 +148,11 @@ def care(client, config):
 
                 if hour <= 13:
                     message = messages.MEET_LOOKING
-                elif 16 > hour >= 13:
+                elif 16 > hour > 13:
                     if weekday == 5:
                         message = messages.MEET_UNSUCCESSFUL_SEARCH
+                    else:
+                        continue
                 else:
                     continue
 
