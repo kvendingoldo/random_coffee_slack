@@ -21,7 +21,7 @@ FLOW_PARTNER_LEFT = "It looks like your partner decided to take a break; " \
                     "Don't worry, I'll find a new one and send you an additional notification when ready."
 FLOW_PARTNER_LEFT_EOW = "It looks like your partner decided to take a break; " \
                         "Sorry, this week is over for making a new pair. Hope that next week will be more successful."
-FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meeting group '{0}' is currently disabled; Please check #nof_rcb for updates"
+FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meeting group '{0}' is currently disabled."
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
                      "I'm a Random Coffee bot here to help you create real connections with people inside your company worldwide. " \
