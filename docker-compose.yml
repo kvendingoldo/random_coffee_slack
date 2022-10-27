@@ -17,7 +17,7 @@ services:
       - ${BOT_HOME}/mysql_data:/var/lib/mysql
   app:
     container_name: bot
-    image: rcb:${BOT_VERSION}
+    image: kvendingoldo/rcb:${BOT_VERSION}
     restart: always
     env_file:
       - ${BOT_HOME}/resources/.env
