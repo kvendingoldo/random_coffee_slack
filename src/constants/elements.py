@@ -4,9 +4,9 @@ import os
 from utils import msg
 
 if "BOT_IMG_URL" in os.environ:
-    BOT_IMG_URL= "https://img.freepik.com/premium-vector/tasty-donut-with-mouth-bite-icon-illustration-cute-colorful-glossy-donuts-with-glaze-powder_385450-17.jpg?w=2000"
-else:
     BOT_IMG_URL = environ.get('BOT_IMG_URL')
+else:
+    BOT_IMG_URL= "https://img.freepik.com/premium-vector/tasty-donut-with-mouth-bite-icon-illustration-cute-colorful-glossy-donuts-with-glaze-powder_385450-17.jpg?w=2000"
 
 DONUT = {
     "type": "image",
