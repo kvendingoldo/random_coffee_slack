@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import os
 from utils import msg
+
+if "BOT_IMG_URL" in os.environ:
+    BOT_IMG_URL= "https://img.freepik.com/premium-vector/tasty-donut-with-mouth-bite-icon-illustration-cute-colorful-glossy-donuts-with-glaze-powder_385450-17.jpg?w=2000"
+else:
+    BOT_IMG_URL = environ.get('BOT_IMG_URL')
 
 DONUT = {
     "type": "image",
-    "image_url": "https://files.slack.com/files-pri/T1H4XT8DV-F02FKRZ2QK0/1000x1000_color.png?pub_secret=43aa14cb10",
+    "image_url": BOT_IMG_URL,
     "alt_text": "cute donut"
 }
 

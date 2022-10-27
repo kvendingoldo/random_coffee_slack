@@ -24,7 +24,7 @@ FLOW_PARTNER_LEFT_EOW = "It looks like your partner decided to take a break; " \
 FLOW_PARTNER_GROUP_DISABLED = "Sorry, your meeting group '{0}' is currently disabled; Please check #nof_rcb for updates"
 
 FLOW_PARTICIPATE_0 = "Hi there!👋\n\n" \
-                     "I'm a Random Coffee bot here to help you create real connections with GD people worldwide. " \
+                     "I'm a Random Coffee bot here to help you create real connections with people inside your company worldwide. " \
                      "Weekly I'll randomly pick one exciting person for you to have a meeting with. " \
                      "You both will receive each other's names; " \
                      "slack them, agree on a date and choose a platform to meet: zoom, skype, meet, etc. \n\n" \

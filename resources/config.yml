@@ -1,1 +1,63 @@
-/Users/asharov/projects/personal/random_coffee_slack/resources/config/dev.yml
+bot:
+  locations:
+    remote:
+      displayName: "Remote"
+      enabledAsGroup: false
+      additionalUsers: []
+      admins: []
+    us:
+      displayName: "US"
+      enabledAsGroup: false
+      additionalUsers: []
+      admins: []
+    saratov:
+      displayName: "RU: Saratov"
+      enabledAsGroup: true
+      additionalUsers:
+        - U02H6R5DUN9 # kvendingoldo173
+      admins:
+        - U01THB38EDV
+    spb:
+      displayName: "RU: Saint Petersburg"
+      enabledAsGroup: false
+      additionalUsers: []
+      admins: []
+    london:
+      displayName: "GB: London"
+      enabledAsGroup: false
+      additionalUsers: []
+      admins: []
+
+  groups:
+    worldwide:
+      displayName: "Worldwide"
+      enabled: true
+      additionalUsers:
+        - U01THB38EDV # kvendingoldo
+      admins: []
+    eng_data_analytics:
+      displayName: "ENG: Data Analytics"
+      enabled: true
+      additionalUsers: []
+      admins: []
+
+database:
+  host: 127.0.0.1
+  port: 3308
+  db: coffee
+  username: root
+
+daemons:
+  week:
+    poolPeriod: 3600 # 1h
+
+notifications:
+  dryRun: true
+
+devMode:
+  enabled: true
+  weekday: 5
+  hour: 20
+
+log:
+  rotation: "1 week"

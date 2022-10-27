@@ -1,6 +1,6 @@
 display_information:
   name: Random Coffee Bot
-  description: If you have any questions - contact @asharov or @ytsvetkova
+  description: If you have any questions - contact admins
   background_color: "#2e0f2e"
 features:
   bot_user:

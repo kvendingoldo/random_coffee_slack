@@ -24,6 +24,7 @@ services:
     environment:
         RCB_LOG_DIR: /home/rcb/bot/logs
         TZ: Etc/GMT-1
+        BOT_IMG_URL: ${BOT_IMG_URL}
     volumes:
       - ${BOT_HOME}/resources/config.yml:/home/rcb/bot/resources/config.yml
       - ${BOT_HOME}/logs:/home/rcb/bot/logs
