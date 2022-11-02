@@ -11,7 +11,7 @@ services:
       MYSQL_DATABASE: coffee
       TZ: Etc/GMT-1
     ports:
-      - "3308:3306"
+      - "3306:3306"
     volumes:
       - ${BOT_HOME}/sql:/docker-entrypoint-initdb.d/:rw
       - ${BOT_HOME}/mysql_data:/var/lib/mysql
