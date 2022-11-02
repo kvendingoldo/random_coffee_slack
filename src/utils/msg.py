@@ -175,6 +175,6 @@ def generate_help_msg_block(commands):
         res.append({"type": "divider"})
 
     res.append({"type": "context",
-                "elements": [{"type": "mrkdwn", "text": "❓If you have any questions contact @asharov or @ytsvetkova"}]})
+                "elements": [{"type": "mrkdwn", "text": "❓If you have any questions contact admins"}]})
 
     return res
