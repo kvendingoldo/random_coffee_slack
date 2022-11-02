@@ -388,7 +388,7 @@ def flow_participate_2(ack, body, client):
                 {
                     "type": "plain_text",
                     "emoji": True,
-                    "text": "\"worldwide\" will be the best option if you do not know meeting group yet"
+                    "text": "\"remote\" will be the best option if you do not know meeting group yet"
                 }
             ]
         },
