@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import environ
+
 from utils import msg
 
 if "BOT_IMG_URL" in os.environ:
