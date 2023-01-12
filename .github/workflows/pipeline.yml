@@ -40,6 +40,8 @@ jobs:
         with:
           context: .
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             kvendingoldo/${{ env.image_name }}:latest
             kvendingoldo/${{ env.image_name }}:${{ steps.set_version.outputs.safe_version }}
