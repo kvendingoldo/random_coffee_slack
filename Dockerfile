@@ -13,6 +13,10 @@ ENV HOME /home/rcb
 ENV USER rcb
 ENV XDG_RUNTIME_DIR=/run/user/1000
 
+# NOTE: it's ad-hoc solution to check that daemon proccess is running as well as bot proccess
+HEALTHCHECK \
+  CMD [ $(ps aux | grep [p]ython | wc -l ) -eq 2 ] && exit 0 || exit 1
+
 RUN mkdir -p ${HOME}/bot
 COPY requirements.txt ${HOME}/bot
 
