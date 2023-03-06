@@ -1,7 +1,7 @@
 slack_bolt==1.9.1
 loguru==0.5.3
 pyyaml==5.4.1
-sqlalchemy==1.4.25
+sqlalchemy==2.0.5.post1
 configparser==5.0.2
 mysqlclient==2.0.3
 pydantic==1.8.1
