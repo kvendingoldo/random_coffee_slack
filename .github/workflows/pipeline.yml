@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       -
         name: Build docker image and push it
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
