@@ -1,5 +1,5 @@
 slack_bolt==1.9.1
-loguru==0.5.3
+loguru==0.7.0
 pyyaml==5.4.1
 sqlalchemy==1.4.25
 configparser==5.0.2
