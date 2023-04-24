@@ -1,4 +1,4 @@
-slack_bolt==1.9.1
+slack_bolt==1.17.2
 loguru==0.5.3
 pyyaml==5.4.1
 sqlalchemy==1.4.25
